@@ -1,0 +1,48 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+const sponsor = await getEntry("sponsors", slug);
+if (!sponsor) {
+	return Astro.redirect("/404", 404);
+}
+const { Content } = await render(sponsor);
+export async function getStaticPaths() {
+	const sponsors = await getCollection("sponsors");
+	return sponsors.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
+}
+---
+
+<style>
+	:root {
+		--direction: 1;
+		@view-transition {
+			navigation: auto;
+			/* biome-ignore lint/correctness/noUnknownProperty: types is not in the rules yet */
+			types: slider;
+		}
+	}
+	img {
+		object-fit: contain;
+	}
+</style>
+<Layout title={`${sponsor?.data?.name ?? 'Sponsor Slug'}`}>
+	<section class="grid">
+		<div class="outdent image-text">
+			<img
+				src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x150" : sponsor?.data?.image?.src}
+				alt=""
+				width="300"
+				height="150"
+				style={{ viewTransitionName: `${sponsor?.data?.slug}-image` }}
+			>
+			<div>
+				<h1 style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>
+					{sponsor?.data?.name ?? 'Sponsor is not loaded'}
+				</h1>
+				<Content />
+			</div>
+		</div>
+	</section>
+</Layout>

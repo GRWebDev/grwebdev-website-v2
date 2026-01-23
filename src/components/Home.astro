@@ -1,0 +1,73 @@
+<script
+	is:inline
+	async
+	src="https://widgets.givebutter.com/latest.umd.cjs?acct=YGjlKv1rH53EHVNY&p=other"
+></script>
+<style>
+	.bg-black {
+		background-color: var(--primary-clr);
+		color: var(--tertiary-clr);
+		font-size: 2.625rem;
+		line-height: 2cap;
+		margin-block-start: 1cap;
+		padding-block-end: 1cap;
+
+		p {
+			margin-block-start: 1cap;
+		}
+	}
+
+	.red-square {
+		background: var(--secondary-clr);
+		grid-area: outdent-end;
+		margin-block-end: -1cap;
+		margin-inline-end: -1px;
+	}
+
+	.trapezoid {
+		grid-column: indent-end / outdent-end;
+		clip-path: polygon(2% 0%, 100% 0, 100% 100%, 28% 100%);
+
+		@container (width > 767px) {
+			clip-path: polygon(22% 0%, 100% 0, 100% 100%, 48% 100%);
+		}
+	}
+
+	.on-top {
+		z-index: 1;
+	}
+</style>
+<section class="grid">
+	<div class="outdent">
+		<h1>Grand Rapids Web Development Group</h1>
+	</div>
+</section>
+<section class="grid bg-black">
+	<div class="red-square trapezoid"></div>
+	<div class="red-square"></div>
+	<div class="full">
+		<section class="grid">
+			<div class="outdent on-top">
+				<p>
+					At GRWebDev, we’re developing a different kind of tech community,
+					where everyone belongs. Whether you’re an industry professional, tech
+					enthusiast, student, or creative, our events offer a welcoming
+					environment to learn something new, share your experiences, and
+					connect with cool people.
+				</p>
+			</div>
+		</section>
+	</div>
+</section>
+<section class="grid">
+	<div class="outdent">
+		<p><small>A 501(c)(3) Organization. EIN: 92-0733019</small></p>
+	</div>
+</section>
+<section class="grid">
+	<div class="center">
+		<p>
+			<givebutter-widget id="gRBJRg"></givebutter-widget>
+		</p>
+	</div>
+</section>

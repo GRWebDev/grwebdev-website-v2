@@ -1,0 +1,76 @@
+:root {
+	--main-max-width: 400px;
+
+	@media screen and (width > 480px) {
+		--main-max-width: 600px;
+	}
+
+	@media screen and (width > 768px) {
+		--main-max-width: 1000px;
+	}
+
+	@media screen and (width > 1152px) {
+		--main-max-width: 1500px;
+	}
+
+	@media screen and (width > 1600px) {
+		--main-max-width: 1800px;
+	}
+}
+
+body {
+	container: body / inline-size;
+}
+
+nav.grid,
+section.grid {
+	display: grid;
+	grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(
+			10cqi,
+			calc(var(--main-max-width) / 10)
+		) [main-start] min(10cqi, calc(var(--main-max-width) / 10)) [indent-start] min(
+			40cqi,
+			var(--main-max-width)
+		) [indent-end] min(10cqi, calc(var(--main-max-width) / 10)) [main-end] min(
+			10cqi,
+			calc(var(--main-max-width) / 10)
+		) [outdent-end] minmax(0.5rem, auto) [full-end];
+
+	> * {
+		grid-area: main;
+
+		&.full {
+			grid-area: full;
+		}
+
+		&.outdent {
+			@media screen and (width > 480px) {
+				grid-area: outdent;
+			}
+		}
+
+		&.indent {
+			@media screen and (width > 480px) {
+				grid-area: indent;
+			}
+		}
+
+		&.center {
+			place-items: center;
+		}
+	}
+}
+
+.image-text {
+	margin-block-start: 1em;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	column-gap: 2ch;
+
+	h1,
+	a h2 {
+		margin: 0;
+		padding-block-start: 0.175em;
+		line-height: 1cap;
+	}
+}

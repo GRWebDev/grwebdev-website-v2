@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+interface sorted {
+	title: typeof sponsors;
+	sustaining: typeof sponsors;
+	event: typeof sponsors;
+	twoM410: typeof sponsors;
+}
+
+const sponsors = await getCollection("sponsors");
+const sponsorsToUse = Object.values(
+	sponsors
+		.filter((c) => c.data.active)
+		.toSorted((a, b) => {
+			const aDate = a.data.joinDate;
+			const bDate = b.data.joinDate;
+			return aDate.valueOf() - bDate.valueOf();
+		})
+		.reduce(
+			(a, c) => {
+				if (c.data.level === "Title") {
+					a.title.push(c);
+				}
+				if (c.data.level === "Sustaining") {
+					a.sustaining.push(c);
+				}
+				if (c.data.level === "Event") {
+					a.event.push(c);
+				}
+				if (c.data.level === "2 Minutes for $10") {
+					a.twoM410.push(c);
+				}
+				return a;
+			},
+			{ title: [], sustaining: [], event: [], twoM410: [] } as sorted,
+		),
+).flat();
+---
+
+<style>
+	:root {
+		--direction: -1;
+		@view-transition {
+			navigation: auto;
+			/* biome-ignore lint/correctness/noUnknownProperty: types is not in the rules yet */
+			types: slider;
+		}
+	}
+
+	img {
+		object-fit: contain;
+	}
+</style>
+<Layout title="Sponsors">
+	<section class="grid">
+		<div>
+			<h1>Sponsors</h1>
+		</div>
+	</section>
+	{sponsorsToUse.map((sponsor) => (
+    <section class="grid">
+      <div class="outdent image-text">
+        <a href={`/sponsors/${sponsor.data.slug}`}>
+          <img src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x375" : sponsor.data.image.src}
+               alt={sponsor?.data?.image.alt}
+               width="100" height="100"
+               style={{ viewTransitionName: `${sponsor?.data?.slug}-image` }} />
+        </a>
+        <div>
+          <a href={`/sponsors/${sponsor.data.slug}`}>
+            <h2 style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>{sponsor?.data?.name ?? 'Sponsor Slug'}</h2>
+          </a>
+          <p>{sponsor?.data?.shortDescription ?? 'Short Description'}</p>
+        </div>
+      </div>
+    </section>
+  ))}
+</Layout>

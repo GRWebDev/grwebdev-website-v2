@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const board = await getCollection("board");
+const boardToUse = board
+	.filter((c) => c.data.active)
+	.toSorted((a, b) => {
+		const aDate = a.data.joinDate;
+		const bDate = b.data.joinDate;
+		return aDate.valueOf() - bDate.valueOf();
+	})
+	.reduce(
+		(a, c) => {
+			switch (c.data.title) {
+				case "President":
+					a[0] = c;
+					break;
+				case "Vice President":
+					a[1] = c;
+					break;
+				case "Secretary":
+					a[3] = c;
+					break;
+				case "Treasurer":
+					a[2] = c;
+					break;
+				default:
+					a.push(c);
+			}
+			return a;
+		},
+		new Array(4).fill({}) as typeof board,
+	);
+---
+
+<style>
+	:root {
+		--direction: -1;
+		@view-transition {
+			navigation: auto;
+			/* biome-ignore lint/correctness/noUnknownProperty: types is not in the rules yet */
+			types: slider;
+		}
+	}
+
+	img {
+		object-fit: cover;
+	}
+</style>
+<Layout title="Board">
+	<section class="grid">
+		<div>
+			<h1>Board of Directors</h1>
+		</div>
+	</section>
+	<!-- TODO: See if we can get head shots -->
+	{boardToUse.map((member) => (
+    <section class="grid">
+      <div class="outdent image-text">
+        <a href={`/board/${member.data.slug}`}>
+        <img src={member?.data?.image?.src === '' ? "https://placehold.co/300x375" : member.data.image.src}
+             alt={member?.data?.image.alt}
+             width="100" height="100"
+             style={{ viewTransitionName: `${member?.data?.slug}-image` }} />
+        </a>
+        <div>
+          <a href={`/board/${member.data.slug}`}>
+            <h2 style={{ viewTransitionName: `${member?.data?.slug}-title` }}>{member?.data?.title ? member?.data?.title + ': ' : ''}{member?.data?.name ?? 'Board Member Bio'}</h2>
+          </a>
+          <p>{member?.data?.shortDescription ?? 'Short Description'}</p>
+        </div>
+      </div>
+    </section>
+  ))}
+</Layout>

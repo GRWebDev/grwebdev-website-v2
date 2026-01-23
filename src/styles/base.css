@@ -1,0 +1,33 @@
+body {
+	background-color: var(--tertiary-clr);
+	color: var(--primary-clr);
+	font-size: 1.125rem;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin-block-start: 1em;
+}
+
+main {
+	padding-block-end: 3em;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+p:has(small) {
+	font-size: 1rem;
+
+	small {
+		font-size: inherit;
+	}
+}
