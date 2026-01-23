@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import { withBase } from "../../utils/utils";
 
 const { slug } = Astro.params;
 const sponsor = await getEntry("sponsors", slug);
@@ -31,7 +32,7 @@ export async function getStaticPaths() {
 	<section class="grid">
 		<div class="outdent image-text">
 			<img
-				src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x150" : sponsor?.data?.image?.src}
+				src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x150" : withBase(sponsor?.data?.image?.src)}
 				alt=""
 				width="300"
 				height="150"

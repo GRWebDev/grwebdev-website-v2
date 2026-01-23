@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { withBase } from "../utils/utils";
 
 interface Props {
 	gridSize?: number;
@@ -69,7 +70,7 @@ while (
 		<div class="event-grid">
 			{eventsToUse.map(event => (
         <a href={event.data.url} target="_blank">
-          <img src={event.data.image.src} alt={event.data.image.src} />
+				<img src={withBase(event.data.image.src)} alt={event.data.image.src} />
         </a>
       ))}
 		</div>
