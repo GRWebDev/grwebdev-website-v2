@@ -12,11 +12,38 @@ Use this guide to add new event entries to the site from Meetup without extra se
 3. For each missing event:
    - Create a new markdown entry in `src/content/Events/`.
    - Add a matching flyer image in `public/event-flyers/`.
+4. Remove any events (and their flyers) that are 6 months old or older.
 
 ## How to identify missing events
 - Event files are named like: `YYYY-MM-DD-<slug>.md`.
 - The date in the filename is the event date.
 - If a date exists in the iCal feed but not in `src/content/Events/`, it is missing.
+
+## Remove events 6 months old or older
+- Determine the cutoff date: today minus 6 months.
+- Remove any event entries with a date on or before the cutoff.
+- Also remove their flyer images in `public/event-flyers/` that match the same date/slug.
+- Keep this repo focused on recent and upcoming events only.
+
+Example (macOS): list old entries
+```
+python3 - <<'PY'
+from datetime import date
+from dateutil.relativedelta import relativedelta
+from pathlib import Path
+
+cutoff = date.today() - relativedelta(months=6)
+root = Path('.')
+
+for p in sorted((root/'src/content/Events').glob('*.md')):
+    parts = p.name.split('-')
+    if len(parts) < 3:
+        continue
+    d = date(int(parts[0]), int(parts[1]), int(parts[2]))
+    if d <= cutoff:
+        print(p)
+PY
+```
 
 ## Extracting data (repeatable commands)
 - Download iCal and show relevant fields:
