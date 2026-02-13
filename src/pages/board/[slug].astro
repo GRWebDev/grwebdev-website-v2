@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import { withBase } from "../../utils/utils.ts";
 
 const { slug } = Astro.params;
 const member = await getEntry("board", slug);
@@ -30,10 +31,11 @@ export async function getStaticPaths() {
 	<section class="grid">
 		<div class="image-text">
 			<img
-				src="https://placehold.co/300x375"
-				alt=""
+				src={member?.data?.image?.src === '' ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
+				alt={member?.data?.image.alt}
 				width="300"
 				height="375"
+				class="cover"
 				style={{ viewTransitionName: `${member?.data?.slug}-image` }}
 			>
 			<div>
