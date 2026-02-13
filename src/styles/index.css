@@ -2,6 +2,7 @@
 
 @import "./reset.css" layer(reset);
 @import "./base.css" layer(base);
+@import "font-oven-sans-variable.css" layer(base);
 @import "./grid.css" layer(utility);
 @import "./color.css" layer(utility);
 @import "./forkMeGitHub.css" layer(component);

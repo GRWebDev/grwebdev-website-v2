@@ -12,6 +12,7 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
+		"@fontsource-variable/open-sans": "^5.2.7",
 		"astro": "^5.16.6"
 	},
 	"devDependencies": {
