@@ -1,5 +1,4 @@
 ---
-title: "Treasurer"
 name: "Mark Noesens"
 image: {
   src: "",
