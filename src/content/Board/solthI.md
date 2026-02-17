@@ -1,5 +1,5 @@
 ---
-title: "President"
+title: "Vice President / Treasurer"
 name: "Sloth I"
 image: {
   src: "",
