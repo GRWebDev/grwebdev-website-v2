@@ -63,6 +63,7 @@ const boardToUse = board
 				<img src={member?.data?.image?.src === '' ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
              alt={member?.data?.image.alt}
              width="100" height="100"
+						 class="cover"
              style={{ viewTransitionName: `${member?.data?.slug}-image` }} />
         </a>
         <div>
