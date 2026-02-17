@@ -47,8 +47,11 @@
 }
 
 /* Apply the layout features set by the classes */
-.denominators, .numerators {
-	font-feature-settings: "dnom" var(--dnom), "numr" var(--numr);
+.denominators,
+.numerators {
+	font-feature-settings:
+		"dnom" var(--dnom),
+		"numr" var(--numr);
 }
 
 /**
@@ -113,7 +116,17 @@
 }
 
 /* Apply the variable axes set by the classes */
-.light, .regular, .semibold, .bold, .extrabold, .condensed-light, .condensed-regular,
-.condensed-semibold, .condensed-bold, .condensed-extrabold {
-	font-variation-settings: "wght" var(--wght), "wdth" var(--wdth);
+.light,
+.regular,
+.semibold,
+.bold,
+.extrabold,
+.condensed-light,
+.condensed-regular,
+.condensed-semibold,
+.condensed-bold,
+.condensed-extrabold {
+	font-variation-settings:
+		"wght" var(--wght),
+		"wdth" var(--wdth);
 }
