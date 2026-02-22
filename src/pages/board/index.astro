@@ -17,21 +17,22 @@ const boardToUse = board
 				case "President":
 					a[0] = c;
 					break;
+				case "Vice President / Treasurer":
 				case "Vice President":
 					a[1] = c;
 					break;
 				case "Secretary":
-					a[3] = c;
-					break;
-				case "Treasurer":
 					a[2] = c;
 					break;
+				// case "Treasurer":
+				// 	a[2] = c;
+				// 	break;
 				default:
 					a.push(c);
 			}
 			return a;
 		},
-		new Array(4).fill({}) as typeof board,
+		new Array(3).fill({}) as typeof board,
 	);
 ---
 
@@ -40,7 +41,6 @@ const boardToUse = board
 		--direction: -1;
 		@view-transition {
 			navigation: auto;
-			/* biome-ignore lint/correctness/noUnknownProperty: types is not in the rules yet */
 			types: slider;
 		}
 	}

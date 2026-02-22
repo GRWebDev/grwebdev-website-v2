@@ -1,5 +1,5 @@
 ---
-title: "Vice President"
+title: "President"
 name: "James Lund"
 image: {
   src: "",
