@@ -4,6 +4,7 @@
 @import "./base.css" layer(base);
 @import "./grid.css" layer(utility);
 @import "./color.css" layer(utility);
+@import "./image.css" layer(utility);
 @import "./forkMeGitHub.css" layer(component);
 @import "./nav.css" layer(component);
 @import "./view-transition.css" layer(component);
