@@ -1,6 +1,7 @@
 body {
 	background-color: var(--tertiary-clr);
 	color: var(--primary-clr);
+	font-family: "Open Sans Variable", sans-serif;
 	font-size: 1.125rem;
 }
 
