@@ -65,9 +65,10 @@ Create a new file in `src/content/Events/`:
 ```
 ---
 name: "Code + Commiserate"
-image: {
-  src: "/event-flyers/2026-04-24-code-commiserate.jpg",
-  alt: "Code + Commiserate"
+images: {
+  light: { src: "/event-flyers/2026-04-24-code-commiserate-light.jpg", alt: "Code + Commiserate" },
+  dark: { src: "/event-flyers/2026-04-24-code-commiserate-dark.jpg", alt: "Code + Commiserate" },
+  colorfull: { src: "/event-flyers/2026-04-24-code-commiserate-colorfull.jpg", alt: "Code + Commiserate" }
 }
 url: "https://www.meetup.com/grwebdev/events/sqcjvtyjcgbgc/"
 date: 2026-04-24
@@ -77,12 +78,21 @@ date: 2026-04-24
 ## Flyer images
 - Place images in `public/event-flyers/`.
 - Filename should match the event date + slug used in the markdown.
-- If Meetup has a new event image:
-  - Open the event page URL from iCal and find `highres_*.jpeg` in the HTML.
-  - Download it and rename to match the event date/slug.
-  - Example download:
-    - `curl -L -s -o public/event-flyers/2026-04-24-code-commiserate.jpg https://secure.meetupstatic.com/photos/event/7/8/5/8/highres_518310808.jpeg`
-- If you use a standard flyer template instead of Meetup’s image, keep the same naming convention.
+- Do **not** use the image URL found in the iCal feed or event-page HTML.
+- Use Meetup's generated flyer downloads from the event page:
+  1. Open the event URL from iCal.
+  2. Click the button with `aria-label="Share event flyer"`.
+  3. In the modal, click each `Save` button to download flyer variants.
+  4. Save into `public/event-flyers/` using the event base filename plus variant suffix:
+     - `-light`
+     - `-dark`
+     - `-colorfull`
+  5. Example names:
+     - `2026-05-21-coffee-with-creators-light.jpg`
+     - `2026-05-21-coffee-with-creators-dark.jpg`
+     - `2026-05-21-coffee-with-creators-colorfull.jpg`
+- In the event markdown entry:
+  - Set `images.light.src`, `images.dark.src`, and `images.colorfull.src` to those three files.
 
 ## Optional: quick comparison script (python3)
 ```
@@ -125,5 +135,6 @@ PY
 ## Checklist before committing
 - New markdown entry added in `src/content/Events/`.
 - New flyer image added in `public/event-flyers/`.
+- Event `images.light`, `images.dark`, and `images.colorfull` paths are set.
 - The `url` points to the event URL from the iCal feed.
 - The `date` matches the filename.
