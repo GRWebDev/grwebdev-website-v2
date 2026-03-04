@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils.ts";
+import { withBase } from "../../utils/utils";
 
 const { slug } = Astro.params;
 const member = await getEntry("board", slug);
