@@ -68,9 +68,12 @@ while (
 <section class="grid">
 	<div class="outdent">
 		<div class="event-grid">
-			{eventsToUse.map(event => (
+			{eventsToUse.map((event, index) => (
         <a href={event.data.url} target="_blank">
-				<img src={withBase(event.data.image.src)} alt={event.data.image.src} />
+				<img
+					src={withBase(index % 2 === 0 ? event.data.images.light.src : event.data.images.dark.src)}
+					alt={index % 2 === 0 ? event.data.images.light.alt : event.data.images.dark.alt}
+				/>
         </a>
       ))}
 		</div>
