@@ -30,6 +30,7 @@ header {
 
 		svg {
 			width: 6em;
+			max-width: revert;
 		}
 	}
 }
