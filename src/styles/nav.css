@@ -10,8 +10,10 @@ header {
 	nav {
 		ul {
 			padding: 0;
+			padding-block-end: .75em;
 			display: flex;
 			list-style: none;
+			align-items: center;
 			gap: 2ch;
 		}
 
@@ -20,14 +22,16 @@ header {
 
 			&::before {
 				content: "|";
+				font-size: 0.9em;
 				position: absolute;
 				top: 0;
-				left: -1ch;
+				left: -1.25ch;
 			}
 		}
 
 		svg {
-			width: 3em;
+			width: 6em;
+			max-width: revert;
 		}
 	}
 }
