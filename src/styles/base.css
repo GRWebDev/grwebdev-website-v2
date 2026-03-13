@@ -3,6 +3,10 @@ body {
 	color: var(--primary-clr);
 	font-family: "Open Sans Variable", sans-serif;
 	font-size: 1.125rem;
+
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	min-height: 100svh;
 }
 
 h1,

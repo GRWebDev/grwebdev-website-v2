@@ -37,7 +37,7 @@ section.grid {
 		) [outdent-end] minmax(0.5rem, auto) [full-end];
 
 	> * {
-		grid-area: main;
+		grid-area: outdent;
 
 		&.full {
 			grid-area: full;
