@@ -2,20 +2,13 @@
 title: "President"
 name: "James Lund"
 image: {
-  src: "",
+  src: "/board-images/james-lund.jpg",
   alt: "Head shot for James Lund"
 }
-shortDescription: "Drumstick fatback t-bone tri-tip shoulder leberkas shank pig kielbasa pork loin ham sirloin cupim."
+shortDescription: "James is a senior software developer and tech lead at SPARK Business Works, a custom software agency here in Grand Rapids. "
 slug: 'james-lund'
 joinDate: 2023-01-01
 active: true
 ---
-Kevin pig beef pork belly, alcatra kielbasa brisket burgdoggen tenderloin
-flank pork loin. Tenderloin capicola leberkas strip steak drumstick beef
-ribs. Capicola pig jowl, chicken shank ham hock biltong porchetta prosciutto
-ball tip short loin chislic boudin tail hamburger. Bresaola turkey shankle
-fatback jowl chislic ribeye, bacon chuck ball tip short loin. Spare ribs
-andouille tri-tip t-bone pork belly burgdoggen ground round pork alcatra
-chuck jowl filet mignon capicola. Frankfurter picanha meatloaf brisket ham
-hock. Filet mignon venison tri-tip biltong jowl kielbasa ham tail pork chop
-pig andouille buffalo.
+
+A problem solver who's determined to bridge the gap between nature and technology. By day, James helps local businesses upgrade their digital infrastructure. By night, he advocates for others by volunteering at organizations such as Django Girls, Code for Good West Michigan, and of course, GRWebDev.
