@@ -34,35 +34,66 @@ header {
 
 footer {
 	background-color: var(--gray-1000);
-	bottom: 0;
-	position: fixed;
-	translate: 0 calc(100% - 2em);
 	width: 100cqi;
-	transition: all 300ms linear 100ms;
 	z-index: 1;
 
-	&:hover {
-		translate: 0 0;
+	@container (width > 1180px) {
+		@media (prefers-reduced-motion: no-preference)  and (hover: hover) {
+			bottom: 0;
+			position: fixed;
+			translate: 0 calc(100% - 2em);
+			transition: all 300ms linear 100ms;
+			&:hover {
+				translate: 0 0;
+			}
+		}
 	}
 
 	section {
 		background-color: oklch(from var(--red-950) l c h / 0.075);
 		padding-block: 1em 3em;
 	}
+
 	.grid div {
 		display: grid;
-		grid-template-columns: 1fr 95px;
+		grid-template-columns: 1fr auto;
 		grid-template-areas:
 			"social seal"
-			"copy seal";
-		grid-gap: 1em;
+			"header seal"
+			"address seal"
+			"ein  ein"
+			"copy copy";
 
-		@container (width > 480px) {
-			grid-template-columns: 1fr auto;
+		h3 {
+			font-size: 0.925em;
+		}
+
+		p:has(small) {
+			margin-block-start: 0;
+
+			small {
+				display: block;
+				font-size: 0.875em;
+			}
 		}
 
 		.social {
 			grid-area: social;
+		}
+
+		.address--header {
+			grid-area: header;
+		}
+
+		.address {
+			grid-area: address;
+		}
+
+		.ein {
+			grid-area: ein;
+			small {
+				margin-block-start: 1.125cap;
+			}
 		}
 
 		.copy {
