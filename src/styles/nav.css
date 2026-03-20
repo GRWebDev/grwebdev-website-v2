@@ -38,7 +38,7 @@ footer {
 	z-index: 1;
 
 	@container (width > 1180px) {
-		@media (prefers-reduced-motion: no-preference)  and (hover: hover) {
+		@media (prefers-reduced-motion: no-preference) and (hover: hover) {
 			bottom: 0;
 			position: fixed;
 			translate: 0 calc(100% - 2em);

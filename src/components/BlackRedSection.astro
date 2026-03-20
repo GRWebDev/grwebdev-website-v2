@@ -1,0 +1,41 @@
+<style>
+	.bg-black {
+		background-color: var(--primary-clr);
+		color: var(--tertiary-clr);
+		font-size: clamp(0.875em, 2.625cqi + 0.25em, 2.375em);
+		line-height: 2cap;
+		margin-block-start: 1cap;
+		padding-block-end: 1cap;
+
+		p {
+			margin-block-start: 1cap;
+		}
+	}
+
+	.red-square {
+		background: var(--secondary-clr);
+		grid-area: outdent-end;
+		margin-block-end: -1cap;
+	}
+
+	.trapezoid {
+		grid-column: indent-end / outdent-end;
+		margin-inline-end: -1px;
+		clip-path: polygon(2% 0%, 100% 0, 100% 100%, 28% 100%);
+
+		@container (width > 767px) {
+			clip-path: polygon(22% 0%, 100% 0, 100% 100%, 48% 100%);
+		}
+	}
+
+	.on-top {
+		z-index: 1;
+	}
+</style>
+<section class="grid bg-black">
+	<div class="red-square trapezoid"></div>
+	<div class="red-square"></div>
+	<div class="full on-top">
+		<slot />
+	</div>
+</section>

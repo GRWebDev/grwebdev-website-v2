@@ -1,0 +1,65 @@
+---
+import BlackRedSection from "../../components/BlackRedSection.astro";
+import MissionStatement from "../../components/MissionStatement.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<style>
+	.inner-wrapper {
+		display: grid;
+		grid-template-columns: auto;
+		grid-template-rows: auto auto;
+		gap: 0;
+		@container (width > 960px) {
+			grid-template-columns: auto auto;
+			grid-template-rows: auto;
+			gap: 2ch;
+		}
+
+		.map {
+			@container (width > 960px) {
+				justify-self: end;
+			}
+		}
+	}
+</style>
+<Layout title="About">
+	<section class="grid">
+		<div class="outdent">
+			<h1>Grand Rapids Web Development Group</h1>
+		</div>
+	</section>
+	<BlackRedSection>
+		<MissionStatement />
+	</BlackRedSection>
+	<section class="grid">
+		<div class="inner-wrapper outdent">
+			<div class="mailing-address">
+				<h2>Mailing Address</h2>
+				<p><small>
+					Grand Rapids Web Development Group
+					<br>℅ Start Garden
+					<br>2 Fulton Street W<br>
+					Grand Rapids, MI 49503
+					<br>
+				</small></p>
+			</div>
+			<div class="map">
+				<h2>Map</h2>
+				<iframe
+					width="425"
+					height="350"
+					src="https://www.openstreetmap.org/export/embed.html?bbox=-85.6709334254265%2C42.961714623713625%2C-85.66567629575731%2C42.964185821592366&amp;layer=mapnik&amp;marker=42.96295023506081%2C-85.66830486059189"
+					style="border: 1px solid black"
+				></iframe>
+				<br>
+				<small
+				><a
+					href="https://www.openstreetmap.org/?mlat=42.962950&amp;mlon=-85.668305#map=19/42.962950/-85.668305"
+				>View Larger Map</a
+				></small
+				>
+			</div>
+		</div>
+	</section>
+</Layout>
