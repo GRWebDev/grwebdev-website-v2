@@ -59,6 +59,11 @@ section.grid {
 			place-items: center;
 		}
 	}
+
+	hr {
+		margin-block: 2cap;
+		margin-inline: -1ch;
+	}
 }
 
 .image-text {
