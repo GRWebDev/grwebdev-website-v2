@@ -11,7 +11,9 @@ if (!member) {
 const { Content } = await render(member);
 export async function getStaticPaths() {
 	const board = await getCollection("board");
-	return board.map((member) => ({ params: { slug: member.data.slug } }));
+	return board
+		.filter((member) => member.data.active)
+		.map((member) => ({ params: { slug: member.data.slug } }));
 }
 ---
 
