@@ -10,7 +10,7 @@ header {
 	nav {
 		ul {
 			padding: 0;
-			padding-block-end: .75em;
+			padding-block-end: 0.75em;
 			display: flex;
 			list-style: none;
 			align-items: center;
