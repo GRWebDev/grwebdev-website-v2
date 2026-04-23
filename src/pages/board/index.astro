@@ -67,10 +67,13 @@ const boardToUse = board
              style={{ viewTransitionName: `${member?.data?.slug}-image` }} />
         </a>
         <div>
-				<a href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}>
-            <h2 style={{ viewTransitionName: `${member?.data?.slug}-title` }}>{member?.data?.title ? member?.data?.title + ': ' : ''}{member?.data?.name ?? 'Board Member Bio'}</h2>
+			<a href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}>
+						<h2 style={`view-transition-name: ${member.data.slug}-title`}>
+							{member.data.title ? `${member.data.title}: ` : ""}
+							{member.data.name}
+						</h2>
           </a>
-          <p>{member?.data?.shortDescription ?? 'Short Description'}</p>
+					<p>{member.data.shortDescription}</p>
         </div>
       </div>
     </section>

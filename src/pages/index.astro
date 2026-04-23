@@ -24,10 +24,6 @@ import Layout from "../layouts/Layout.astro";
 </style>
 <Layout title="Home">
 	<Home />
-	<div class="mobile-show">
-		<EventGrid gridSize={3} />
-	</div>
-	<div class="desktop-show">
-		<EventGrid gridSize={6} old={1} />
-	</div>
+	<div class="mobile-show"><EventGrid gridSize={3} /></div>
+	<div class="desktop-show"><EventGrid gridSize={6} old={1} /></div>
 </Layout>
