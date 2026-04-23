@@ -5,6 +5,12 @@ import Layout from "../../layouts/Layout.astro";
 ---
 
 <style>
+	section:last-child {
+		.map {
+			padding-block-end: revert;
+		}
+	}
+
 	.inner-wrapper {
 		display: grid;
 		grid-template-columns: auto;
@@ -13,6 +19,20 @@ import Layout from "../../layouts/Layout.astro";
 		@container (width > 960px) {
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: auto;
+		}
+
+		.address {
+			h2,
+			h3 {
+				@container (width > 400px) {
+					line-height: 1cap;
+				}
+			}
+		}
+
+		.map {
+			margin-block-start: 1.5em;
+			padding-block-end: 1.5em;
 		}
 
 		iframe {
