@@ -9,6 +9,10 @@ if (!member) {
 	return Astro.redirect("/404", 404);
 }
 const { Content } = await render(member);
+const memberTitlePrefix = member.data.title ? `${member.data.title}: ` : "";
+const memberPageTitle = `${memberTitlePrefix}${member.data.name}`;
+const memberImageTransitionStyle = `view-transition-name: ${member.data.slug}-image`;
+const memberTitleTransitionStyle = `view-transition-name: ${member.data.slug}-title`;
 export async function getStaticPaths() {
 	const board = await getCollection("board");
 	return board
@@ -26,24 +30,19 @@ export async function getStaticPaths() {
 		}
 	}
 </style>
-<Layout
-	title={`${member?.data?.title ? member?.data?.title + ': ' : ''}${member?.data?.name ?? 'Board Member Bio'}`}
->
+<Layout title={memberPageTitle}>
 	<section class="grid">
 		<div class="image-text">
 			<img
-				src={member?.data?.image?.src === '' ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
-				alt={member?.data?.image.alt}
+				src={member.data.image.src === "" ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
+				alt={member.data.image.alt}
 				width="300"
 				height="375"
 				class="cover"
-				style={{ viewTransitionName: `${member?.data?.slug}-image` }}
+				style={memberImageTransitionStyle}
 			>
 			<div>
-				<h1 style={{ viewTransitionName: `${member?.data?.slug}-title` }}>
-					{member?.data?.title ? member?.data?.title + ': ' : ''}
-					{member?.data?.name ?? 'Member is not loaded'}
-				</h1>
+				<h1 style={memberTitleTransitionStyle}>{memberPageTitle}</h1>
 				<Content />
 			</div>
 		</div>

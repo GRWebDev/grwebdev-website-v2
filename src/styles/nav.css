@@ -10,7 +10,7 @@ header {
 	nav {
 		ul {
 			padding: 0;
-			padding-block-end: .75em;
+			padding-block-end: 0.75em;
 			display: flex;
 			list-style: none;
 			align-items: center;
@@ -95,6 +95,7 @@ footer {
 
 		.ein {
 			grid-area: ein;
+
 			small {
 				margin-block-start: 1.125cap;
 			}
@@ -109,7 +110,7 @@ footer {
 		}
 	}
 
-	ul {
+	.social-media {
 		padding: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, 50px);

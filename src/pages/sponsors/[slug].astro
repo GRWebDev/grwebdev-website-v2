@@ -9,6 +9,8 @@ if (!sponsor) {
 	return Astro.redirect("/404", 404);
 }
 const { Content } = await render(sponsor);
+const sponsorImageTransitionStyle = `view-transition-name: ${sponsor.data.slug}-image`;
+const sponsorTitleTransitionStyle = `view-transition-name: ${sponsor.data.slug}-title`;
 export async function getStaticPaths() {
 	const sponsors = await getCollection("sponsors");
 	return sponsors.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
@@ -31,16 +33,14 @@ export async function getStaticPaths() {
 	<section class="grid">
 		<div class="outdent image-text">
 			<img
-				src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x150" : withBase(sponsor?.data?.image?.src)}
+				src={sponsor.data.image.src === "" ? "https://placehold.co/300x150" : withBase(sponsor.data.image.src)}
 				alt=""
 				width="300"
 				height="150"
-				style={{ viewTransitionName: `${sponsor?.data?.slug}-image` }}
+				style={sponsorImageTransitionStyle}
 			>
 			<div>
-				<h1 style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>
-					{sponsor?.data?.name ?? 'Sponsor is not loaded'}
-				</h1>
+				<h1 style={sponsorTitleTransitionStyle}>{sponsor.data.name}</h1>
 				<Content />
 			</div>
 		</div>
