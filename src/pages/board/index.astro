@@ -5,7 +5,7 @@ import { withBase } from "../../utils/utils";
 
 const board = await getCollection("board");
 const boardToUse = board
-	.filter((c) => c.data.active)
+	.filter((member) => member.data.active)
 	.toSorted((a, b) => {
 		const aDate = a.data.joinDate;
 		const bDate = b.data.joinDate;
@@ -33,7 +33,8 @@ const boardToUse = board
 			return a;
 		},
 		new Array(3).fill({}) as typeof board,
-	);
+	)
+	.filter((member) => member.id !== undefined);
 ---
 
 <style>
