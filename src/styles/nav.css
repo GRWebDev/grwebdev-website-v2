@@ -90,7 +90,12 @@ header {
 				}
 			}
 
-			svg {
+			label {
+				display: flex;
+				align-items: center;
+				gap: 2ch;
+			}
+			svg.logo {
 				width: 6em;
 				max-width: revert;
 			}

@@ -1,5 +1,6 @@
 ---
 import Logo from "../assets/grwebdev.svg";
+import Menu from "../assets/menu-vertical.svg";
 import { withBase } from "../utils/utils.ts";
 import ForkMeGitHub from "./ForkMeGitHub.astro";
 ---
@@ -12,7 +13,7 @@ import ForkMeGitHub from "./ForkMeGitHub.astro";
 					for="show-menu"
 					aria-label="Expand / Collapse Navigation"
 					aria-controls="site-menu"
-					><Logo /> <input type="checkbox" id="show-menu" name="show-menu">
+					><Logo class="logo" /> <Menu /> <input type="checkbox" id="show-menu" name="show-menu">
 				</label>
 			</li>
 			<li class="expanded">
