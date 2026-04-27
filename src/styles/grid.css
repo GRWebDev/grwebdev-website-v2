@@ -22,6 +22,10 @@ body {
 	container: body / inline-size;
 }
 
+.container {
+	container: container / inline-size;
+}
+
 nav.grid,
 section.grid {
 	display: grid;
@@ -44,13 +48,29 @@ section.grid {
 		}
 
 		&.outdent {
-			@media screen and (width > 480px) {
+			@container (width > 480px) {
 				grid-area: outdent;
 			}
 		}
 
+		&.main {
+			@container (width > 480px) {
+				grid-area: main;
+			}
+		}
+
+		&.outdent-main-indent {
+			@container (width > 960px) {
+				grid-area: main;
+			}
+			@container (width > 1600px) {
+				grid-area: indent;
+			}
+		}
+
 		&.indent {
-			@media screen and (width > 480px) {
+			grid-area: main;
+			@container (width > 480px) {
 				grid-area: indent;
 			}
 		}
@@ -66,15 +86,33 @@ section.grid {
 }
 
 .image-text {
+	--_gap: 2ch;
+
 	margin-block-start: 1em;
 	display: grid;
-	grid-template-columns: auto 1fr;
-	column-gap: 2ch;
+	grid-template-columns: 1fr;
+	gap: var(--_gap);
+
+	@container (width > 620px) {
+		grid-template-columns: auto 1fr;
+	}
+
+	&.board {
+		@container (width > 540px) {
+			grid-template-columns: min((100cqi - var(--_gap)) / 2.25, 400px) 1fr;
+		}
+
+		img {
+			width: 100%;
+			height: revert;
+			aspect-ratio: 4 / 5;
+		}
+	}
 
 	h1,
 	a h2 {
 		margin: 0;
 		padding-block-start: 0.175em;
-		line-height: 1cap;
+		line-height: 1.25cap;
 	}
 }

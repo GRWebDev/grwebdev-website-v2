@@ -1,18 +1,25 @@
 ---
 import Logo from "../assets/grwebdev.svg";
+import { withBase } from "../utils/utils.ts";
 import ForkMeGitHub from "./ForkMeGitHub.astro";
 ---
 
 <header>
 	<nav class="grid">
-		<ul class="outdent">
-			<li>
-				<a href={import.meta.env.BASE_URL} aria-label="Home"> <Logo /> </a>
+		<ul>
+			<li class="collapsed">
+				<label for="show-menu"
+					><Logo /> <input type="checkbox" id="show-menu" name="show-menu">
+				</label>
+			</li>
+			<li class="expanded">
+				<a href={withBase(`/`)} aria-label="Home"> <Logo /> </a>
 			</li>
 			<!-- TODO: Add What we do and get involved links/pages -->
-			<li><a href={`${import.meta.env.BASE_URL}board`}>Board</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}sponsors`}>Sponsors</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}about`}>About</a></li>
+			<li class="collapsed"><a href={withBase(`/`)}>Home</a></li>
+			<li><a href={withBase(`/board`)}>Board</a></li>
+			<li><a href={withBase(`/sponsors`)}>Sponsors</a></li>
+			<li><a href={withBase(`/about`)}>About</a></li>
 		</ul>
 	</nav>
 	<!-- End -->
