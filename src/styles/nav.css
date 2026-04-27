@@ -19,15 +19,40 @@ header {
 			transition: height 300ms ease-in-out 100ms;
 
 			@media (prefers-reduced-motion: no-preference) {
-				height: 55px;
-			}
-
-			&:has(input:checked) {
-				height: revert;
+				height: 60px;
 			}
 
 			@container (width > 500px) {
 				flex-direction: row;
+			}
+
+			li + li {
+				position: relative;
+
+				&::before {
+					font-size: 0.9em;
+					position: absolute;
+					top: 0;
+					left: -1.25ch;
+
+					@container (width > 500px) {
+						content: "|";
+					}
+				}
+			}
+
+			&:has(:not(input:checked)) {
+				li + li:not(.expanded) {
+					display: none;
+				}
+			}
+
+			&:has(input:checked) {
+				height: revert;
+
+				li + li:not(.expanded) {
+					display: list-item;
+				}
 			}
 
 			.collapsed {
@@ -35,8 +60,26 @@ header {
 					display: none;
 				}
 
+				&:has(#show-menu) {
+					padding: 4px;
+				}
+
+				&:has(#show-menu):focus-within {
+					outline: 2px solid var(--gray-900);
+					outline-offset: -2px;
+				}
+
 				#show-menu {
-					display: none;
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					margin: -1px;
+					padding: 0;
+					border: 0;
+					overflow: hidden;
+					clip: rect(0 0 0 0);
+					clip-path: inset(50%);
+					white-space: nowrap;
 				}
 			}
 
@@ -46,26 +89,11 @@ header {
 					display: list-item;
 				}
 			}
-		}
 
-		li + li {
-			position: relative;
-
-			&::before {
-				font-size: 0.9em;
-				position: absolute;
-				top: 0;
-				left: -1.25ch;
-
-				@container (width > 500px) {
-					content: "|";
-				}
+			svg {
+				width: 6em;
+				max-width: revert;
 			}
-		}
-
-		svg {
-			width: 6em;
-			max-width: revert;
 		}
 	}
 }

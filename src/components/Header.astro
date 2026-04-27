@@ -6,9 +6,12 @@ import ForkMeGitHub from "./ForkMeGitHub.astro";
 
 <header>
 	<nav class="grid">
-		<ul>
+		<ul id="site-menu">
 			<li class="collapsed">
-				<label for="show-menu"
+				<label
+					for="show-menu"
+					aria-label="Expand / Collapse Navigation"
+					aria-controls="site-menu"
 					><Logo /> <input type="checkbox" id="show-menu" name="show-menu">
 				</label>
 			</li>
