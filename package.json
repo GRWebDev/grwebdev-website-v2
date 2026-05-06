@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/open-sans": "^5.2.7",
-		"astro": "^6.1.5"
+		"astro": "^6.2.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
