@@ -13,7 +13,7 @@ Use this guide to add new event entries to the site from Meetup without extra se
    - stale Meetup URLs on existing entries
 3. For each missing event:
    - Create a new markdown entry in `src/content/Events/`.
-   - Add a matching flyer image in `public/event-flyers/`.
+   - Add matching flyer images in `src/assets/event-flyers/`.
 4. Update any existing event entry whose `url` does not match the current iCal URL for that date.
 5. Remove any events (and their flyers) that are 6 months old or older.
 
@@ -34,7 +34,7 @@ Use this guide to add new event entries to the site from Meetup without extra se
 ## Remove events 6 months old or older
 - Determine the cutoff date: today minus 6 months.
 - Remove any event entries with a date on or before the cutoff.
-- Also remove their flyer images in `public/event-flyers/` that match the same date/slug.
+- Also remove their flyer images in `src/assets/event-flyers/` that match the same date/slug.
 - Keep this repo focused on recent and upcoming events only.
 
 Example (macOS): list old entries
@@ -81,9 +81,8 @@ Create a new file in `src/content/Events/`:
 ---
 name: "Code + Commiserate"
 images: {
-  light: { src: "/event-flyers/2026-04-24-code-commiserate-light.jpg", alt: "Code + Commiserate" },
-  dark: { src: "/event-flyers/2026-04-24-code-commiserate-dark.jpg", alt: "Code + Commiserate" },
-  colorfull: { src: "/event-flyers/2026-04-24-code-commiserate-colorfull.jpg", alt: "Code + Commiserate" }
+  light: { src: "../../assets/event-flyers/2026-04-24-code-commiserate-light.jpg", alt: "Code + Commiserate" },
+  dark: { src: "../../assets/event-flyers/2026-04-24-code-commiserate-dark.jpg", alt: "Code + Commiserate" }
 }
 url: "https://www.meetup.com/grwebdev/events/sqcjvtyjcgbgc/"
 date: 2026-04-24
@@ -91,20 +90,20 @@ date: 2026-04-24
 ```
 
 ## Flyer images
-- Place images in `public/event-flyers/`.
+- Place images in `src/assets/event-flyers/`.
 - Filename should match the event date + slug used in the markdown.
 - Do **not** use the image URL found in the iCal feed or event-page HTML as the final flyer asset.
-- Use Meetup's generated flyer canvases from the event page. The share modal renders three variants:
+- Use Meetup's generated flyer canvases from the event page. The share modal renders multiple variants, but the site only uses:
   - canvas index `0` -> `-light`
   - canvas index `1` -> `-dark`
-  - canvas index `2` -> `-colorfull`
-- Preferred repeatable method: export the three canvases with Playwright instead of clicking around manually.
+- Ignore any additional variants.
+- Preferred repeatable method: export the first two canvases with Playwright instead of clicking around manually.
 - Example names:
   - `2026-05-21-coffee-with-creators-light.jpg`
   - `2026-05-21-coffee-with-creators-dark.jpg`
-  - `2026-05-21-coffee-with-creators-colorfull.jpg`
 - In the event markdown entry:
-  - Set `images.light.src`, `images.dark.src`, and `images.colorfull.src` to those three files.
+  - Set `images.light.src` and `images.dark.src` to paths relative to the event markdown file, e.g. `../../assets/event-flyers/2026-05-21-coffee-with-creators-light.jpg`.
+  - These fields are validated by the event content collection schema with Astro's `image()` helper, so missing files should fail during build.
 
 ## Repeatable comparison script
 Use this instead of comparing dates only:
@@ -166,7 +165,7 @@ PY
 ```
 
 ## Repeatable flyer export script
-This exports the exact three flyer variants from the Meetup event page into `public/event-flyers/`.
+This exports the light and dark flyer variants from the Meetup event page into `src/assets/event-flyers/`.
 
 ```bash
 TMPDIR="$(mktemp -d)"
@@ -180,8 +179,8 @@ const fs = require('fs');
 const { chromium } = require('playwright');
 
 const eventUrl = 'https://www.meetup.com/grwebdev/events/313704098/';
-const outputBase = '/ABS/PATH/TO/REPO/public/event-flyers/2026-03-23-what-is-user-experience';
-const variantNames = ['light', 'dark', 'colorfull'];
+const outputBase = '/ABS/PATH/TO/REPO/src/assets/event-flyers/2026-03-23-what-is-user-experience';
+const variantNames = ['light', 'dark'];
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -191,14 +190,14 @@ const variantNames = ['light', 'dark', 'colorfull'];
   await page.waitForTimeout(5000);
   await page.getByRole('button', { name: 'Share event flyer' }).first().click();
   await page.waitForFunction(
-    () => document.querySelectorAll('canvas[data-flyer-canvas]').length === 3,
+    () => document.querySelectorAll('canvas[data-flyer-canvas]').length >= 2,
     { timeout: 30000 }
   );
   await page.waitForTimeout(4000);
 
   const dataUrls = await page
     .locator('canvas[data-flyer-canvas]')
-    .evaluateAll(nodes => nodes.map((n) => n.toDataURL('image/jpeg', 0.9)));
+    .evaluateAll(nodes => nodes.slice(0, 2).map((n) => n.toDataURL('image/jpeg', 0.9)));
 
   dataUrls.forEach((url, index) => {
     const base64 = url.replace(/^data:image\/jpeg;base64,/, '');
@@ -252,9 +251,10 @@ PY
 
 ## Checklist before committing
 - New markdown entry added in `src/content/Events/`.
-- New flyer image added in `public/event-flyers/`.
-- Event `images.light`, `images.dark`, and `images.colorfull` paths are set.
+- New light and dark flyer images added in `src/assets/event-flyers/`.
+- Event `images.light` and `images.dark` paths are set as relative paths from `src/content/Events/` to `src/assets/event-flyers/`.
 - The `url` points to the event URL from the iCal feed.
 - Existing event URLs for matching dates were checked and updated if stale.
 - Same-date events were checked for duplicates by URL, not collapsed into one entry.
 - The `date` matches the filename.
+- `npm run build` passes so Astro validates the content collection image paths.

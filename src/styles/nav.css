@@ -21,11 +21,15 @@ header {
 			position: relative;
 
 			&::before {
-				content: "|";
+				border-inline-start: 1px solid black;
+				bottom: 0;
+				content: " ";
 				font-size: 0.9em;
+				height: 1em;
+				left: -1ch;
+				margin-block: auto;
 				position: absolute;
 				top: 0;
-				left: -1.25ch;
 			}
 		}
 

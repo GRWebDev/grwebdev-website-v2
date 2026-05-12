@@ -1,6 +1,6 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { withBase } from "../utils/utils";
 
 interface Props {
 	gridSize?: number;
@@ -64,18 +64,28 @@ while (
 			grid-template-columns: repeat(3, 1fr);
 		}
 	}
+	.event-grid img {
+		height: revert;
+	}
 </style>
 <section class="grid">
 	<div class="outdent">
 		<div class="event-grid">
-			{eventsToUse.map((event, index) => (
-				<a href={event.data.url} target="_blank" rel="noopener">
-				<img
-					src={withBase(index % 2 === 0 ? event.data.images.light.src : event.data.images.dark.src)}
-					alt={index % 2 === 0 ? event.data.images.light.alt : event.data.images.dark.alt}
-				/>
-				</a>
-			))}
+			{eventsToUse.map((event, index) => {
+				const image =
+					index % 2 === 0 ? event.data.images.light : event.data.images.dark;
+
+				return (
+					<a href={event.data.url} target="_blank" rel="noopener">
+					<Image
+						src={image.src}
+						alt={image.alt}
+						layout="full-width"
+						quality="low"
+					/>
+					</a>
+				);
+			})}
 		</div>
 	</div>
 </section>
