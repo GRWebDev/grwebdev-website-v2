@@ -34,7 +34,7 @@ const boardToUse = board
 		},
 		new Array(3).fill({}) as typeof board,
 	)
-	.filter((member) => member.id !== undefined);
+	.filter((member) => !!member.id);
 ---
 
 <style>
