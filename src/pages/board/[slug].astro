@@ -15,7 +15,9 @@ const memberImageTransitionStyle = `view-transition-name: ${member.data.slug}-im
 const memberTitleTransitionStyle = `view-transition-name: ${member.data.slug}-title`;
 export async function getStaticPaths() {
 	const board = await getCollection("board");
-	return board.map((member) => ({ params: { slug: member.data.slug } }));
+	return board
+		.filter((member) => member.data.active)
+		.map((member) => ({ params: { slug: member.data.slug } }));
 }
 ---
 
