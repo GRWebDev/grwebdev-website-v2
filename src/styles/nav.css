@@ -26,33 +26,27 @@ header {
 				flex-direction: row;
 			}
 
-			li + li {
+			.spacer {
 				position: relative;
 
 				&::before {
+					border-inline-start: 2px solid var(--gray-700);
+					bottom: 0;
 					font-size: 0.9em;
+					height: 1em;
+					left: -1ch;
+					margin-block: auto;
 					position: absolute;
 					top: 0;
-					left: -1.25ch;
 
 					@container (width > 500px) {
-						content: "|";
+						content: " ";
 					}
-				}
-			}
-
-			&:has(:not(input:checked)) {
-				li + li:not(.expanded) {
-					display: none;
 				}
 			}
 
 			&:has(input:checked) {
 				height: revert;
-
-				li + li:not(.expanded) {
-					display: list-item;
-				}
 			}
 
 			.collapsed {
@@ -61,6 +55,7 @@ header {
 				}
 
 				&:has(#show-menu) {
+					width: 100%;
 					padding: 4px;
 				}
 
@@ -87,14 +82,22 @@ header {
 				display: none;
 				@container (width > 500px) {
 					display: list-item;
+					width: 6em;
+
+					&.grow {
+						width: revert;
+						flex: 1;
+					}
 				}
 			}
 
 			label {
 				display: flex;
+				justify-content: space-between;
 				align-items: center;
 				gap: 2ch;
 			}
+
 			svg.logo {
 				width: 6em;
 				max-width: revert;

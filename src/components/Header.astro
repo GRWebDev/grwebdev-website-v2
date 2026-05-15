@@ -1,8 +1,7 @@
 ---
 import Logo from "../assets/grwebdev.svg";
-import Menu from "../assets/menu-vertical.svg";
+import Menu from "../assets/menu-bars.svg";
 import { withBase } from "../utils/utils.ts";
-import ForkMeGitHub from "./ForkMeGitHub.astro";
 ---
 
 <header>
@@ -19,13 +18,12 @@ import ForkMeGitHub from "./ForkMeGitHub.astro";
 			<li class="expanded">
 				<a href={withBase(`/`)} aria-label="Home"> <Logo /> </a>
 			</li>
+			<li class="expanded grow"></li>
 			<!-- TODO: Add What we do and get involved links/pages -->
 			<li class="collapsed"><a href={withBase(`/`)}>Home</a></li>
 			<li><a href={withBase(`/board`)}>Board</a></li>
-			<li><a href={withBase(`/sponsors`)}>Sponsors</a></li>
-			<li><a href={withBase(`/about`)}>About</a></li>
+			<li class="spacer"><a href={withBase(`/sponsors`)}>Sponsors</a></li>
+			<li class="spacer"><a href={withBase(`/about`)}>About</a></li>
 		</ul>
 	</nav>
-	<!-- End -->
-	<ForkMeGitHub />
 </header>
