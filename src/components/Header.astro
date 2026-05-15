@@ -2,8 +2,21 @@
 import Logo from "../assets/grwebdev.svg";
 import Menu from "../assets/menu-bars.svg";
 import { withBase } from "../utils/utils.ts";
+
+interface Props {
+	headerText: string;
+}
+
+const { headerText } = Astro.props;
+console.log({ headerText });
 ---
 
+<style>
+	h1 {
+		margin: 0;
+		font-size: clamp(1.1112em, 2.5cqi - 0.175em, 2em);
+	}
+</style>
 <header>
 	<nav class="grid">
 		<ul id="site-menu">
@@ -12,13 +25,15 @@ import { withBase } from "../utils/utils.ts";
 					for="show-menu"
 					aria-label="Expand / Collapse Navigation"
 					aria-controls="site-menu"
-					><Logo class="logo" /> <Menu /> <input type="checkbox" id="show-menu" name="show-menu">
+					><Logo class="logo" />
+					<Menu />
+					<input type="checkbox" id="show-menu" name="show-menu">
 				</label>
 			</li>
 			<li class="expanded">
 				<a href={withBase(`/`)} aria-label="Home"> <Logo /> </a>
 			</li>
-			<li class="expanded grow"></li>
+			<li class="expanded grow"><h1>{headerText}</h1></li>
 			<!-- TODO: Add What we do and get involved links/pages -->
 			<li class="collapsed"><a href={withBase(`/`)}>Home</a></li>
 			<li><a href={withBase(`/board`)}>Board</a></li>

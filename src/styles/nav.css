@@ -22,7 +22,7 @@ header {
 				height: 60px;
 			}
 
-			@container (width > 500px) {
+			@container (width > 768px) {
 				flex-direction: row;
 			}
 
@@ -39,7 +39,7 @@ header {
 					position: absolute;
 					top: 0;
 
-					@container (width > 500px) {
+					@container (width > 768px) {
 						content: " ";
 					}
 				}
@@ -50,7 +50,7 @@ header {
 			}
 
 			.collapsed {
-				@container (width > 500px) {
+				@container (width > 768px) {
 					display: none;
 				}
 
@@ -80,7 +80,7 @@ header {
 
 			.expanded {
 				display: none;
-				@container (width > 500px) {
+				@container (width > 768px) {
 					display: list-item;
 					width: 6em;
 

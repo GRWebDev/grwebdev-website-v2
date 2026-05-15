@@ -50,13 +50,12 @@ const boardToUse = board
 		object-fit: cover;
 	}
 </style>
-<Layout title="Board">
-	<section class="grid">
-		<div>
-			<h1>Board of Directors</h1>
-		</div>
-	</section>
-	<!-- TODO: See if we can get head shots -->
+<Layout title="Board" headerText="Board of Directors">
+	<!--<section class="grid">-->
+	<!--	<div>-->
+	<!--		<h1>Board of Directors</h1>-->
+	<!--	</div>-->
+	<!--</section>-->
 	{boardToUse.map((member) => (
     <section class="grid">
       <div class="outdent image-text">

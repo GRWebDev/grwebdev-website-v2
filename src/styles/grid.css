@@ -1,21 +1,5 @@
 :root {
 	--main-max-width: 400px;
-
-	@media screen and (width > 480px) {
-		--main-max-width: 600px;
-	}
-
-	@media screen and (width > 768px) {
-		--main-max-width: 1000px;
-	}
-
-	@media screen and (width > 1152px) {
-		--main-max-width: 1500px;
-	}
-
-	@media screen and (width > 1600px) {
-		--main-max-width: 1800px;
-	}
 }
 
 body {
@@ -28,6 +12,21 @@ body {
 
 nav.grid,
 section.grid {
+	@container (width > 480px) {
+		--main-max-width: 600px;
+	}
+
+	@container (width > 768px) {
+		--main-max-width: 1000px;
+	}
+
+	@container (width > 1152px) {
+		--main-max-width: 1500px;
+	}
+
+	@container (width > 1600px) {
+		--main-max-width: 1800px;
+	}
 	display: grid;
 	grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(
 			10cqi,
