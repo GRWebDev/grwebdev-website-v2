@@ -60,8 +60,14 @@ while (
 		display: grid;
 		gap: 2ch;
 		grid-template-columns: 1fr;
-		@container (width > 940px) {
+		@container (width > 620px) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		@container (width > 960px) {
 			grid-template-columns: repeat(3, 1fr);
+		}
+		@container (width > 1280px) {
+			grid-template-columns: repeat(4, 1fr);
 		}
 	}
 	.event-grid img {
@@ -69,7 +75,7 @@ while (
 	}
 </style>
 <section class="grid">
-	<div class="outdent">
+	<div>
 		<div class="event-grid">
 			{eventsToUse.map((event, index) => {
 				const image =
