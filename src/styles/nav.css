@@ -21,7 +21,7 @@ header {
 			position: relative;
 
 			&::before {
-				border-inline-start: 1px solid black;
+				border-inline-start: 1px solid var(--primary-clr);
 				bottom: 0;
 				content: " ";
 				font-size: 0.9em;

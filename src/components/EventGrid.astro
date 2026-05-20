@@ -2,12 +2,8 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 
-interface Props {
-	gridSize?: number;
-	old?: number;
-}
-
-const { gridSize = 3, old = 0 } = Astro.props;
+const gridSize = 8;
+const old = 2;
 
 const events = await getCollection("events");
 const eventsToUse: typeof events = [];
@@ -70,8 +66,34 @@ while (
 			grid-template-columns: repeat(4, 1fr);
 		}
 	}
+
 	.event-grid img {
 		height: revert;
+	}
+
+	.event-grid a:nth-child(-n + 2),
+	.event-grid a:nth-child(n + 6) {
+		display: none;
+	}
+
+	@container (width > 620px) {
+		.event-grid a:nth-child(6) {
+			display: block;
+		}
+	}
+
+	@container (width > 960px) {
+		.event-grid a:nth-child(2),
+		.event-grid a:nth-child(7) {
+			display: block;
+		}
+	}
+
+	@container (width > 1280px) {
+		.event-grid a:nth-child(1),
+		.event-grid a:nth-child(8) {
+			display: block;
+		}
 	}
 </style>
 <section class="grid">
@@ -80,17 +102,20 @@ while (
 			{eventsToUse.map((event, index) => {
 				const image =
 					index % 2 === 0 ? event.data.images.light : event.data.images.dark;
+				const isLikelyFirstVisible = index === 2;
 
 				return (
 					<a href={event.data.url} target="_blank" rel="noopener">
-					<Image
-						src={image.src}
-						alt={image.alt}
-						fetchpriority="high"
-						layout="full-width"
-						loading="eager"
-						quality="low"
-					/>
+						<Image
+							src={image.src}
+							alt={image.alt}
+							fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
+							layout="full-width"
+							loading={isLikelyFirstVisible ? "eager" : "lazy"}
+							quality="low"
+							sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
+							widths={[360, 720]}
+						/>
 					</a>
 				);
 			})}
