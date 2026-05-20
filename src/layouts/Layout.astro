@@ -34,7 +34,13 @@ const { title } = Astro.props;
 		>
 		<meta name="apple-mobile-web-app-title" content="GRWebDev">
 		<link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`}>
+		<link rel="preconnect" href="https://givebutter.com">
+		<link rel="preconnect" href="https://widgets.givebutter.com">
 		<meta name="generator" content={Astro.generator}>
+		<meta
+			name="description"
+			content="Grand Rapids Web Development Group works with the community to open spaces where the community can present, share, and discuss the latest topics in web development."
+		>
 		<title>{`${title} | GRWebDev`}</title>
 	</head>
 	<body>
