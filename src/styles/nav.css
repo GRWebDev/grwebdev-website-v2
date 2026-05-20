@@ -41,18 +41,6 @@ footer {
 	width: 100cqi;
 	z-index: 1;
 
-	@container (width > 1180px) {
-		@media (prefers-reduced-motion: no-preference) and (hover: hover) {
-			bottom: 0;
-			position: fixed;
-			translate: 0 calc(100% - 2em);
-			transition: all 300ms linear 100ms;
-			&:hover {
-				translate: 0 0;
-			}
-		}
-	}
-
 	section {
 		background-color: oklch(from var(--red-950) l c h / 0.075);
 		padding-block: 1em 3em;

@@ -34,7 +34,7 @@ export async function getStaticPaths() {
 		<div class="outdent image-text">
 			<img
 				src={sponsor.data.image.src === "" ? "https://placehold.co/300x150" : withBase(sponsor.data.image.src)}
-				alt=""
+				alt={sponsor?.data?.image.alt}
 				width="300"
 				height="150"
 				style={sponsorImageTransitionStyle}
