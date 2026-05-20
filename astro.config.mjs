@@ -6,6 +6,18 @@ export default defineConfig({
   site: 'https://grwebdev.github.io',
   base: '/grwebdev-website-v2/',
   experimental: {
-    svgOptimizer: svgoOptimizer(),
+    svgOptimizer: svgoOptimizer({
+      plugins: [
+        {
+          name: 'preset-default',
+          params: {
+            overrides: {
+              // disable a default plugin
+              cleanupIds: false,
+            },
+          },
+        },
+      ],
+    }),
   }
 });
