@@ -1,5 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const board = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Board" }),
@@ -36,19 +37,15 @@ const sponsors = defineCollection({
 
 const events = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Events" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     name: z.string(),
     images: z.object({
       light: z.object({
-        src: z.string(),
+        src: image(),
         alt: z.string(),
       }),
       dark: z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-      colorfull: z.object({
-        src: z.string(),
+        src: image(),
         alt: z.string(),
       }),
     }),
