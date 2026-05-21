@@ -2,7 +2,7 @@
 title: "Secretary"
 name: "Matt Gehrls"
 image: {
-  src: "/board-images/matt.jpg",
+  src: "matt.jpg",
   alt: "Head shot for Matt Gehrls"
 }
 shortDescription: "Matt is a full stack .Net and Next.JS developer with an interest in Accessibility and CI/CD pipelines."

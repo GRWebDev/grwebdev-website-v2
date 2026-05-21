@@ -1,18 +1,36 @@
 ---
 import Logo from "../assets/grwebdev.svg";
-import ForkMeGitHub from "./ForkMeGitHub.astro";
 ---
 
 <header>
 	<nav class="grid">
 		<ul class="outdent">
 			<li>
-				<a href={import.meta.env.BASE_URL} aria-label="Home"> <Logo /> </a>
+				<a href={import.meta.env.BASE_URL} aria-label="Home">
+					<Logo />
+				</a>
 			</li>
-			<!-- TODO: Add What we do and get involved links/pages -->
-			<li><a href={`${import.meta.env.BASE_URL}board`}>Board</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}sponsors`}>Sponsors</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}about`}>About</a></li>
+			<li>
+				<a
+					class={Astro.url.pathname.includes("board") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}board`}
+					>Board</a
+				>
+			</li>
+			<li>
+				<a
+					class={Astro.url.pathname.includes("sponsors") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}sponsors`}
+					>Sponsors</a
+				>
+			</li>
+			<li>
+				<a
+					class={Astro.url.pathname.includes("about") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}about`}
+					>About</a
+				>
+			</li>
 		</ul>
 	</nav>
 </header>

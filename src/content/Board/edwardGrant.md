@@ -1,7 +1,7 @@
 ---
 name: "Edward Grant"
 image: {
-  src: "/board-images/edward-grant.png",
+  src: "edward-grant.png",
   alt: "Headshot of Edward Grant"
 }
 shortDescription: "Works for a company you've never heard of, building enterprise content management systems for a company you'll know well."

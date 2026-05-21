@@ -1,7 +1,6 @@
 ---
 name: "Mark Noesens"
 image: {
-  src: "",
   alt: "Head shot for Mark Noesen"
 }
 shortDescription: "Drumstick fatback t-bone tri-tip shoulder leberkas shank pig kielbasa pork loin ham sirloin cupim."

@@ -8,7 +8,7 @@ const board = defineCollection({
     title: z.string().optional(),
     name: z.string(),
     image: z.object({
-      src: z.string(),
+      src: z.string().optional(),
       alt: z.string(),
     }),
     shortDescription: z.string(),

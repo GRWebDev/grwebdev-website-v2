@@ -33,6 +33,23 @@ header {
 			}
 		}
 
+		a {
+			text-decoration: none;
+			text-underline-offset: 0.28em;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.active {
+			font-weight: 700;
+
+			&:hover {
+				text-decoration-thickness: 0.12em;
+			}
+		}
+
 		svg {
 			width: 6em;
 			max-width: revert;
