@@ -12,6 +12,16 @@
 	}
 }
 
+@media (prefers-reduced-motion: reduce) {
+	:active-view-transition-type(slider) {
+		&::view-transition-old(*),
+		&::view-transition-new(*) {
+			animation-duration: 1ms;
+			transform: none;
+		}
+	}
+}
+
 @keyframes slide-out {
 	0% {
 		transform: translateX(0%);

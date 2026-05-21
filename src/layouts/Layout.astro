@@ -49,8 +49,9 @@ const { preconnectGivebutter = false, title } = Astro.props;
 		<title>{`${title} | GRWebDev`}</title>
 	</head>
 	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
 		<Header />
-		<main><slot /></main>
+		<main id="main"><slot /></main>
 		<Footer />
 	</body>
 </html>

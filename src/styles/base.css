@@ -35,8 +35,31 @@ a {
 	}
 }
 
+.skip-link {
+	background: var(--primary-clr);
+	color: var(--tertiary-clr);
+	inset-block-start: 0.5rem;
+	inset-inline-start: 0.5rem;
+	padding: 0.5rem 0.75rem;
+	position: fixed;
+	transform: translateY(calc(-100% - 1rem));
+	z-index: 10;
+
+	&:focus-visible {
+		transform: translateY(0);
+	}
+}
+
 p {
 	text-wrap: balance;
+}
+
+h1,
+h2,
+h3,
+p,
+a {
+	hyphens: auto;
 }
 
 p:has(small) {

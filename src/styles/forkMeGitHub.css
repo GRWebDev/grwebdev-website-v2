@@ -12,6 +12,13 @@
 	}
 }
 
+@media (prefers-reduced-motion: reduce) {
+	.github-corner .octo-arm,
+	.github-corner:hover .octo-arm {
+		animation: none;
+	}
+}
+
 @keyframes octocat-wave {
 	0%,
 	100% {
