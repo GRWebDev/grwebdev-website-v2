@@ -5,9 +5,10 @@ import Header from "../components/Header.astro";
 
 interface Props {
 	title: string;
+	preconnectGivebutter?: boolean;
 }
 
-const { title } = Astro.props;
+const { preconnectGivebutter = false, title } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,8 +35,12 @@ const { title } = Astro.props;
 		>
 		<meta name="apple-mobile-web-app-title" content="GRWebDev">
 		<link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`}>
-		<link rel="preconnect" href="https://givebutter.com">
-		<link rel="preconnect" href="https://widgets.givebutter.com">
+		{preconnectGivebutter && (
+				<>
+					<link rel="preconnect" href="https://givebutter.com" />
+					<link rel="preconnect" href="https://widgets.givebutter.com" />
+				</>
+			)}
 		<meta name="generator" content={Astro.generator}>
 		<meta
 			name="description"
