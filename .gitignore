@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# local live-mode recovery state
+.impeccable/live/sessions/
+
 # dependencies
 node_modules/
 
