@@ -20,11 +20,11 @@ const board = defineCollection({
 
 const sponsors = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Sponsors" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     level: z.string(),
     name: z.string(),
     image: z.object({
-      src: z.string(),
+      src: image(),
       alt: z.string(),
     }),
     shortDescription: z.string(),

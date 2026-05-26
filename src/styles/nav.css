@@ -34,6 +34,9 @@ header {
 		}
 
 		a {
+			align-items: center;
+			display: inline-flex;
+			min-block-size: 44px;
 			text-decoration: none;
 			text-underline-offset: 0.28em;
 

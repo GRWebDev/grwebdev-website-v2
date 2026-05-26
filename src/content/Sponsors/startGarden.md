@@ -2,7 +2,7 @@
 level: 'Sustaining'
 name: "Start Garden"
 image: {
-  src: "/start-garden.svg",
+  src: "../../assets/sponsors/start-garden.svg",
   alt: "Start Garden logo"
 }
 shortDescription: "Connecting local employers, educators, community organizations and workforce experts who are
@@ -22,4 +22,3 @@ Gain access to entrepreneurial resources
 Have a dedicated space to ideate, work and grow
 Try your hand at a new venture—no strings attached
 Learn more at [startgarden.com](https://startgarden.com/).
-

@@ -1,7 +1,19 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
+import type { ImageMetadata } from "astro";
+import sponsorPlaceholder from "../../assets/sponsors/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils";
+
+const sponsorImages = import.meta.glob<{ default: ImageMetadata }>(
+	"../../assets/sponsors/*.{jpg,jpeg,png,webp,avif,svg}",
+	{ eager: true },
+);
+const getSponsorImage = (src?: string) =>
+	src
+		? (sponsorImages[`../../assets/sponsors/${src}`]?.default ??
+			sponsorPlaceholder)
+		: sponsorPlaceholder;
 
 const { slug } = Astro.params;
 const sponsor = await getEntry("sponsors", slug);
@@ -13,7 +25,9 @@ const sponsorImageTransitionStyle = `view-transition-name: ${sponsor.data.slug}-
 const sponsorTitleTransitionStyle = `view-transition-name: ${sponsor.data.slug}-title`;
 export async function getStaticPaths() {
 	const sponsors = await getCollection("sponsors");
-	return sponsors.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
+	return sponsors
+		.filter((sponsor) => sponsor.data.active)
+		.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
 }
 ---
 
@@ -28,17 +42,31 @@ export async function getStaticPaths() {
 	img {
 		object-fit: contain;
 	}
+
+	.sponsor-detail {
+		row-gap: 1em;
+		grid-template-columns: minmax(0, 1fr);
+
+		img {
+			inline-size: min(100%, 300px);
+			block-size: auto;
+		}
+
+		@container (width > 560px) {
+			grid-template-columns: auto minmax(0, 1fr);
+		}
+	}
 </style>
 <Layout title={`${sponsor?.data?.name ?? 'Sponsor Slug'}`}>
 	<section class="grid">
-		<div class="outdent image-text">
-			<img
-				src={sponsor.data.image.src === "" ? "https://placehold.co/300x150" : withBase(sponsor.data.image.src)}
-				alt={sponsor?.data?.image.alt}
+		<div class="outdent image-text sponsor-detail">
+			<Image
+				src={getSponsorImage(sponsor.data.image.src)}
+				alt={sponsor?.data?.image.alt || `${sponsor.data.name} logo`}
 				width="300"
 				height="150"
 				style={sponsorImageTransitionStyle}
-			>
+			/>
 			<div>
 				<h1 style={sponsorTitleTransitionStyle}>{sponsor.data.name}</h1>
 				<Content />

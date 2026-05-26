@@ -2,7 +2,7 @@
 level: 'Title'
 name: "LaFleur Marketing"
 image: {
-  src: "/lafleur-logo.svg",
+  src: "../../assets/sponsors/lafleur-logo.svg",
   alt: "LaFleur Marketing logo"
 }
 shortDescription: "Your forward-thinking digital marketing partner for law firms"
