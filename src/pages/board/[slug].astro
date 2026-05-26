@@ -1,18 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
-import type { ImageMetadata } from "astro";
 import boardPlaceholder from "../../assets/board/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
-
-const boardImages = import.meta.glob<{ default: ImageMetadata }>(
-	"../../assets/board/*.{jpg,jpeg,png,webp,avif,svg}",
-	{ eager: true },
-);
-const getBoardImage = (src?: string) =>
-	src
-		? (boardImages[`../../assets/board/${src}`]?.default ?? boardPlaceholder)
-		: boardPlaceholder;
 
 const { slug } = Astro.params;
 const member = await getEntry("board", slug);
@@ -45,7 +35,7 @@ export async function getStaticPaths() {
 	<section class="grid">
 		<div class="image-text">
 			<Image
-				src={getBoardImage(member.data.image.src)}
+				src={member.data.image.src ?? boardPlaceholder}
 				alt={member.data.image.alt}
 				width="300"
 				height="375"
