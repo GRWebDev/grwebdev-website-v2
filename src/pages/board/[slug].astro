@@ -36,7 +36,7 @@ export async function getStaticPaths() {
 		<div class="image-text">
 			<Image
 				src={member.data.image.src ?? boardPlaceholder}
-				alt={member.data.image.alt}
+				alt={member.data.image.src ? member.data.image.alt : ""}
 				width="300"
 				height="375"
 				class="cover"
