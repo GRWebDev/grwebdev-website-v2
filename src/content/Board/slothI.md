@@ -2,7 +2,7 @@
 title: "Vice President / Treasurer"
 name: "Sloth I"
 image: {
-  src: "sloth.jpg",
+  src: "../../assets/board/sloth.jpg",
   alt: "Head shot for Sloth I"
 }
 shortDescription: "Sloth I is a full stack JavaScript programmer and owner of SlothWerks, a custom web and mobile application development agency."

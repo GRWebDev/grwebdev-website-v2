@@ -2,7 +2,7 @@
 title: "President"
 name: "James Lund"
 image: {
-  src: "james-lund.jpg",
+  src: "../../assets/board/james-lund.jpg",
   alt: "Head shot for James Lund"
 }
 shortDescription: "James is a senior software developer and tech lead at SPARK Business Works, a custom software agency here in Grand Rapids. "

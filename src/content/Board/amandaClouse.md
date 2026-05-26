@@ -1,7 +1,7 @@
 ---
 name: "Amanda (Manny) Clouse"
 image: {
-  src: "amanda-clouse.jpg",
+  src: "../../assets/board/amanda-clouse.jpg",
   alt: "Head shot for Amanda (Manny) Clouse"
 }
 shortDescription: "Fostering an inclusive space for everyone in tech."
