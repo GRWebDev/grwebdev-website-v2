@@ -22,6 +22,11 @@ import BlackRedSection from "./BlackRedSection.astro";
 		window.addEventListener("load", loadGivebutter, { once: true });
 	}
 </script>
+<style>
+	.donation-widget {
+		min-inline-size: 3.125em;
+	}
+</style>
 <section class="grid">
 	<div>
 		<h1>Grand Rapids Web Development Group</h1>
@@ -35,9 +40,3 @@ import BlackRedSection from "./BlackRedSection.astro";
 		</p>
 	</div>
 </section>
-
-<style>
-	.donation-widget {
-		min-block-size: clamp(18rem, 55cqi, 34rem);
-	}
-</style>
