@@ -1,8 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
-import type { ImageMetadata } from "astro";
-import sponsorPlaceholder from "../../assets/sponsors/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
 
 const { slug } = Astro.params;
@@ -30,14 +28,14 @@ export async function getStaticPaths() {
 		}
 	}
 </style>
-<Layout title={`${sponsor?.data?.name ?? 'Sponsor Slug'}`}>
+<Layout title={sponsor.data.name}>
 	<section class="grid">
 		<div class="container">
 			<div class="outdent image-text large">
 				<Image
 					class="contain image"
-					src={sponsor.data.image.src ?? sponsorPlaceholder}
-					alt={sponsor?.data?.image.alt || `${sponsor.data.name} logo`}
+					src={sponsor.data.image.src}
+					alt={sponsor.data.image.alt || `${sponsor.data.name} logo`}
 					widths={[300]}
 					style={sponsorImageTransitionStyle}
 				/>

@@ -72,13 +72,25 @@ footer {
 
 	.grid div {
 		display: grid;
-		grid-template-columns: 1fr auto;
+		grid-template-columns: 1fr;
 		grid-template-areas:
-			"social seal"
-			"header seal"
-			"address seal"
-			"ein  ein"
-			"copy copy";
+			"social"
+			"header"
+			"address"
+			"seal"
+			"ein"
+			"copy";
+		gap: 0 2ch;
+
+		@container (width > 520px) {
+			grid-template-columns: 1fr auto;
+			grid-template-areas:
+				"social seal"
+				"header seal"
+				"address seal"
+				"ein  ein"
+				"copy copy";
+		}
 
 		h2 {
 			font-size: 0.925em;
@@ -119,6 +131,11 @@ footer {
 
 		.seal {
 			grid-area: seal;
+			margin-block-start: 1em;
+
+			@container (width > 520px) {
+				margin-block-start: 0;
+			}
 		}
 	}
 

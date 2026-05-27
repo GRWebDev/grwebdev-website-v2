@@ -26,6 +26,12 @@ import BlackRedSection from "./BlackRedSection.astro";
 	.donation-widget {
 		min-inline-size: 3.125em;
 	}
+
+	.donation-widget a {
+		display: inline-flex;
+		min-block-size: 44px;
+		align-items: center;
+	}
 </style>
 <section class="grid">
 	<div>
@@ -36,7 +42,15 @@ import BlackRedSection from "./BlackRedSection.astro";
 <section class="grid">
 	<div class="center">
 		<p class="donation-widget">
-			<givebutter-widget id="gRBJRg"></givebutter-widget>
+			<givebutter-widget id="gRBJRg">
+				<a
+					href="https://givebutter.com/gRBJRg"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Donate to GRWebDev
+				</a>
+			</givebutter-widget>
 		</p>
 	</div>
 </section>
