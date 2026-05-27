@@ -95,11 +95,14 @@ section.grid {
 	.image {
 		grid-area: image;
 	}
+
 	.title {
 		grid-area: title;
 	}
+
 	.body {
 		grid-area: body;
+		text-box: cap text;
 	}
 
 	&.large {
@@ -112,6 +115,26 @@ section.grid {
 
 		.image {
 			place-self: center;
+		}
+
+		.board-title.role {
+			margin-block-start: 1ex;
+			text-box: trim-start cap text;
+
+			@container (width > 620px) {
+				margin-block-start: 0;
+			}
+		}
+
+		&:not(:has(.role + .name)) {
+			.board-title.name {
+				margin-block-start: .75ex;
+				text-box: cap alphabetic;
+
+				@container (width > 620px) {
+					margin-block-start: 0;
+				}
+			}
 		}
 	}
 
@@ -128,15 +151,22 @@ section.grid {
 	.board-title {
 		display: block;
 		font-weight: 700;
-		line-height: 1.1;
+		line-height: 1.125;
 		text-decoration: none;
+
 		&.stacked {
 			display: grid;
-			gap: 0.1125em;
+			gap: 0.15em;
 		}
+
 		.role {
 			color: var(--red-500);
 			font-size: 0.75em;
+			text-box: trim-start cap text;
+		}
+
+		.name {
+			text-box: cap alphabetic;
 		}
 	}
 
