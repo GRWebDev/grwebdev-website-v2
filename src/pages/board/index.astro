@@ -67,7 +67,7 @@ const boardToUse = board
 					   tabindex="-1">
 						<Image
 							src={member.data.image.src ?? boardPlaceholder}
-							alt={member.data.image.src ? member.data.image.alt : ""}
+							alt={member.data.image.src ? member.data.image.alt : `Place holder image for ${member.data.name}`}
 							width="100"
 							height="100"
 							class="cover"
