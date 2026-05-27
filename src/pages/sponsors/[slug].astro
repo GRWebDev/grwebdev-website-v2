@@ -29,38 +29,27 @@ export async function getStaticPaths() {
 			types: slider;
 		}
 	}
-	img {
-		object-fit: contain;
-	}
-
-	.sponsor-detail {
-		row-gap: 1em;
-		grid-template-columns: minmax(0, 1fr);
-
-		img {
-			inline-size: min(100%, 300px);
-			block-size: auto;
-			place-self: center;
-			width: 16.667em;
-		}
-
-		@container (width > 560px) {
-			grid-template-columns: auto minmax(0, 1fr);
-		}
-	}
 </style>
 <Layout title={`${sponsor?.data?.name ?? 'Sponsor Slug'}`}>
 	<section class="grid">
-		<div class="outdent image-text sponsor-detail">
-			<Image
-				src={sponsor.data.image.src ?? sponsorPlaceholder}
-				alt={sponsor?.data?.image.alt || `${sponsor.data.name} logo`}
-				widths={[300]}
-				style={sponsorImageTransitionStyle}
-			/>
-			<div>
-				<h1 style={sponsorTitleTransitionStyle}>{sponsor.data.name}</h1>
-				<Content />
+		<div class="container">
+			<div class="outdent image-text large">
+				<Image
+					class="contain image"
+					src={sponsor.data.image.src ?? sponsorPlaceholder}
+					alt={sponsor?.data?.image.alt || `${sponsor.data.name} logo`}
+					widths={[300]}
+					style={sponsorImageTransitionStyle}
+				/>
+				<h1
+					class="board-title stacked title"
+					style={sponsorTitleTransitionStyle}
+				>
+					<span class="board-title name">{sponsor.data.name}</span>
+				</h1>
+				<div class="body">
+					<Content />
+				</div>
 			</div>
 		</div>
 	</section>

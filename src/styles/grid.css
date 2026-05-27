@@ -88,55 +88,65 @@ section.grid {
 .image-text {
 	margin-block-start: 1em;
 	display: grid;
-	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-columns: auto 1fr;
+	grid-template-areas: "image title" "body body";
 	column-gap: 2ch;
-	min-width: 0;
 
-	&.image-text > *,
-	&.image-text div {
-		min-width: 0;
+	.image {
+		grid-area: image;
+	}
+	.title {
+		grid-area: title;
+	}
+	.body {
+		grid-area: body;
+	}
+
+	&.large {
+		grid-template-areas: "image" "title" "body";
+		@container (width > 620px) {
+			grid-template-rows: auto auto 1fr;
+			grid-template-areas: "image title" "image body" "image body";
+			place-items: revert;
+		}
+
+		.image {
+			place-self: center;
+		}
 	}
 
 	h1,
 	a h2 {
 		margin: 0;
-		padding-block-start: 0.175em;
 		line-height: 1cap;
 	}
 
-	a:has(.board-title-stacked) {
+	a:has(.board-title.stacked) {
 		text-decoration: none;
 	}
 
-	.board-title-stacked {
-		display: grid;
-		gap: 0.12em;
-		line-height: 1.16;
-		padding-block-start: 0;
-	}
-
-	.board-title-role {
-		color: var(--red-500);
+	.board-title {
 		display: block;
-		font-size: 0.72em;
 		font-weight: 700;
-		line-height: 1.05;
+		line-height: 1.1;
 		text-decoration: none;
+		&.stacked {
+			display: grid;
+			gap: 0.1125em;
+		}
+		.role {
+			color: var(--red-500);
+			font-size: 0.75em;
+		}
 	}
 
-	.board-title-name {
-		display: block;
-		line-height: 1.05;
-		text-decoration: none;
-	}
-
-	a:has(.board-title-stacked):hover .board-title-role,
-	a:has(.board-title-stacked):hover .board-title-name,
-	a:has(.board-title-stacked):focus-visible .board-title-role,
-	a:has(.board-title-stacked):focus-visible .board-title-name {
+	a:has(.board-title.stacked):hover .board-title.role,
+	a:has(.board-title.stacked):hover .board-title.name,
+	a:has(.board-title.stacked):focus-visible .board-title.role,
+	a:has(.board-title.stacked):focus-visible .board-title.name {
 		text-decoration: underline;
 		text-decoration-color: currentColor;
-		text-decoration-thickness: 0.08em;
-		text-underline-offset: 0.16em;
+		text-decoration-thickness: 0.1em;
+		text-underline-offset: 0.1667em;
 	}
 }

@@ -65,26 +65,25 @@ const sponsorsToUse = Object.values(
 	{sponsorsToUse.map((sponsor) => (
 		<section class="grid">
 			<div class="image-text">
-				<a href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`} tabindex="-1">
+				<a href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}
+				   tabindex="-1">
 					<Image
-						class="sponsor-logo"
+						class="image"
 						src={sponsor.data.image.src ?? sponsorPlaceholder}
 						alt={sponsor?.data?.image.alt || `${sponsor.data.name} logo`}
 						widths={[140]}
 						style={{ viewTransitionName: `${sponsor?.data?.slug}-image` }}
 					/>
 				</a>
-				<div>
-					<a
-						class="sponsor-link"
-						href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}
-					>
-						<h2 style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>
-							{sponsor?.data?.name ?? "Sponsor Slug"}
-						</h2>
-					</a>
-					<p>{sponsor?.data?.shortDescription ?? "Short Description"}</p>
-				</div>
+				<a
+					class="title"
+					href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}
+				>
+					<h2 class="board-title stacked" style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>
+						<span class="board-title name">{sponsor?.data?.name ?? "Sponsor Slug"}</span>
+					</h2>
+				</a>
+				<p class="body">{sponsor?.data?.shortDescription ?? "Short Description"}</p>
 			</div>
 		</section>
 	))}

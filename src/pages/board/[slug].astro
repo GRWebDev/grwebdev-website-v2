@@ -10,6 +10,7 @@ if (!member) {
 	return Astro.redirect("/404", 404);
 }
 const { Content } = await render(member);
+const hasBio = !!member.body;
 const memberTitlePrefix = member.data.title ? `${member.data.title}: ` : "";
 const memberPageTitle = `${memberTitlePrefix}${member.data.name}`;
 const memberImageTransitionStyle = `view-transition-name: ${member.data.slug}-image`;
@@ -33,21 +34,29 @@ export async function getStaticPaths() {
 </style>
 <Layout title={memberPageTitle}>
 	<section class="grid">
-		<div class="image-text">
-			<Image
-				src={member.data.image.src ?? boardPlaceholder}
-				alt={member.data.image.src ? member.data.image.alt : ""}
-				width="300"
-				height="375"
-				class="cover"
-				style={memberImageTransitionStyle}
-			/>
-			<div>
-				<h1 class="board-title-stacked" style={memberTitleTransitionStyle}>
-					<span class="board-title-role">{member.data.title}</span>
-					<span class="board-title-name">{member.data.name}</span>
+		<div class="container">
+			<div class="image-text large">
+				<Image
+					src={member.data.image.src ?? boardPlaceholder}
+					alt={member.data.image.src ? member.data.image.alt : ""}
+					width="300"
+					height="375"
+					class="cover image"
+					style={memberImageTransitionStyle}
+				/>
+				<h1
+					class="board-title stacked title"
+					style={memberTitleTransitionStyle}
+				>
+					{member.data.title && (
+					<span class="board-title role">{member.data.title}</span>
+				)}
+					<span class="board-title name">{member.data.name}</span>
 				</h1>
-				<Content />
+				<div class="body">
+					{hasBio ?
+					<Content /> : <p>Bio coming soon.</p>}
+				</div>
 			</div>
 		</div>
 	</section>
