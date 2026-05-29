@@ -128,7 +128,7 @@ section.grid {
 
 		&:not(:has(.role + .name)) {
 			.board-title.name {
-				margin-block-start: .75ex;
+				margin-block-start: 0.75ex;
 				text-box: cap alphabetic;
 
 				@container (width > 620px) {

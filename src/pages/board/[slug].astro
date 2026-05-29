@@ -26,9 +26,11 @@ export async function getStaticPaths() {
 <style>
 	:root {
 		--direction: 1;
-		@view-transition {
-			navigation: auto;
-			types: slider;
+		@media (prefers-reduced-motion: no-preference) {
+			@view-transition {
+				navigation: auto;
+				types: slider;
+			}
 		}
 	}
 </style>
