@@ -7,6 +7,9 @@ dist/
 # local live-mode recovery state
 .impeccable/live/sessions/
 
+# output from lighthouse
+.lighthouse
+
 # dependencies
 node_modules/
 
