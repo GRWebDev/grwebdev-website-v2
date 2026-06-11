@@ -17,11 +17,11 @@ Inside this project, you'll see the following folders and files:
 │   │   └── reusable components
 │   ├── content
 │   │   └── Board
-│   │   │   └── One file per board member 
+│   │   │   └── One file per board member
 │   │   └── Presentations
-│   │   │   └── One file per presentation 
+│   │   │   └── One file per presentation
 │   │   └── Sponsors
-│   │   │   └── One file per sponsor  
+│   │   │   └── One file per sponsor
 │   ├── layouts
 │   │   └── Layout.astro -- Items that are on ever page go here
 │   └── pages
@@ -35,8 +35,8 @@ Inside this project, you'll see the following folders and files:
 All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                                    |
-|:--------------------------|:----------------------------------------------------------|
-| `npm install`             | Installs dependencies                                     |
+| :------------------------ | :-------------------------------------------------------- |
+| `npm ci`                  | Installs dependencies                                     |
 | `npm run dev`             | Starts local dev server at `localhost:4321`               |
 | `npm run build`           | Build your production site to `./dist/`                   |
 | `npm run preview`         | Preview your build locally, before deploying              |
@@ -81,3 +81,9 @@ npm run update:events -- --dry-run --skip-flyers
 npm run update:events -- --event https://www.meetup.com/grwebdev/events/315330656/
 npm run update:events -- --feed-file ./events.ics --today 2026-07-09
 ```
+
+## FAQ
+
+**Why use `npm ci`?**
+
+`npm ci` is more predictable across a team. [Read more](https://support.deploybot.com/build-tools/why-developers-should-use-npm-ci-instead-of-npm-install-and-its-benefits#why-use-npm-ci).

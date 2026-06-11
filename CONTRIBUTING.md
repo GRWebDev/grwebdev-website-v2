@@ -33,7 +33,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](./
 To set up your local development environment:
 
 1. Clone your fork: `git clone https://github.com/GRWebDev/grwebdev-website-v2/fork`
-2. Install dependencies: `npm install`
+2. Install dependencies: `npm ci`
 
 ## Certificate of Origin
 
