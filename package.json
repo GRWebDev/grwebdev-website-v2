@@ -14,7 +14,8 @@
 		"update:events": "node scripts/update-events.mjs",
 		"lint": "biome check",
 		"lint:fix": "biome check --write .",
-		"prepare": "husky"
+		"prepare": "husky",
+		"test": ""
 	},
 	"lint-staged": {
 		"*": "biome check --write ."
