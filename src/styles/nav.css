@@ -14,7 +14,11 @@ header {
 			display: flex;
 			list-style: none;
 			align-items: center;
-			gap: 2ch;
+			gap: 1.5ch;
+
+			@container (width > 480px) {
+				gap: 2ch;
+			}
 		}
 
 		li + li {
@@ -26,10 +30,14 @@ header {
 				content: " ";
 				font-size: 0.9em;
 				height: 1em;
-				left: -1ch;
+				left: -0.75ch;
 				margin-block: auto;
 				position: absolute;
 				top: 0;
+
+				@container (width > 480px) {
+					left: -1ch;
+				}
 			}
 		}
 

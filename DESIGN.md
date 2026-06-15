@@ -178,9 +178,9 @@ Event discovery relies on real flyer imagery, shown in a one-column grid on smal
 
 Board and sponsor listings use a compact image/text row.
 
-- **Style:** `100px` square image followed by text.
+- **Style:** Board rows use a `100px` square image followed by text. Sponsor rows should deviate for landscape-oriented marks: use a wider logo rail that lets each logo keep its natural horizontal proportion, with text below on small screens and beside the logo on larger screens.
 - **Spacing:** `2ch` column gap.
-- **Images:** Board images cover the square; sponsor images contain within the square.
+- **Images:** Board images cover the square. Sponsor logos contain within the wider logo rail and should not be forced into a portrait or square treatment.
 - **Motion:** View-transition names preserve image/title continuity between list and detail pages.
 
 ### Black/Red Community Section

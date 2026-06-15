@@ -36,10 +36,13 @@ a {
 }
 
 .skip-link {
+	align-items: center;
 	background: var(--primary-clr);
 	color: var(--tertiary-clr);
+	display: inline-flex;
 	inset-block-start: 0.5rem;
 	inset-inline-start: 0.5rem;
+	min-block-size: 44px;
 	padding: 0.5rem 0.75rem;
 	position: fixed;
 	transform: translateY(calc(-100% - 1rem));

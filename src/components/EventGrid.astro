@@ -4,6 +4,11 @@ import { getCollection } from "astro:content";
 
 const gridSize = 8;
 const old = 2;
+const eventDateFormatter = new Intl.DateTimeFormat("en-US", {
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+});
 
 const events = await getCollection("events");
 const eventsToUse: typeof events = [];
@@ -52,7 +57,7 @@ while (
 	}
 
 	.event-grid {
-		margin-block-start: 1em;
+		margin-block-start: 1.25em;
 		display: grid;
 		gap: 2ch;
 		grid-template-columns: 1fr;
@@ -96,20 +101,23 @@ while (
 		}
 	}
 </style>
-<section class="grid">
+<section class="grid" aria-labelledby="community-calendar-heading">
 	<div>
+		<h2 id="community-calendar-heading">Upcoming Events</h2>
 		{eventsToUse.length > 0 && (
 					<div class="event-grid">
 						{eventsToUse.map((event, index) => {
 							const image =
 								index % 2 === 0 ? event.data.images.light : event.data.images.dark;
 							const isLikelyFirstVisible = index === 2;
+							const eventLabel = `${event.data.name}, ${eventDateFormatter.format(event.data.date)} on Meetup`;
 
 							return (
 								<a
 									href={event.data.url}
 									target="_blank"
 									rel="noopener noreferrer"
+									aria-label={eventLabel}
 								>
 									<Image
 										src={image.src}
