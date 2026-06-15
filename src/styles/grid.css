@@ -98,11 +98,31 @@ section.grid {
 
 	.title {
 		grid-area: title;
+		display: flow-root;
+		place-content: end;
 	}
 
 	.body {
 		grid-area: body;
 		text-box: cap text;
+	}
+
+	&:is(a) {
+		text-decoration: none;
+	}
+
+	&:is(a):hover :where(.board-title.role),
+	&:is(a):hover :where(.board-title.name),
+	&:is(a):focus-visible :where(.board-title.role),
+	&:is(a):focus-visible :where(.board-title.name),
+	a:has(.board-title.stacked):hover :where(.board-title.role),
+	a:has(.board-title.stacked):hover :where(.board-title.name),
+	a:has(.board-title.stacked):focus-visible :where(.board-title.role),
+	a:has(.board-title.stacked):focus-visible :where(.board-title.name) {
+		text-decoration: underline;
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 0.1em;
+		text-underline-offset: 0.1667em;
 	}
 
 	&.large {
@@ -160,24 +180,14 @@ section.grid {
 			gap: 0.15em;
 		}
 
-		.role {
+		&.role {
 			color: var(--secondary-clr);
 			font-size: 0.75em;
 			text-box: trim-start cap text;
 		}
 
-		.name {
+		&.name {
 			text-box: cap alphabetic;
 		}
-	}
-
-	a:has(.board-title.stacked):hover .board-title.role,
-	a:has(.board-title.stacked):hover .board-title.name,
-	a:has(.board-title.stacked):focus-visible .board-title.role,
-	a:has(.board-title.stacked):focus-visible .board-title.name {
-		text-decoration: underline;
-		text-decoration-color: currentColor;
-		text-decoration-thickness: 0.1em;
-		text-underline-offset: 0.1667em;
 	}
 }
