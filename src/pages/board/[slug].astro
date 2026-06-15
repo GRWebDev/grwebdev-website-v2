@@ -43,6 +43,8 @@ export async function getStaticPaths() {
 					alt={member.data.image.src ? member.data.image.alt : ""}
 					width="300"
 					height="375"
+					widths={[300, 600]}
+					sizes="300px"
 					class="cover image"
 					style={memberImageTransitionStyle}
 				/>

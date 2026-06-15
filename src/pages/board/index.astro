@@ -68,26 +68,28 @@ const boardToUse = board
 					aria-labelledby={`board-${member.data.slug}-title`}
 				>
 					<div class="image">
-					<Image
-						src={member.data.image.src ?? boardPlaceholder}
-						alt=""
-						width="100"
-						height="100"
-						class="cover"
-						style={{ viewTransitionName: `${member.data.slug}-image` }}
-					/>
+						<Image
+							src={member.data.image.src ?? boardPlaceholder}
+							alt=""
+							width="100"
+							height="100"
+							widths={[100, 200]}
+							sizes="100px"
+							class="cover"
+							style={{ viewTransitionName: `${member.data.slug}-image` }}
+						/>
 					</div>
 					<div class="title">
-					<h2
-						id={`board-${member.data.slug}-title`}
-						class="board-title stacked"
-						style={`view-transition-name: ${member.data.slug}-title`}
-					>
-						{member.data.title && (
-							<span class="board-title role">{member.data.title}</span>
-						)}
-						<span class="board-title name">{member.data.name}</span>
-					</h2>
+						<h2
+							id={`board-${member.data.slug}-title`}
+							class="board-title stacked"
+							style={`view-transition-name: ${member.data.slug}-title`}
+						>
+							{member.data.title && (
+								<span class="board-title role">{member.data.title}</span>
+							)}
+							<span class="board-title name">{member.data.name}</span>
+						</h2>
 					</div>
 					<p class="body">{member.data.shortDescription}</p>
 				</a>

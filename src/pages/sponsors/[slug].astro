@@ -42,7 +42,8 @@ export async function getStaticPaths() {
 					class="contain image"
 					src={sponsor.data.image.src}
 					alt={sponsor.data.image.alt || `${sponsor.data.name} logo`}
-					widths={[300]}
+					widths={[300, 600]}
+					sizes="300px"
 					style={sponsorImageTransitionStyle}
 				/>
 				<h1
