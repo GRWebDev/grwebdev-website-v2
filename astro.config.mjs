@@ -3,21 +3,26 @@ import { defineConfig, svgoOptimizer } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://grwebdev.github.io',
-  base: '/grwebdev-website-v2/',
-  experimental: {
-    svgOptimizer: svgoOptimizer({
-      plugins: [
-        {
-          name: 'preset-default',
-          params: {
-            overrides: {
-              // disable a default plugin
-              cleanupIds: false,
-            },
-          },
-        },
-      ],
-    }),
-  }
+	site: "https://grwebdev.github.io",
+	base: "/grwebdev-website-v2/",
+	experimental: {
+		svgOptimizer: svgoOptimizer({
+			plugins: [
+				{
+					name: "preset-default",
+					params: {
+						overrides: {
+							// Keep SVG ids stable for assets that reference internal clips.
+							cleanupIds: false,
+						},
+					},
+				},
+			],
+		}),
+	},
+	vite: {
+		build: {
+			assetsInlineLimit: 0,
+		},
+	},
 });

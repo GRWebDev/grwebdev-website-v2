@@ -1,7 +1,8 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import boardPlaceholder from "../../assets/board/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils";
 
 const board = await getCollection("board");
 const boardToUse = board
@@ -40,9 +41,11 @@ const boardToUse = board
 <style>
 	:root {
 		--direction: -1;
-		@view-transition {
-			navigation: auto;
-			types: slider;
+		@media (prefers-reduced-motion: no-preference) {
+			@view-transition {
+				navigation: auto;
+				types: slider;
+			}
 		}
 	}
 
@@ -56,27 +59,48 @@ const boardToUse = board
 			<h1>Board of Directors</h1>
 		</div>
 	</section>
-	<!-- TODO: See if we can get head shots -->
 	{boardToUse.map((member) => (
-    <section class="grid">
-      <div class="outdent image-text">
-				<a href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}>
-				<img src={member?.data?.image?.src === '' ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
-             alt={member?.data?.image.alt}
-             width="100" height="100"
-						 class="cover"
-             style={{ viewTransitionName: `${member?.data?.slug}-image` }} />
-        </a>
-        <div>
-			<a href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}>
-						<h2 style={`view-transition-name: ${member.data.slug}-title`}>
-							{member.data.title ? `${member.data.title}: ` : ""}
-							{member.data.name}
+		<section class="grid">
+			<div class="container">
+				<a
+					href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}
+					class="image-text"
+					aria-labelledby={`board-${member.data.slug}-title`}
+				>
+					<div class="image">
+						<Image
+							src={member.data.image.src ?? boardPlaceholder}
+							alt=""
+							width="100"
+							height="100"
+							widths={[100, 200]}
+							sizes="100px"
+							class="cover"
+							style={{ viewTransitionName: `${member.data.slug}-image` }}
+						/>
+					</div>
+					<div class="title">
+						<h2
+							id={`board-${member.data.slug}-title`}
+							class="board-title stacked"
+							style={`view-transition-name: ${member.data.slug}-title`}
+						>
+							{member.data.title && (
+								<span class="board-title role">{member.data.title}</span>
+							)}
+							<span class="board-title name">{member.data.name}</span>
 						</h2>
-          </a>
-					<p>{member.data.shortDescription}</p>
-        </div>
-      </div>
-    </section>
-  ))}
+					</div>
+					<p class="body">{member.data.shortDescription}</p>
+				</a>
+			</div>
+		</section>
+	))}
+	{boardToUse.length === 0 && (
+		<section class="grid">
+			<div>
+				<p>Board information is not available right now.</p>
+			</div>
+		</section>
+	)}
 </Layout>

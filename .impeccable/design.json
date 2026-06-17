@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-20T00:00:00-04:00",
+  "title": "Design System: GRWebDev",
+  "extensions": {
+    "colorMeta": {
+      "stage-black": {
+        "role": "primary",
+        "displayName": "Stage Black",
+        "canonical": "var(--primary-clr), sourced from --gray-100",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(25% 0 0)",
+          "oklch(35% 0 0)",
+          "oklch(45% 0 0)",
+          "oklch(55% 0 0)",
+          "oklch(65% 0 0)",
+          "oklch(80% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      },
+      "signal-red": {
+        "role": "secondary",
+        "displayName": "Signal Red",
+        "canonical": "var(--secondary-clr), sourced from --red-500",
+        "tonalRamp": [
+          "oklch(15% 0.1984 29.23)",
+          "oklch(25% 0.1984 29.23)",
+          "oklch(35% 0.1984 29.23)",
+          "oklch(45% 0.1984 29.23)",
+          "oklch(55% 0.1984 29.23)",
+          "oklch(65% 0.16 29.23)",
+          "oklch(80% 0.09 29.23)",
+          "oklch(95% 0.03 29.23)"
+        ]
+      },
+      "room-light": {
+        "role": "neutral",
+        "displayName": "Room Light",
+        "canonical": "var(--tertiary-clr), sourced from --gray-1000",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(25% 0 0)",
+          "oklch(35% 0 0)",
+          "oklch(45% 0 0)",
+          "oklch(55% 0 0)",
+          "oklch(65% 0 0)",
+          "oklch(80% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Condensed Community Statement",
+        "purpose": "Poster-like statement text in black/red sections."
+      },
+      "body": {
+        "displayName": "Open Body",
+        "purpose": "Readable community copy, logistics, and descriptions."
+      },
+      "nav": {
+        "displayName": "Plain Navigation",
+        "purpose": "Sticky header links and simple site movement."
+      }
+    },
+    "shadows": [
+      {
+        "name": "header-lift",
+        "value": "0 -0.5em 0.5em 0.5em var(--gray-700)",
+        "purpose": "Separates the sticky header from scrolling content."
+      }
+    ],
+    "motion": [
+      {
+        "name": "footer-reveal",
+        "value": "transition: all 300ms linear 100ms",
+        "purpose": "Reveals the fixed footer on large hover-capable screens."
+      },
+      {
+        "name": "octocat-wave",
+        "value": "560ms ease-in-out",
+        "purpose": "Small GitHub corner animation."
+      },
+      {
+        "name": "slider-view-transition",
+        "value": "view-transition types: slider",
+        "purpose": "Preserves continuity from list pages to detail pages."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "main-480",
+        "value": "480px"
+      },
+      {
+        "name": "main-768",
+        "value": "768px"
+      },
+      {
+        "name": "main-1152",
+        "value": "1152px"
+      },
+      {
+        "name": "main-1600",
+        "value": "1600px"
+      },
+      {
+        "name": "event-grid",
+        "value": "940px"
+      },
+      {
+        "name": "desktop-event-switch",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Plain inherited-color link with underline on hover.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">Board</a>",
+      "css": ".ds-nav-link { color: inherit; text-decoration: none; font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; } .ds-nav-link:hover { text-decoration: underline; } .ds-nav-link:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.25em; }"
+    },
+    {
+      "name": "Event Flyer Tile",
+      "kind": "card",
+      "refersTo": "event-flyer",
+      "description": "Full image event tile with no decorative frame.",
+      "html": "<a class=\"ds-event-flyer\" href=\"#\"><img src=\"/event-flyers/2026-05-26-running-local-ai-agents-light.jpg\" alt=\"GRWebDev event flyer\"></a>",
+      "css": ".ds-event-flyer { display: block; color: inherit; text-decoration: none; } .ds-event-flyer img { display: block; width: 100%; height: auto; border-radius: 0; } .ds-event-flyer:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.35em; }"
+    },
+    {
+      "name": "Image Text Row",
+      "kind": "custom",
+      "refersTo": "person-list-item",
+      "description": "Compact board or sponsor row with a square image and text.",
+      "html": "<article class=\"ds-image-text\"><img src=\"/board-images/edward-grant.png\" alt=\"Board member\"><div><h2>President: Name</h2><p>Short community description.</p></div></article>",
+      "css": ".ds-image-text { display: grid; grid-template-columns: auto 1fr; column-gap: 2ch; align-items: start; font-family: \"Open Sans Variable\", sans-serif; color: var(--primary-clr); } .ds-image-text img { width: 100px; height: 100px; object-fit: cover; border-radius: 0; } .ds-image-text h2 { margin: 0; padding-block-start: 0.175em; line-height: 1cap; } .ds-image-text p { margin-block-start: 1em; text-wrap: balance; }"
+    },
+    {
+      "name": "Black Red Community Section",
+      "kind": "custom",
+      "refersTo": "black-red-section",
+      "description": "Signature poster section using Stage Black, Signal Red, and Room Light.",
+      "html": "<section class=\"ds-black-red\"><div class=\"ds-signal-shape\"></div><p>At GRWebDev, everyone belongs.</p></section>",
+      "css": ".ds-black-red { position: relative; overflow: hidden; background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; font-variation-settings: \"wght\" 300, \"wdth\" 75; font-size: clamp(0.875em, 2.625cqi + 0.25em, 2.375em); line-height: 2cap; padding: 1cap; border-radius: 0; } .ds-black-red p { position: relative; z-index: 1; margin-block-start: 1cap; } .ds-signal-shape { position: absolute; inset-block-end: 0; inset-inline-end: 0; width: 42%; height: 65%; background: var(--secondary-clr); clip-path: polygon(22% 0%, 100% 0, 100% 100%, 48% 100%); }"
+    },
+    {
+      "name": "Plain Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "A future-compatible button derived from the existing link and black/red vocabulary.",
+      "html": "<button class=\"ds-button-primary\">Attend an event</button>",
+      "css": ".ds-button-primary { appearance: none; border: 1px solid var(--primary-clr); border-radius: 0; background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; padding: 0.75em 1em; cursor: pointer; } .ds-button-primary:hover { text-decoration: underline; } .ds-button-primary:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.25em; } .ds-button-primary:disabled { opacity: 0.55; cursor: not-allowed; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Community Bulletin Board",
+    "overview": "The GRWebDev system should feel like a real local notice board outside a well-used event room: practical, public, friendly, and a little handmade. It is not a corporate conference brand. It should help newcomers understand what is happening, who is involved, and where they can show up without needing insider status.",
+    "keyCharacteristics": [
+      "Public, local, and easy to scan.",
+      "Poster-like blocks instead of decorative cards.",
+      "Real community artifacts: event flyers, board photos, sponsor logos, venue maps.",
+      "Strong black/red contrast, softened by accessible Room Light usage.",
+      "Plain language and visible next steps."
+    ],
+    "rules": [
+      {
+        "name": "The Signal, Not Wallpaper Rule",
+        "body": "Signal Red should point at important structure or energy. Do not scatter it as a generic accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Room Stays Open Rule",
+        "body": "Dark sections must preserve enough Room Light contrast for newcomers scanning logistics, names, dates, and links.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Stay with Open Sans Variable unless there is a deliberate brand reason to add another family. The current system gets its range from weight, width, scale, and layout.",
+        "section": "typography"
+      },
+      {
+        "name": "The Plain Invitation Rule",
+        "body": "Typography should sound and look like people inviting people. Avoid all-caps institutional labels and over-styled conference language.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Bulletin Rule",
+        "body": "Do not add card shadows to make lists feel designed. Use spacing, imagery, typography, and grid position first.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use real community artifacts: event flyers, board photos, sponsor logos, venue maps, and organization details.",
+      "Do keep layouts public and scannable, especially for dates, names, locations, and next steps.",
+      "Do preserve the Stage Black, Signal Red, and Room Light relationship.",
+      "Do use the outdent grid to create a confident local-poster layout.",
+      "Do support WCAG 2.2 AA, reduced motion preferences, keyboard-friendly navigation, visible focus states, and contrast that does not rely on red and black alone."
+    ],
+    "donts": [
+      "Don't make the site feel corporate.",
+      "Don't use polished enterprise sameness, stock-photo professionalism, investor-deck language, generic SaaS sections, or sterile tech conference aesthetics.",
+      "Don't imply exclusivity, insider status, hustle culture, or a narrow definition of who counts as a developer.",
+      "Don't replace real community imagery with decorative abstract panels.",
+      "Don't add side-stripe card borders, gradient text, glassmorphism, identical icon-card grids, or hero-metric templates.",
+      "Don't use Signal Red as wallpaper. It should carry direction or emphasis."
+    ]
+  }
+}

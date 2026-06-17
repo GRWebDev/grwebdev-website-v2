@@ -1,14 +1,30 @@
 :root {
 	view-transition-name: none;
+	--route-slide-duration: 380ms;
+	--route-slide-easing: cubic-bezier(0.16, 1, 0.3, 1);
+	--route-slide-distance: 24%;
 }
 
 :active-view-transition-type(slider) {
 	&::view-transition-old(*) {
-		animation: slide-out 750ms cubic-bezier(0.86, 0, 0.07, 1) forwards;
+		animation: slide-out var(--route-slide-duration) var(--route-slide-easing)
+			forwards;
 	}
 
 	&::view-transition-new(*) {
-		animation: slide-in 750ms cubic-bezier(0.86, 0, 0.07, 1) forwards;
+		animation: slide-in var(--route-slide-duration) var(--route-slide-easing)
+			forwards;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:active-view-transition-type(slider) {
+		&::view-transition-old(*),
+		&::view-transition-new(*) {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
 	}
 }
 
@@ -19,14 +35,18 @@
 
 	100% {
 		opacity: 0;
-		transform: translateX(calc(50% * var(--direction, 1)));
+		transform: translateX(
+			calc(var(--route-slide-distance) * var(--direction, 1))
+		);
 	}
 }
 
 @keyframes slide-in {
 	0% {
 		opacity: 0;
-		transform: translateX(calc(-50% * var(--direction, 1)));
+		transform: translateX(
+			calc(var(--route-slide-distance) * var(--direction, 1) * -1)
+		);
 	}
 
 	100% {

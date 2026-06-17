@@ -1,7 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils";
 
 const { slug } = Astro.params;
 const sponsor = await getEntry("sponsors", slug);
@@ -13,35 +13,48 @@ const sponsorImageTransitionStyle = `view-transition-name: ${sponsor.data.slug}-
 const sponsorTitleTransitionStyle = `view-transition-name: ${sponsor.data.slug}-title`;
 export async function getStaticPaths() {
 	const sponsors = await getCollection("sponsors");
-	return sponsors.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
+	return sponsors
+		.filter((sponsor) => sponsor.data.active)
+		.map((sponsor) => ({ params: { slug: sponsor.data.slug } }));
 }
 ---
 
 <style>
 	:root {
 		--direction: 1;
-		@view-transition {
-			navigation: auto;
-			types: slider;
+		@media (prefers-reduced-motion: no-preference) {
+			@view-transition {
+				navigation: auto;
+				types: slider;
+			}
 		}
 	}
 	img {
-		object-fit: contain;
+		width: 16.67em;
+		height: auto;
 	}
 </style>
-<Layout title={`${sponsor?.data?.name ?? 'Sponsor Slug'}`}>
+<Layout title={sponsor.data.name}>
 	<section class="grid">
-		<div class="outdent image-text">
-			<img
-				src={sponsor.data.image.src === "" ? "https://placehold.co/300x150" : withBase(sponsor.data.image.src)}
-				alt=""
-				width="300"
-				height="150"
-				style={sponsorImageTransitionStyle}
-			>
-			<div>
-				<h1 style={sponsorTitleTransitionStyle}>{sponsor.data.name}</h1>
-				<Content />
+		<div class="container">
+			<div class="outdent image-text large">
+				<Image
+					class="contain image"
+					src={sponsor.data.image.src}
+					alt={sponsor.data.image.alt || `${sponsor.data.name} logo`}
+					widths={[300, 600]}
+					sizes="300px"
+					style={sponsorImageTransitionStyle}
+				/>
+				<h1
+					class="board-title stacked title"
+					style={sponsorTitleTransitionStyle}
+				>
+					<span class="board-title name">{sponsor.data.name}</span>
+				</h1>
+				<div class="body">
+					<Content />
+				</div>
 			</div>
 		</div>
 	</section>

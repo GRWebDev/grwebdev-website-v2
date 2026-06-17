@@ -4,11 +4,11 @@ import { z } from "astro/zod";
 
 const board = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Board" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string().optional(),
     name: z.string(),
     image: z.object({
-      src: z.string(),
+      src: image().optional(),
       alt: z.string(),
     }),
     shortDescription: z.string(),
@@ -20,11 +20,11 @@ const board = defineCollection({
 
 const sponsors = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Sponsors" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     level: z.string(),
     name: z.string(),
     image: z.object({
-      src: z.string(),
+      src: image(),
       alt: z.string(),
     }),
     shortDescription: z.string(),

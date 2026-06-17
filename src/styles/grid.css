@@ -76,7 +76,7 @@ section.grid {
 		}
 
 		&.center {
-			place-items: center;
+			place-self: center;
 		}
 	}
 
@@ -89,12 +89,105 @@ section.grid {
 	margin-block-start: 1em;
 	display: grid;
 	grid-template-columns: auto 1fr;
+	grid-template-areas: "image title" "body body";
 	column-gap: 2ch;
+
+	.image {
+		grid-area: image;
+	}
+
+	.title {
+		grid-area: title;
+		display: flow-root;
+		place-content: end;
+	}
+
+	.body {
+		grid-area: body;
+		text-box: cap text;
+	}
+
+	&:is(a) {
+		text-decoration: none;
+	}
+
+	&:is(a):hover :where(.board-title.role),
+	&:is(a):hover :where(.board-title.name),
+	&:is(a):focus-visible :where(.board-title.role),
+	&:is(a):focus-visible :where(.board-title.name),
+	a:has(.board-title.stacked):hover :where(.board-title.role),
+	a:has(.board-title.stacked):hover :where(.board-title.name),
+	a:has(.board-title.stacked):focus-visible :where(.board-title.role),
+	a:has(.board-title.stacked):focus-visible :where(.board-title.name) {
+		text-decoration: underline;
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 0.1em;
+		text-underline-offset: 0.1667em;
+	}
+
+	&.large {
+		grid-template-areas: "image" "title" "body";
+		@container (width > 620px) {
+			grid-template-rows: auto auto 1fr;
+			grid-template-areas: "image title" "image body" "image body";
+			place-items: revert;
+		}
+
+		.image {
+			place-self: center;
+		}
+
+		.board-title.role {
+			margin-block-start: 1ex;
+			text-box: trim-start cap text;
+
+			@container (width > 620px) {
+				margin-block-start: 0;
+			}
+		}
+
+		&:not(:has(.role + .name)) {
+			.board-title.name {
+				margin-block-start: 0.75ex;
+				text-box: cap alphabetic;
+
+				@container (width > 620px) {
+					margin-block-start: 0;
+				}
+			}
+		}
+	}
 
 	h1,
 	a h2 {
 		margin: 0;
-		padding-block-start: 0.175em;
 		line-height: 1cap;
+	}
+
+	a:has(.board-title.stacked) {
+		text-decoration: none;
+		align-self: end;
+	}
+
+	.board-title {
+		display: block;
+		font-weight: 700;
+		line-height: 1.125;
+		text-decoration: none;
+
+		&.stacked {
+			display: grid;
+			gap: 0.15em;
+		}
+
+		&.role {
+			color: var(--secondary-clr);
+			font-size: 0.75em;
+			text-box: trim-start cap text;
+		}
+
+		&.name {
+			text-box: cap alphabetic;
+		}
 	}
 }

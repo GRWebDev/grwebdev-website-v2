@@ -1,7 +1,8 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
+import boardPlaceholder from "../../assets/board/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils";
 
 const { slug } = Astro.params;
 const member = await getEntry("board", slug);
@@ -9,6 +10,7 @@ if (!member) {
 	return Astro.redirect("/404", 404);
 }
 const { Content } = await render(member);
+const hasBio = !!member.body;
 const memberTitlePrefix = member.data.title ? `${member.data.title}: ` : "";
 const memberPageTitle = `${memberTitlePrefix}${member.data.name}`;
 const memberImageTransitionStyle = `view-transition-name: ${member.data.slug}-image`;
@@ -24,26 +26,41 @@ export async function getStaticPaths() {
 <style>
 	:root {
 		--direction: 1;
-		@view-transition {
-			navigation: auto;
-			types: slider;
+		@media (prefers-reduced-motion: no-preference) {
+			@view-transition {
+				navigation: auto;
+				types: slider;
+			}
 		}
 	}
 </style>
 <Layout title={memberPageTitle}>
 	<section class="grid">
-		<div class="image-text">
-			<img
-				src={member.data.image.src === "" ? "https://placehold.co/300x375" : withBase(member.data.image.src)}
-				alt={member.data.image.alt}
-				width="300"
-				height="375"
-				class="cover"
-				style={memberImageTransitionStyle}
-			>
-			<div>
-				<h1 style={memberTitleTransitionStyle}>{memberPageTitle}</h1>
-				<Content />
+		<div class="container">
+			<div class="image-text large">
+				<Image
+					src={member.data.image.src ?? boardPlaceholder}
+					alt={member.data.image.src ? member.data.image.alt : ""}
+					width="300"
+					height="375"
+					widths={[300, 600]}
+					sizes="300px"
+					class="cover image"
+					style={memberImageTransitionStyle}
+				/>
+				<h1
+					class="board-title stacked title"
+					style={memberTitleTransitionStyle}
+				>
+					{member.data.title && (
+					<span class="board-title role">{member.data.title}</span>
+				)}
+					<span class="board-title name">{member.data.name}</span>
+				</h1>
+				<div class="body">
+					{hasBio ?
+					<Content /> : <p>Bio coming soon.</p>}
+				</div>
 			</div>
 		</div>
 	</section>

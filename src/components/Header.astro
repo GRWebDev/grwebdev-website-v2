@@ -1,20 +1,41 @@
 ---
 import Logo from "../assets/grwebdev.svg";
-import ForkMeGitHub from "./ForkMeGitHub.astro";
+
+const isActivePath = (path: string) => Astro.url.pathname.includes(path);
 ---
 
 <header>
 	<nav class="grid">
 		<ul class="outdent">
 			<li>
-				<a href={import.meta.env.BASE_URL} aria-label="Home"> <Logo /> </a>
+				<a href={import.meta.env.BASE_URL} aria-label="Home">
+					<Logo />
+				</a>
 			</li>
-			<!-- TODO: Add What we do and get involved links/pages -->
-			<li><a href={`${import.meta.env.BASE_URL}board`}>Board</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}sponsors`}>Sponsors</a></li>
-			<li><a href={`${import.meta.env.BASE_URL}about`}>About</a></li>
+			<li>
+				<a
+					aria-current={isActivePath("board") ? "page" : undefined}
+					class={isActivePath("board") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}board`}
+					>Board</a
+				>
+			</li>
+			<li>
+				<a
+					aria-current={isActivePath("sponsors") ? "page" : undefined}
+					class={isActivePath("sponsors") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}sponsors`}
+					>Sponsors</a
+				>
+			</li>
+			<li>
+				<a
+					aria-current={isActivePath("about") ? "page" : undefined}
+					class={isActivePath("about") ? "active" : ""}
+					href={`${import.meta.env.BASE_URL}about`}
+					>About</a
+				>
+			</li>
 		</ul>
 	</nav>
-	<!-- End -->
-	<ForkMeGitHub />
 </header>

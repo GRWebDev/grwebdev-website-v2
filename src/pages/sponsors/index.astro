@@ -1,7 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import { withBase } from "../../utils/utils";
 
 interface sorted {
 	title: typeof sponsors;
@@ -43,14 +43,44 @@ const sponsorsToUse = Object.values(
 <style>
 	:root {
 		--direction: -1;
-		@view-transition {
-			navigation: auto;
-			types: slider;
+		@media (prefers-reduced-motion: no-preference) {
+			@view-transition {
+				navigation: auto;
+				types: slider;
+			}
 		}
 	}
 
-	img {
+	.logo-row .image {
+		block-size: 5.5rem;
+		display: grid;
+		inline-size: min(100%, 17rem);
+		place-items: center start;
+	}
+
+	.logo-row {
+		grid-template-areas:
+			"image"
+			"title"
+			"body";
+		grid-template-columns: 1fr;
+
+		@container (width > 620px) {
+			align-items: center;
+			grid-template-areas:
+				"image title"
+				"image body";
+			grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+			row-gap: 0;
+		}
+	}
+
+	.logo-row .image img {
+		height: auto;
+		max-block-size: 4rem;
+		max-inline-size: 100%;
 		object-fit: contain;
+		width: auto;
 	}
 </style>
 <Layout title="Sponsors">
@@ -60,21 +90,41 @@ const sponsorsToUse = Object.values(
 		</div>
 	</section>
 	{sponsorsToUse.map((sponsor) => (
-    <section class="grid">
-      <div class="outdent image-text">
-				<a href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}>
-					<img src={sponsor?.data?.image?.src === '' ? "https://placehold.co/300x375" : withBase(sponsor.data.image.src)}
-						 alt={sponsor?.data?.image.alt}
-						 width="100" height="100"
-						 style={{ viewTransitionName: `${sponsor?.data?.slug}-image` }} />
+		<section class="grid">
+			<div class="container">
+					<a
+						href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}
+						class="image-text logo-row"
+						aria-labelledby={`sponsor-${sponsor.data.slug}-title`}
+					>
+						<div class="image">
+							<Image
+								src={sponsor.data.image.src}
+								alt=""
+								widths={[100, 200]}
+								sizes="(min-width: 621px) 18rem, 100vw"
+								style={{ viewTransitionName: `${sponsor.data.slug}-image` }}
+							/>
+						</div>
+						<div class="title">
+						<h2
+							id={`sponsor-${sponsor.data.slug}-title`}
+							class="board-title stacked"
+							style={{ viewTransitionName: `${sponsor.data.slug}-title` }}
+						>
+							<span class="board-title name">{sponsor.data.name}</span>
+						</h2>
+					</div>
+					<p class="body">{sponsor.data.shortDescription}</p>
 				</a>
-				<div>
-					<a href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}>
-						<h2 style={{ viewTransitionName: `${sponsor?.data?.slug}-title` }}>{sponsor?.data?.name ?? 'Sponsor Slug'}</h2>
-					</a>
-					<p>{sponsor?.data?.shortDescription ?? 'Short Description'}</p>
-				</div>
-      </div>
-    </section>
-  ))}
+			</div>
+		</section>
+	))}
+	{sponsorsToUse.length === 0 && (
+		<section class="grid">
+			<div>
+				<p>Sponsor information is not available right now.</p>
+			</div>
+		</section>
+	)}
 </Layout>

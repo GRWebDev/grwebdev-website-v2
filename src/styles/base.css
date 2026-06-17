@@ -24,13 +24,45 @@ a {
 	color: inherit;
 	text-decoration: none;
 
-	&:hover {
+	&:hover,
+	&:focus-visible {
 		text-decoration: underline;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--secondary-clr);
+		outline-offset: 0.2em;
+	}
+}
+
+.skip-link {
+	align-items: center;
+	background: var(--primary-clr);
+	color: var(--tertiary-clr);
+	display: inline-flex;
+	inset-block-start: 0.5rem;
+	inset-inline-start: 0.5rem;
+	min-block-size: 44px;
+	padding: 0.5rem 0.75rem;
+	position: fixed;
+	transform: translateY(calc(-100% - 1rem));
+	z-index: 10;
+
+	&:focus-visible {
+		transform: translateY(0);
 	}
 }
 
 p {
 	text-wrap: balance;
+}
+
+h1,
+h2,
+h3,
+p,
+a {
+	hyphens: auto;
 }
 
 p:has(small) {
