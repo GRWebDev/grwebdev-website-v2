@@ -10,7 +10,8 @@
 			"./src/**/*.astro",
 			"./src/**/*.css",
 			"./src/**/*.md",
-			"./src/!.astro"
+			"./src/!.astro",
+			"./scripts/**/*.mjs"
 		],
 		"ignoreUnknown": false
 	},
