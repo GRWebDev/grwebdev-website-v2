@@ -7,6 +7,15 @@ Use this guide to add new event entries to the site from Meetup without extra se
   - https://www.meetup.com/grwebdev/events/ical/
 
 ## Quick workflow
+Run the repeatable updater first:
+
+```bash
+npm run update:events -- --dry-run
+npm run update:events
+```
+
+Use the manual steps below only when Meetup changes its page markup or an event needs special handling.
+
 1. Fetch the iCal feed and extract event dates + URLs.
 2. Compare feed events to existing event frontmatter by `date + url` to find:
    - missing events
