@@ -22,6 +22,10 @@ const board = defineCollection({
 lkAdbcKJEwdbkjcbdwskVBFK. sdKVCNsfkv. holyshiiiiittttttt
 kl;jasdfbhvkafsendklvjafendlkvnefld
 
+heyyyyyy edward!!!!!!
+
+
+
 const sponsors = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Sponsors" }),
   schema: z.object({
