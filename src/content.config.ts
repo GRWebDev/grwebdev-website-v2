@@ -17,6 +17,7 @@ const board = defineCollection({
     active: z.boolean()
   }),
 });
+kl;jasdfbhvkafsendklvjafendlkvnefld
 
 const sponsors = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "src/content/Sponsors" }),
