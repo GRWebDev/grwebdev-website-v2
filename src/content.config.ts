@@ -17,6 +17,9 @@ const board = defineCollection({
     active: z.boolean()
   }),
 });
+
+
+lkAdbcKJEwdbkjcbdwskVBFK. sdKVCNsfkv. holyshiiiiittttttt
 kl;jasdfbhvkafsendklvjafendlkvnefld
 
 const sponsors = defineCollection({
