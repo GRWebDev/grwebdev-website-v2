@@ -131,6 +131,10 @@ section.grid {
 			grid-template-rows: auto auto 1fr;
 			grid-template-areas: "image title" "image body" "image body";
 			place-items: revert;
+
+			.title {
+				place-content: start;
+			}
 		}
 
 		.image {
