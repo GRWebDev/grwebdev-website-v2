@@ -5,7 +5,7 @@ const isActivePath = (path: string) => Astro.url.pathname.includes(path);
 ---
 
 <header>
-	<nav class="grid">
+	<nav class="grid" aria-label="Primary navigation">
 		<ul class="outdent">
 			<li>
 				<a href={import.meta.env.BASE_URL} aria-label="Home">
