@@ -5,6 +5,7 @@ import { defineConfig, svgoOptimizer } from "astro/config";
 export default defineConfig({
 	site: "https://grwebdev.github.io",
 	base: "/grwebdev-website-v2/",
+	compressHTML: true,
 	experimental: {
 		svgOptimizer: svgoOptimizer({
 			plugins: [
