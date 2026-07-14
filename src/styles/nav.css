@@ -1,7 +1,7 @@
 header {
 	border-block-end: 1px solid var(--gray-900);
 	box-shadow: 0 -0.5em 0.5em 0.5em var(--gray-700);
-	padding-block: 1em 0.5em;
+	padding-block: 0.625rem 0.35rem;
 	background-color: var(--gray-1000);
 	position: sticky;
 	top: 0;
@@ -9,15 +9,36 @@ header {
 
 	nav {
 		ul {
-			padding: 0;
-			padding-block-end: 0.75em;
 			display: flex;
 			list-style: none;
+			margin: 0;
+			padding: 0;
+			padding-block-end: calc(0.75em - 6px);
 			align-items: center;
 			gap: 1.5ch;
 
 			@container (width > 480px) {
 				gap: 2ch;
+				padding-block-end: 0.75em;
+			}
+		}
+
+		a {
+			align-items: center;
+			display: inline-flex;
+			font-size: 1rem;
+			min-block-size: 44px;
+			text-decoration: none;
+			text-underline-offset: 0.28em;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		li:first-child {
+			a {
+				min-block-size: 38px;
 			}
 		}
 
@@ -41,18 +62,6 @@ header {
 			}
 		}
 
-		a {
-			align-items: center;
-			display: inline-flex;
-			min-block-size: 44px;
-			text-decoration: none;
-			text-underline-offset: 0.28em;
-
-			&:hover {
-				text-decoration: underline;
-			}
-		}
-
 		.active {
 			font-weight: 700;
 
@@ -62,8 +71,20 @@ header {
 		}
 
 		svg {
-			width: 6em;
+			width: min(5em, 46cqi);
 			max-width: revert;
+		}
+
+		@container (width > 480px) {
+			li:first-child {
+				a {
+					min-block-size: 44px;
+				}
+			}
+
+			svg {
+				width: 6em;
+			}
 		}
 	}
 }
