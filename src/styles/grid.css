@@ -105,6 +105,10 @@ section.grid {
 	.body {
 		grid-area: body;
 		text-box: cap text;
+
+		> * {
+			max-width: 70ch;
+		}
 	}
 
 	&:is(a) {
