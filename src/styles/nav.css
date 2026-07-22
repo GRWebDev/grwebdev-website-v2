@@ -36,9 +36,12 @@
 
 	.active {
 		font-weight: 700;
+		text-decoration: underline;
+		text-decoration-color: var(--secondary-clr);
 
 		&:hover {
 			text-decoration-thickness: 0.12em;
+			text-decoration-color: var(--secondary-clr);
 		}
 	}
 }
