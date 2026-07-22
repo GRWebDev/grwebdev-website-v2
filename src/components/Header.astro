@@ -1,41 +1,89 @@
 ---
 import Logo from "../assets/grwebdev.svg";
 
+const baseUrl = import.meta.env.BASE_URL;
+const donateUrl = "https://givebutter.com/gRBJRg";
 const isActivePath = (path: string) => Astro.url.pathname.includes(path);
+const links = [
+	{ label: "Board", path: "board" },
+	{ label: "Sponsors", path: "sponsors" },
+	{ label: "About", path: "about" },
+];
 ---
 
-<header>
+<script is:inline>
+	const loadGivebutter = () => {
+		if (document.querySelector("script[data-givebutter-widget]")) {
+			return;
+		}
+
+		const script = document.createElement("script");
+		script.async = true;
+		script.dataset.givebutterWidget = "";
+		script.src =
+			"https://widgets.givebutter.com/latest.umd.cjs?acct=YGjlKv1rH53EHVNY&p=other";
+		document.head.append(script);
+	};
+
+	if ("requestIdleCallback" in window) {
+		window.requestIdleCallback(loadGivebutter, { timeout: 2500 });
+	} else {
+		window.addEventListener("load", loadGivebutter, { once: true });
+	}
+</script>
+
+<header class="site-header">
 	<nav class="grid" aria-label="Primary navigation">
-		<ul class="outdent">
-			<li>
-				<a href={import.meta.env.BASE_URL} aria-label="Home">
-					<Logo />
-				</a>
-			</li>
-			<li>
-				<a
-					aria-current={isActivePath("board") ? "page" : undefined}
-					class={isActivePath("board") ? "active" : ""}
-					href={`${import.meta.env.BASE_URL}board`}
-					>Board</a
-				>
-			</li>
-			<li>
-				<a
-					aria-current={isActivePath("sponsors") ? "page" : undefined}
-					class={isActivePath("sponsors") ? "active" : ""}
-					href={`${import.meta.env.BASE_URL}sponsors`}
-					>Sponsors</a
-				>
-			</li>
-			<li>
-				<a
-					aria-current={isActivePath("about") ? "page" : undefined}
-					class={isActivePath("about") ? "active" : ""}
-					href={`${import.meta.env.BASE_URL}about`}
-					>About</a
-				>
-			</li>
-		</ul>
+		<div class="site-header__bar outdent">
+			<a class="site-header__brand" href={baseUrl} aria-label="GRWebDev home">
+				<Logo />
+			</a>
+
+			<ul class="site-header__desktop-links">
+				{links.map(({ label, path }) => (
+					<li>
+						<a
+							aria-current={isActivePath(path) ? "page" : undefined}
+							class={isActivePath(path) ? "active" : ""}
+							href={`${baseUrl}${path}`}
+						>
+							{label}
+						</a>
+					</li>
+				))}
+			</ul>
+
+			<span class="site-header__donation">
+				<givebutter-widget id="gRBJRg">
+					<a
+						class="site-header__donate-fallback"
+						href={donateUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Donate to GRWebDev
+					</a>
+				</givebutter-widget>
+			</span>
+
+			<details class="site-header__mobile-menu">
+				<summary aria-label="Toggle navigation menu">
+					<span class="site-header__menu-mark" aria-hidden="true"></span>
+				</summary>
+				<ul>
+					{links.map(({ label, path }) => (
+						<li>
+							<a
+								aria-current={isActivePath(path) ? "page" : undefined}
+								class={isActivePath(path) ? "active" : ""}
+								href={`${baseUrl}${path}`}
+							>
+								{label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</details>
+		</div>
 	</nav>
 </header>
