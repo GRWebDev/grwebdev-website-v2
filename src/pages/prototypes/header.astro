@@ -1,0 +1,153 @@
+---
+// Two responsive header variants, switchable via ?variant=, on the throwaway /prototypes/header route.
+import EventGrid from "../../components/EventGrid.astro";
+import Footer from "../../components/Footer.astro";
+import HeaderPrototypeA from "../../components/prototypes/header/HeaderPrototypeA.astro";
+import HeaderPrototypeB from "../../components/prototypes/header/HeaderPrototypeB.astro";
+import PrototypeSwitcher from "../../components/prototypes/header/PrototypeSwitcher.astro";
+import "../../styles/index.css";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="robots" content="noindex, nofollow">
+		<link rel="preconnect" href="https://givebutter.com">
+		<link rel="preconnect" href="https://widgets.givebutter.com">
+		<title>Header option A | GRWebDev prototype</title>
+		<script is:inline>
+			const loadGivebutter = () => {
+				if (document.querySelector("script[data-givebutter-widget]")) {
+					return;
+				}
+
+				const script = document.createElement("script");
+				script.async = true;
+				script.dataset.givebutterWidget = "";
+				script.src =
+					"https://widgets.givebutter.com/latest.umd.cjs?acct=YGjlKv1rH53EHVNY&p=other";
+				document.head.append(script);
+			};
+
+			if ("requestIdleCallback" in window) {
+				window.requestIdleCallback(loadGivebutter, { timeout: 2500 });
+			} else {
+				window.addEventListener("load", loadGivebutter, { once: true });
+			}
+		</script>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<div data-header-mount></div>
+		<template data-header-template="A"><HeaderPrototypeA /></template>
+		<template data-header-template="B"><HeaderPrototypeB /></template>
+		<script is:inline>
+			const requestedVariant = new URL(window.location.href).searchParams
+				.get("variant")
+				?.toUpperCase();
+			const variant = requestedVariant === "B" ? "B" : "A";
+			const mount = document.querySelector("[data-header-mount]");
+			const template = document.querySelector(
+				`[data-header-template="${variant}"]`,
+			);
+
+			if (mount && template instanceof HTMLTemplateElement) {
+				mount.replaceChildren(template.content.cloneNode(true));
+			}
+		</script>
+
+		<main id="main">
+			<section class="grid prototype-intro">
+				<div>
+					<p class="prototype-note">
+						Throwaway header study · Option
+						<span data-current-variant>A</span>
+					</p>
+					<h1>Grand Rapids Web Development Group</h1>
+				</div>
+			</section>
+
+			<section class="grid community-statement">
+				<div>
+					<p>
+						We open friendly spaces where people can learn, present, discuss web
+						development, and connect with the local community.
+					</p>
+				</div>
+			</section>
+
+			<section class="grid review-prompt" aria-labelledby="review-heading">
+				<div>
+					<h2 id="review-heading">Try the header at two sizes</h2>
+					<p>
+						On a narrow screen, open and close the navigation. Then scroll
+						through the real event grid to judge the sticky header’s height and
+						presence.
+					</p>
+				</div>
+			</section>
+
+			<EventGrid />
+		</main>
+
+		<Footer />
+		<PrototypeSwitcher />
+	</body>
+</html>
+
+<style>
+	[data-header-mount] {
+		display: contents;
+	}
+
+	.prototype-intro {
+		padding-block: clamp(2rem, 6cqi, 5rem) clamp(2.5rem, 8cqi, 6rem);
+	}
+
+	.prototype-intro h1 {
+		font-size: clamp(2.25rem, 7cqi, 5.5rem);
+		letter-spacing: -0.035em;
+		line-height: 0.98;
+		max-inline-size: 15ch;
+	}
+
+	.prototype-note {
+		color: var(--secondary-clr);
+		font-size: 0.85rem;
+		font-weight: 700;
+		margin-block: 0 0.75rem;
+	}
+
+	.community-statement {
+		background: var(--gray-100);
+		color: var(--gray-1000);
+		padding-block: clamp(2.5rem, 7cqi, 6rem);
+	}
+
+	.community-statement p {
+		font-size: clamp(1.5rem, 4.5cqi, 3.75rem);
+		font-variation-settings:
+			"wght" 300,
+			"wdth" 75;
+		letter-spacing: -0.025em;
+		line-height: 1.12;
+		margin: 0;
+		max-inline-size: 23ch;
+	}
+
+	.review-prompt {
+		padding-block-start: clamp(2rem, 5cqi, 4rem);
+	}
+
+	.review-prompt p {
+		max-inline-size: 64ch;
+	}
+
+	@media (width < 24rem) {
+		.prototype-intro h1 {
+			font-size: 2rem;
+		}
+	}
+</style>
