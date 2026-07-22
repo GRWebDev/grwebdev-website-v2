@@ -1,14 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import { formatEventDate, isEventUpcoming } from "../utils/event-date.mjs";
 
 const gridSize = 8;
 const old = 2;
-const eventDateFormatter = new Intl.DateTimeFormat("en-US", {
-	day: "numeric",
-	month: "long",
-	year: "numeric",
-});
 
 const events = await getCollection("events");
 const eventsToUse: typeof events = [];
@@ -17,10 +13,16 @@ const eventsSorted = events.toSorted((a, b) => {
 	const bDate = b.data.date;
 	return bDate.valueOf() - aDate.valueOf();
 });
-const d = new Date();
+const now = new Date();
 const [eventsAfter, eventsBefore] = eventsSorted.reduce(
 	(a, c) => {
-		if (c.data.date.valueOf() > d.valueOf()) {
+		if (
+			isEventUpcoming({
+				date: c.data.date,
+				now,
+				timeZone: c.data.timeZone,
+			})
+		) {
 			a[0].push(c);
 		} else {
 			a[1].push(c);
@@ -110,7 +112,10 @@ while (
 							const image =
 								index % 2 === 0 ? event.data.images.light : event.data.images.dark;
 							const isLikelyFirstVisible = index === 2;
-							const eventLabel = `${event.data.name}, ${eventDateFormatter.format(event.data.date)} on Meetup`;
+							const eventLabel = `${event.data.name}, ${formatEventDate({
+								date: event.data.date,
+								timeZone: event.data.timeZone,
+							})} on Meetup`;
 
 							return (
 								<a

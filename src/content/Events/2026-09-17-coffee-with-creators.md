@@ -6,4 +6,5 @@ images: {
 }
 url: "https://www.meetup.com/grwebdev/events/jdkdwtyjcmbwb/"
 date: 2026-09-17
+timeZone: "America/New_York"
 ---

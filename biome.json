@@ -10,9 +10,11 @@
 			"./src/**/*.astro",
 			"./src/**/*.css",
 			"./src/**/*.md",
+			"./src/**/*.mjs",
 			"./src/!.astro",
 			"./scripts/**/*.mjs",
-			"./src/**/*.ts"
+			"./src/**/*.ts",
+			"./test/**/*.mjs"
 		],
 		"ignoreUnknown": false
 	},

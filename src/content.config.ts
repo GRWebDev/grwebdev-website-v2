@@ -54,6 +54,7 @@ const events = defineCollection({
 			}),
 			url: z.string(),
 			date: z.date(),
+			timeZone: z.string(),
 		}),
 });
 export const collections = { board, sponsors, events };
