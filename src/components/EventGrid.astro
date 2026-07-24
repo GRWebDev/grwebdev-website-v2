@@ -127,6 +127,7 @@ while (
 									<Image
 										src={image.src}
 										alt={image.alt}
+										decoding={isLikelyFirstVisible ? "sync" : "async"}
 										fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
 										layout="full-width"
 										loading={isLikelyFirstVisible ? "eager" : "lazy"}
