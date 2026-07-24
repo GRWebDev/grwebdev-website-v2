@@ -15,9 +15,19 @@ const searchableExtensions = new Set([
 	".xml",
 ]);
 
-async function walk(directory) {
+interface RemovedAsset {
+	file: string;
+	bytes: number;
+}
+
+interface PrunedAssets {
+	files: RemovedAsset[];
+	bytes: number;
+}
+
+async function walk(directory: string): Promise<string[]> {
 	const entries = await readdir(directory, { withFileTypes: true });
-	const files = [];
+	const files: string[] = [];
 
 	for (const entry of entries) {
 		const path = join(directory, entry.name);
@@ -31,7 +41,9 @@ async function walk(directory) {
 	return files;
 }
 
-export async function pruneUnusedRasterAssets(outputDirectory) {
+export async function pruneUnusedRasterAssets(
+	outputDirectory: string | URL,
+): Promise<PrunedAssets> {
 	const outputPath =
 		outputDirectory instanceof URL
 			? fileURLToPath(outputDirectory)
@@ -47,7 +59,7 @@ export async function pruneUnusedRasterAssets(outputDirectory) {
 	const rasterAssets = (await walk(assetPath)).filter((file) =>
 		rasterExtensions.has(extname(file).toLowerCase()),
 	);
-	const removed = [];
+	const removed: RemovedAsset[] = [];
 
 	for (const file of rasterAssets) {
 		const assetName = relative(outputPath, file).replaceAll("\\", "/");
@@ -68,6 +80,6 @@ export async function pruneUnusedRasterAssets(outputDirectory) {
 	};
 }
 
-export function formatBytes(bytes) {
+export function formatBytes(bytes: number): string {
 	return `${(bytes / 1024 / 1024).toFixed(2)} MiB`;
 }

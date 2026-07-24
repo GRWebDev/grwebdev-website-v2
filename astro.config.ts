@@ -1,9 +1,9 @@
-// @ts-check
+import type { AstroIntegration } from "astro";
 import { defineConfig, svgoOptimizer } from "astro/config";
 import {
 	formatBytes,
 	pruneUnusedRasterAssets,
-} from "./scripts/prune-unused-assets.mjs";
+} from "./scripts/prune-unused-assets.ts";
 
 const pruneUnusedRasterAssetsIntegration = {
 	name: "prune-unused-raster-assets",
@@ -15,7 +15,7 @@ const pruneUnusedRasterAssetsIntegration = {
 			);
 		},
 	},
-};
+} satisfies AstroIntegration;
 
 // https://astro.build/config
 export default defineConfig({

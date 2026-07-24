@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { formatEventDate, isEventUpcoming } from "../utils/event-date.mjs";
+import { formatEventDate, isEventUpcoming } from "../utils/event-date.ts";
 
 const gridSize = 8;
 const old = 2;
@@ -114,7 +114,6 @@ while (
 							const isLikelyFirstVisible = index === 2;
 							const eventLabel = `${event.data.name}, ${formatEventDate({
 								date: event.data.date,
-								timeZone: event.data.timeZone,
 							})} on Meetup`;
 
 							return (

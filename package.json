@@ -11,8 +11,9 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"test": "node --test && npm run lint && npm run build",
-		"update:events": "node scripts/update-events.mjs",
+		"test": "node --test test/*.test.ts && npm run typecheck && npm run lint && npm run build",
+		"typecheck": "astro check",
+		"update:events": "node scripts/update-events.ts",
 		"lint": "biome check",
 		"lint:fix": "biome check --write .",
 		"prepare": "husky"
@@ -25,9 +26,12 @@
 		"astro": "^7.2.2"
 	},
 	"devDependencies": {
+		"@astrojs/check": "^0.9.9",
 		"@biomejs/biome": "2.5.8",
+		"@types/node": "^22.20.1",
 		"husky": "^9.1.7",
 		"lint-staged": "17.3.0",
-		"playwright": "^1.62.1"
+		"playwright": "^1.62.1",
+		"typescript": "^6.0.3"
 	}
 }

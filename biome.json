@@ -7,14 +7,14 @@
 	},
 	"files": {
 		"includes": [
+			"./astro.config.ts",
 			"./src/**/*.astro",
 			"./src/**/*.css",
 			"./src/**/*.md",
-			"./src/**/*.mjs",
-			"./src/!.astro",
-			"./scripts/**/*.mjs",
 			"./src/**/*.ts",
-			"./test/**/*.mjs"
+			"./src/!.astro",
+			"./scripts/**/*.ts",
+			"./test/**/*.ts"
 		],
 		"ignoreUnknown": false
 	},
@@ -25,7 +25,10 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"preset": "recommended"
+			"preset": "recommended",
+			"suspicious": {
+				"noExplicitAny": "error"
+			}
 		}
 	},
 	"html": {

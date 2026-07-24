@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { pruneUnusedRasterAssets } from "../scripts/prune-unused-assets.mjs";
+import { pruneUnusedRasterAssets } from "../scripts/prune-unused-assets.ts";
 
 test("build cleanup removes only unreferenced raster assets", async () => {
 	const outputDirectory = await mkdtemp(join(tmpdir(), "grwebdev-assets-"));

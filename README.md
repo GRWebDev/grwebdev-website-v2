@@ -44,6 +44,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro -- --help` | Get help using the Astro CLI                              |
 | `npm run lint`            | List out linting issues                                   |
 | `npm run lint:fix`        | Correct automatically fixable lint issues and list others |
+| `npm run typecheck`       | Check Astro and TypeScript types                          |
 | `npm run update:events`   | Update event content and flyer images from Meetup         |
 
 ## Updating Events

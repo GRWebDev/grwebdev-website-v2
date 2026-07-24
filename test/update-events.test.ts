@@ -14,9 +14,8 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const importerPath = fileURLToPath(
-	new URL("../scripts/update-events.mjs", import.meta.url),
+	new URL("../scripts/update-events.ts", import.meta.url),
 );
-
 test("Meetup imports preserve the event time zone in Markdown", async (t) => {
 	const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-events-"));
 	t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
