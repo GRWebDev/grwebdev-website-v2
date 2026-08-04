@@ -14,7 +14,11 @@
 		"update:events": "node scripts/update-events.mjs",
 		"lint": "biome check",
 		"lint:fix": "biome check --write .",
-		"prepare": "husky"
+		"prepare": "husky",
+		"test": ""
+	},
+	"lint-staged": {
+		"*": "biome check --write ."
 	},
 	"dependencies": {
 		"@fontsource-variable/open-sans": "^5.2.7",
@@ -23,6 +27,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.4.15",
 		"husky": "^9.1.7",
-		"playwright": "^1.61.1"
+		"playwright": "^1.61.1",
+		"lint-staged": "^17.0.7"
 	}
 }

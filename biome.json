@@ -11,7 +11,8 @@
 			"./src/**/*.css",
 			"./src/**/*.md",
 			"./src/!.astro",
-			"./scripts/**/*.mjs"
+			"./scripts/**/*.mjs",
+			"./src/**/*.ts"
 		],
 		"ignoreUnknown": false
 	},
@@ -26,7 +27,10 @@
 		}
 	},
 	"html": {
-		"formatter": { "enabled": true, "indentScriptAndStyle": true },
+		"formatter": {
+			"enabled": true,
+			"indentScriptAndStyle": true
+		},
 		"experimentalFullSupportEnabled": true
 	},
 	"javascript": {
@@ -44,7 +48,10 @@
 	},
 	"overrides": [
 		{
-			"includes": ["!.astro/**", "**/*.astro"],
+			"includes": [
+				"!.astro/**",
+				"**/*.astro"
+			],
 			"linter": {
 				"rules": {
 					"style": {
