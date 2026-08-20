@@ -40,7 +40,3 @@ To set up your local development environment:
 By contributing to this project, you certify that your contribution was created in whole or in part by you and you have the right to submit it under the open source license indicated in the file.
 
 - [LICENSE](./LICENSE.md)
-
-## Additional Resources
-
-- [GRWebDev Slack](https://grwebdev.slack.com/archives/C06HFCHGB33)
