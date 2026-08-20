@@ -22,12 +22,8 @@ SOFTWARE.
 
 CONTENT EXCLUSION
 
-The following are NOT covered by the MIT License above and remain the exclusive
-copyright of GRWebDev. All rights reserved.
+The following are NOT covered by the MIT License above:
 
     All files under src/assets/
     All files under src/content/
     All files under public/ (including images, logos, and the site manifest)
-
-These materials may not be reproduced, redistributed, or used without express
-written permission from GRWebDev.
