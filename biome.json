@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
@@ -7,12 +7,14 @@
 	},
 	"files": {
 		"includes": [
+			"./astro.config.ts",
 			"./src/**/*.astro",
 			"./src/**/*.css",
 			"./src/**/*.md",
+			"./src/**/*.ts",
 			"./src/!.astro",
-			"./scripts/**/*.mjs",
-			"./src/**/*.ts"
+			"./scripts/**/*.ts",
+			"./test/**/*.ts"
 		],
 		"ignoreUnknown": false
 	},
@@ -23,7 +25,10 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"preset": "recommended",
+			"suspicious": {
+				"noExplicitAny": "error"
+			}
 		}
 	},
 	"html": {
@@ -48,10 +53,7 @@
 	},
 	"overrides": [
 		{
-			"includes": [
-				"!.astro/**",
-				"**/*.astro"
-			],
+			"includes": ["!.astro/**", "**/*.astro"],
 			"linter": {
 				"rules": {
 					"style": {

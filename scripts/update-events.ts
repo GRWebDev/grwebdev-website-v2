@@ -4,11 +4,80 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
+interface CliArgs {
+	dryRun: boolean;
+	skipFlyers: boolean;
+	noCleanup: boolean;
+	help: boolean;
+	event: string;
+	feedFile: string;
+	today: string;
+}
+
+interface FeedEvent {
+	date: string;
+	summary: string;
+	name: string;
+	timeZone: string;
+	url: string;
+}
+
+interface LocalEvent {
+	file: string;
+	date: string;
+	name?: string;
+	slug: string;
+	timeZone?: string;
+	url?: string;
+}
+
+interface EventUpdate {
+	local: LocalEvent;
+	feed: FeedEvent;
+}
+
+interface AmbiguousStaleEvents {
+	date: string;
+	locals: LocalEvent[];
+	feeds: FeedEvent[];
+}
+
+interface EventComparison {
+	missing: FeedEvent[];
+	stale: EventUpdate[];
+	ambiguousStale: AmbiguousStaleEvents[];
+}
+
+interface EventSummary {
+	feedEvents: FeedEvent[];
+	localEvents: LocalEvent[];
+	missing: FeedEvent[];
+	stale: EventUpdate[];
+	timeZoneUpdates: EventUpdate[];
+	ambiguousStale: AmbiguousStaleEvents[];
+	oldEvents: LocalEvent[];
+	cutoff: Date;
+}
+
+interface EventMarkdown {
+	file: string;
+	date: string;
+	name: string;
+	slug: string;
+	timeZone: string;
+	url: string;
+}
+
+interface FlyerExport {
+	eventUrl: string;
+	outputBase: string;
+}
+
 const repoRoot = process.cwd();
 const eventsDir = path.join(repoRoot, "src/content/Events");
 const flyersDir = path.join(repoRoot, "src/assets/event-flyers");
 const meetupIcalUrl = "https://www.meetup.com/grwebdev/events/ical/";
-const flyerVariants = ["light", "dark"];
+const flyerVariants = ["light", "dark"] as const;
 
 const args = parseArgs(process.argv.slice(2));
 
@@ -17,12 +86,13 @@ if (args.help) {
 	process.exit(0);
 }
 
-main().catch((error) => {
-	console.error(`\nupdate:events failed: ${error.message}`);
+main().catch((error: unknown) => {
+	const message = error instanceof Error ? error.message : String(error);
+	console.error(`\nupdate:events failed: ${message}`);
 	process.exit(1);
 });
 
-async function main() {
+async function main(): Promise<void> {
 	const feedText = await readFeed();
 	const feedEvents = parseIcal(feedText)
 		.filter((event) => !args.event || event.url === args.event)
@@ -43,12 +113,14 @@ async function main() {
 		feedEvents,
 		localEvents,
 	);
+	const timeZoneUpdates = findTimeZoneUpdates(feedEvents, localEvents);
 
 	printSummary({
 		feedEvents,
 		localEvents,
 		missing,
 		stale,
+		timeZoneUpdates,
 		ambiguousStale,
 		oldEvents,
 		cutoff,
@@ -69,6 +141,10 @@ async function main() {
 		await updateEventUrl(event.local.file, event.feed.url);
 	}
 
+	for (const event of timeZoneUpdates) {
+		await updateEventTimeZone(event.local.file, event.feed.timeZone);
+	}
+
 	for (const event of missing) {
 		const slug = slugFor(event);
 		const outputBase = `${event.date}-${slug}`;
@@ -79,6 +155,7 @@ async function main() {
 			date: event.date,
 			name: siteNameFor(event.summary),
 			slug: outputBase,
+			timeZone: event.timeZone,
 			url: event.url,
 		});
 
@@ -93,8 +170,8 @@ async function main() {
 	console.log("\nDone.");
 }
 
-function parseArgs(argv) {
-	const parsed = {
+function parseArgs(argv: string[]): CliArgs {
+	const parsed: CliArgs = {
 		dryRun: false,
 		skipFlyers: false,
 		noCleanup: false,
@@ -127,13 +204,13 @@ function parseArgs(argv) {
 	return parsed;
 }
 
-function readValue(argv, index, flag) {
+function readValue(argv: string[], index: number, flag: string): string {
 	const value = argv[index];
 	if (!value) throw new Error(`${flag} requires a value`);
 	return value;
 }
 
-async function readFeed() {
+async function readFeed(): Promise<string> {
 	if (args.feedFile) {
 		return fs.readFile(path.resolve(repoRoot, args.feedFile), "utf8");
 	}
@@ -148,13 +225,17 @@ async function readFeed() {
 	return response.text();
 }
 
-function parseIcal(text) {
+function parseIcal(text: string): FeedEvent[] {
 	return text
 		.split("BEGIN:VEVENT")
 		.slice(1)
 		.map((block) => block.split("END:VEVENT")[0])
 		.map((block) => {
-			const dtStart = matchLine(block, /^DTSTART(?:;TZID=[^:]+)?:([0-9T]+)/m);
+			const dtStartMatch = block.match(
+				/^DTSTART(?:;TZID=([^:]+))?:([0-9TZ]+)/m,
+			);
+			const timeZone = dtStartMatch?.[1] ?? "UTC";
+			const dtStart = dtStartMatch?.[2];
 			const summary = unescapeIcal(matchLine(block, /^SUMMARY:(.+)$/m) ?? "");
 			const url = matchLine(block, /^URL;VALUE=URI:(.+)$/m);
 
@@ -164,17 +245,18 @@ function parseIcal(text) {
 				date: `${dtStart.slice(0, 4)}-${dtStart.slice(4, 6)}-${dtStart.slice(6, 8)}`,
 				summary,
 				name: siteNameFor(summary),
+				timeZone,
 				url: url.trim(),
 			};
 		})
-		.filter(Boolean);
+		.filter((event): event is FeedEvent => event !== null);
 }
 
-function matchLine(text, regex) {
+function matchLine(text: string, regex: RegExp): string | undefined {
 	return text.match(regex)?.[1]?.trim();
 }
 
-function unescapeIcal(value) {
+function unescapeIcal(value: string): string {
 	return value
 		.replaceAll("\\,", ",")
 		.replaceAll("\\;", ";")
@@ -182,9 +264,9 @@ function unescapeIcal(value) {
 		.trim();
 }
 
-async function readLocalEvents() {
+async function readLocalEvents(): Promise<LocalEvent[]> {
 	const entries = await fs.readdir(eventsDir, { withFileTypes: true });
-	const events = [];
+	const events: LocalEvent[] = [];
 
 	for (const entry of entries) {
 		if (!entry.isFile() || !entry.name.endsWith(".md")) continue;
@@ -197,6 +279,7 @@ async function readLocalEvents() {
 			matchLine(frontmatter, /^date:\s*(.+)$/m);
 		const url = matchLine(frontmatter, /^url:\s*"([^"]+)"/m);
 		const name = matchLine(frontmatter, /^name:\s*"([^"]+)"/m);
+		const timeZone = matchLine(frontmatter, /^timeZone:\s*"([^"]+)"/m);
 		const slug = entry.name
 			.replace(/\.md$/, "")
 			.replace(/^\d{4}-\d{2}-\d{2}-/, "");
@@ -208,6 +291,7 @@ async function readLocalEvents() {
 			date,
 			name,
 			slug,
+			timeZone,
 			url,
 		});
 	}
@@ -217,12 +301,15 @@ async function readLocalEvents() {
 	);
 }
 
-function compareEvents(feedEvents, localEvents) {
+function compareEvents(
+	feedEvents: FeedEvent[],
+	localEvents: LocalEvent[],
+): EventComparison {
 	const localByDate = groupBy(localEvents, (event) => event.date);
 	const feedByDate = groupBy(feedEvents, (event) => event.date);
-	const missing = [];
-	const stale = [];
-	const ambiguousStale = [];
+	const missing: FeedEvent[] = [];
+	const stale: EventUpdate[] = [];
+	const ambiguousStale: AmbiguousStaleEvents[] = [];
 
 	for (const feed of feedEvents) {
 		const localUrls = new Set(
@@ -257,8 +344,24 @@ function compareEvents(feedEvents, localEvents) {
 	return { missing, stale, ambiguousStale };
 }
 
-function groupBy(items, getKey) {
-	const groups = new Map();
+function findTimeZoneUpdates(
+	feedEvents: FeedEvent[],
+	localEvents: LocalEvent[],
+): EventUpdate[] {
+	return localEvents.flatMap((local) => {
+		const feed = feedEvents.find(
+			(event) => event.date === local.date && event.url === local.url,
+		);
+		if (!feed || feed.timeZone === local.timeZone) return [];
+		return [{ feed, local }];
+	});
+}
+
+function groupBy<Item, Key>(
+	items: Item[],
+	getKey: (item: Item) => Key,
+): Map<Key, Item[]> {
+	const groups = new Map<Key, Item[]>();
 	for (const item of items) {
 		const key = getKey(item);
 		groups.set(key, [...(groups.get(key) ?? []), item]);
@@ -266,7 +369,7 @@ function groupBy(items, getKey) {
 	return groups;
 }
 
-function siteNameFor(summary) {
+function siteNameFor(summary: string): string {
 	if (summary === "Friday Morning Code + Commiserate")
 		return "Code + Commiserate";
 	if (summary === "Coffee with Creators @ The Factory")
@@ -274,7 +377,7 @@ function siteNameFor(summary) {
 	return summary.trim();
 }
 
-function slugFor(event) {
+function slugFor(event: FeedEvent): string {
 	const name = siteNameFor(event.summary);
 	if (name === "Code + Commiserate") return "code-commiserate";
 	if (name === "Coffee with Creators") return "coffee-with-creators";
@@ -282,7 +385,7 @@ function slugFor(event) {
 	return slugify(name);
 }
 
-function slugify(value) {
+function slugify(value: string): string {
 	return value
 		.toLowerCase()
 		.replaceAll("+", " plus ")
@@ -291,7 +394,7 @@ function slugify(value) {
 		.replace(/-{2,}/g, "-");
 }
 
-async function removeEvent(event) {
+async function removeEvent(event: LocalEvent): Promise<void> {
 	await fs.rm(event.file, { force: true });
 
 	for (const variant of flyerVariants) {
@@ -304,25 +407,48 @@ async function removeEvent(event) {
 	console.log(`Removed old event ${relative(event.file)}`);
 }
 
-async function updateEventUrl(file, url) {
+async function updateEventUrl(file: string, url: string): Promise<void> {
 	const text = await fs.readFile(file, "utf8");
 	const updated = text.replace(/^url:\s*"[^"]+"/m, `url: "${url}"`);
 	await fs.writeFile(file, updated);
 	console.log(`Updated URL in ${relative(file)}`);
 }
 
-async function writeEventMarkdown({ file, date, name, slug, url }) {
-	const markdown = `---\nname: "${escapeYamlString(name)}"\nimages: {\n  light: { src: "../../assets/event-flyers/${slug}-light.jpg", alt: "${escapeYamlString(name)}" },\n  dark: { src: "../../assets/event-flyers/${slug}-dark.jpg", alt: "${escapeYamlString(name)}" }\n}\nurl: "${url}"\ndate: ${date}\n---\n`;
+async function updateEventTimeZone(
+	file: string,
+	timeZone: string,
+): Promise<void> {
+	const text = await fs.readFile(file, "utf8");
+	const escapedTimeZone = escapeYamlString(timeZone);
+	const updated = /^timeZone:\s*"[^"]+"/m.test(text)
+		? text.replace(/^timeZone:\s*"[^"]+"/m, `timeZone: "${escapedTimeZone}"`)
+		: text.replace(/^(date:\s*.+)$/m, `$1\ntimeZone: "${escapedTimeZone}"`);
+	await fs.writeFile(file, updated);
+	console.log(`Updated time zone in ${relative(file)}`);
+}
+
+async function writeEventMarkdown({
+	file,
+	date,
+	name,
+	slug,
+	timeZone,
+	url,
+}: EventMarkdown): Promise<void> {
+	const markdown = `---\nname: "${escapeYamlString(name)}"\nimages: {\n  light: { src: "../../assets/event-flyers/${slug}-light.jpg", alt: "${escapeYamlString(name)}" },\n  dark: { src: "../../assets/event-flyers/${slug}-dark.jpg", alt: "${escapeYamlString(name)}" }\n}\nurl: "${url}"\ndate: ${date}\ntimeZone: "${escapeYamlString(timeZone)}"\n---\n`;
 
 	await fs.writeFile(file, markdown, { flag: "wx" });
 	console.log(`Created ${relative(file)}`);
 }
 
-function escapeYamlString(value) {
+function escapeYamlString(value: string): string {
 	return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 }
 
-async function exportFlyers({ eventUrl, outputBase }) {
+async function exportFlyers({
+	eventUrl,
+	outputBase,
+}: FlyerExport): Promise<void> {
 	const { chromium } = await import("playwright");
 	const browser = await chromium.launch({ headless: true });
 
@@ -348,36 +474,43 @@ async function exportFlyers({ eventUrl, outputBase }) {
 		const dataUrls = await page
 			.locator("canvas[data-flyer-canvas]")
 			.evaluateAll((nodes) =>
-				nodes.slice(0, 2).map((node) => node.toDataURL("image/jpeg", 0.9)),
+				nodes.slice(0, 2).map((node) => {
+					if (!(node instanceof HTMLCanvasElement)) {
+						throw new TypeError("Expected the event flyer to be a canvas");
+					}
+					return node.toDataURL("image/jpeg", 0.9);
+				}),
 			);
 
 		for (const [index, dataUrl] of dataUrls.entries()) {
+			const variant = flyerVariants[index];
+			if (!variant) {
+				throw new RangeError(`Unexpected flyer variant at index ${index}`);
+			}
 			const base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, "");
 			await fs.writeFile(
-				`${outputBase}-${flyerVariants[index]}.jpg`,
+				`${outputBase}-${variant}.jpg`,
 				Buffer.from(base64, "base64"),
 			);
-			console.log(
-				`Exported ${relative(`${outputBase}-${flyerVariants[index]}.jpg`)}`,
-			);
+			console.log(`Exported ${relative(`${outputBase}-${variant}.jpg`)}`);
 		}
 	} finally {
 		await browser.close();
 	}
 }
 
-function sixMonthsAgo(today) {
+function sixMonthsAgo(today: Date): Date {
 	return new Date(today.getFullYear(), today.getMonth() - 6, today.getDate());
 }
 
-function parseDate(value) {
+function parseDate(value: string): Date {
 	const parsed = new Date(`${value}T00:00:00`);
 	if (Number.isNaN(parsed.getTime()))
 		throw new Error(`Invalid --today date: ${value}`);
 	return parsed;
 }
 
-function formatDate(date) {
+function formatDate(date: Date): string {
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, "0");
 	const day = String(date.getDate()).padStart(2, "0");
@@ -389,15 +522,17 @@ function printSummary({
 	localEvents,
 	missing,
 	stale,
+	timeZoneUpdates,
 	ambiguousStale,
 	oldEvents,
 	cutoff,
-}) {
+}: EventSummary): void {
 	console.log(`Feed events: ${feedEvents.length}`);
 	console.log(`Local events: ${localEvents.length}`);
 	console.log(`Cleanup cutoff: ${formatDate(cutoff)}`);
 	console.log(`Missing events: ${missing.length}`);
 	console.log(`Stale URLs: ${stale.length}`);
+	console.log(`Time zone updates: ${timeZoneUpdates.length}`);
 	console.log(`Ambiguous stale dates: ${ambiguousStale.length}`);
 	console.log(`Old events: ${args.noCleanup ? "skipped" : oldEvents.length}`);
 
@@ -410,6 +545,11 @@ function printSummary({
 		"\nStale URL updates",
 		stale,
 		(event) => `${relative(event.local.file)} -> ${event.feed.url}`,
+	);
+	printItems(
+		"\nTime zone updates",
+		timeZoneUpdates,
+		(event) => `${relative(event.local.file)} -> ${event.feed.timeZone}`,
 	);
 	printItems("\nOld events", args.noCleanup ? [] : oldEvents, (event) =>
 		relative(event.file),
@@ -426,17 +566,21 @@ function printSummary({
 	}
 }
 
-function printItems(title, items, format) {
+function printItems<Item>(
+	title: string,
+	items: Item[],
+	format: (item: Item) => string,
+): void {
 	if (items.length === 0) return;
 	console.log(`${title}:`);
 	for (const item of items) console.log(`- ${format(item)}`);
 }
 
-function relative(file) {
+function relative(file: string): string {
 	return path.relative(repoRoot, file);
 }
 
-function printHelp() {
+function printHelp(): void {
 	console.log(`Update GRWebDev event entries from Meetup.
 
 Usage:

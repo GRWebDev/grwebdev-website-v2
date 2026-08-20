@@ -1,14 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import { formatEventDate, isEventUpcoming } from "../utils/event-date.ts";
 
 const gridSize = 8;
 const old = 2;
-const eventDateFormatter = new Intl.DateTimeFormat("en-US", {
-	day: "numeric",
-	month: "long",
-	year: "numeric",
-});
 
 const events = await getCollection("events");
 const eventsToUse: typeof events = [];
@@ -17,10 +13,16 @@ const eventsSorted = events.toSorted((a, b) => {
 	const bDate = b.data.date;
 	return bDate.valueOf() - aDate.valueOf();
 });
-const d = new Date();
+const now = new Date();
 const [eventsAfter, eventsBefore] = eventsSorted.reduce(
 	(a, c) => {
-		if (c.data.date.valueOf() > d.valueOf()) {
+		if (
+			isEventUpcoming({
+				date: c.data.date,
+				now,
+				timeZone: c.data.timeZone,
+			})
+		) {
 			a[0].push(c);
 		} else {
 			a[1].push(c);
@@ -103,14 +105,16 @@ while (
 </style>
 <section class="grid" aria-labelledby="community-calendar-heading">
 	<div>
-		<h2 id="community-calendar-heading">Upcoming Events</h2>
+		<h2 id="community-calendar-heading">Events</h2>
 		{eventsToUse.length > 0 && (
 					<div class="event-grid">
 						{eventsToUse.map((event, index) => {
 							const image =
 								index % 2 === 0 ? event.data.images.light : event.data.images.dark;
 							const isLikelyFirstVisible = index === 2;
-							const eventLabel = `${event.data.name}, ${eventDateFormatter.format(event.data.date)} on Meetup`;
+							const eventLabel = `${event.data.name}, ${formatEventDate({
+								date: event.data.date,
+							})} on Meetup`;
 
 							return (
 								<a
@@ -122,6 +126,7 @@ while (
 									<Image
 										src={image.src}
 										alt={image.alt}
+										decoding={isLikelyFirstVisible ? "sync" : "async"}
 										fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
 										layout="full-width"
 										loading={isLikelyFirstVisible ? "eager" : "lazy"}
@@ -135,7 +140,7 @@ while (
 					</div>
 				)}
 		{eventsToUse.length === 0 && (
-					<p>No upcoming events are listed right now. Check back soon.</p>
+					<p>No events are listed right now. Check back soon.</p>
 				)}
 	</div>
 </section>

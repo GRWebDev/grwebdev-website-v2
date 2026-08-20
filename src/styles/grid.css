@@ -105,6 +105,10 @@ section.grid {
 	.body {
 		grid-area: body;
 		text-box: cap text;
+
+		> * {
+			max-width: 70ch;
+		}
 	}
 
 	&:is(a) {
@@ -127,10 +131,19 @@ section.grid {
 
 	&.large {
 		grid-template-areas: "image" "title" "body";
+
+		.title {
+			place-content: center;
+		}
+
 		@container (width > 620px) {
 			grid-template-rows: auto auto 1fr;
 			grid-template-areas: "image title" "image body" "image body";
 			place-items: revert;
+
+			.title {
+				place-content: start;
+			}
 		}
 
 		.image {

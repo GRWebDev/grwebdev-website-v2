@@ -54,6 +54,12 @@ a {
 }
 
 p {
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
 	text-wrap: balance;
 }
 
@@ -62,7 +68,7 @@ h2,
 h3,
 p,
 a {
-	hyphens: auto;
+	hyphens: manual;
 }
 
 p:has(small) {

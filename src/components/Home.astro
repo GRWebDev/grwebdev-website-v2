@@ -2,56 +2,9 @@
 import BlackRedSection from "./BlackRedSection.astro";
 ---
 
-<script is:inline>
-	const loadGivebutter = () => {
-		if (document.querySelector("script[data-givebutter-widget]")) {
-			return;
-		}
-
-		const script = document.createElement("script");
-		script.async = true;
-		script.dataset.givebutterWidget = "";
-		script.src =
-			"https://widgets.givebutter.com/latest.umd.cjs?acct=YGjlKv1rH53EHVNY&p=other";
-		document.head.append(script);
-	};
-
-	if ("requestIdleCallback" in window) {
-		window.requestIdleCallback(loadGivebutter, { timeout: 2500 });
-	} else {
-		window.addEventListener("load", loadGivebutter, { once: true });
-	}
-</script>
-<style>
-	.donation-widget {
-		min-block-size: 3.125em;
-		min-inline-size: 3.125em;
-	}
-
-	.donation-widget a {
-		display: inline-flex;
-		min-block-size: 44px;
-		align-items: center;
-	}
-</style>
 <section class="grid">
 	<div>
 		<h1>Grand Rapids Web Development Group</h1>
 	</div>
 </section>
 <BlackRedSection></BlackRedSection>
-<section class="grid">
-	<div class="center">
-		<p class="donation-widget">
-			<givebutter-widget id="gRBJRg">
-				<a
-					href="https://givebutter.com/gRBJRg"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Donate to GRWebDev
-				</a>
-			</givebutter-widget>
-		</p>
-	</div>
-</section>
