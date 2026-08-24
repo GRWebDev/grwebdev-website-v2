@@ -3,7 +3,7 @@
 	"type": "module",
 	"version": "0.0.1",
 	"engines": {
-		"node": ">=22.22.1",
+		"node": ">=26.7.0",
 		"npm": ">=9.6.5"
 	},
 	"scripts": {
@@ -28,7 +28,7 @@
 	"devDependencies": {
 		"@astrojs/check": "^0.9.9",
 		"@biomejs/biome": "2.5.10",
-		"@types/node": "^22.20.1",
+		"@types/node": "^26.2.0",
 		"husky": "^9.1.7",
 		"lint-staged": "17.3.0",
 		"playwright": "^1.62.1",
