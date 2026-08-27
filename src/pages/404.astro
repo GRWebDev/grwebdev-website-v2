@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <Layout title="404">
@@ -11,7 +13,7 @@ import Layout from "../layouts/Layout.astro";
 				back home or check the current board, sponsors, and event listings.
 			</p>
 			<p>
-				<a href={import.meta.env.BASE_URL}>Go home</a>
+				<a href={baseUrl}>Go home</a>
 			</p>
 		</div>
 	</section>
