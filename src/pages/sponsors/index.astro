@@ -10,6 +10,7 @@ interface sorted {
 	twoM410: typeof sponsors;
 }
 
+const baseUrl = import.meta.env.BASE_URL;
 const sponsors = await getCollection("sponsors");
 const sponsorsToUse = Object.values(
 	sponsors
@@ -93,7 +94,7 @@ const sponsorsToUse = Object.values(
 		<section class="grid">
 			<div class="container">
 					<a
-						href={`${import.meta.env.BASE_URL}sponsors/${sponsor.data.slug}`}
+						href={`${baseUrl}sponsors/${sponsor.data.slug}`}
 						class="image-text logo-row"
 						aria-labelledby={`sponsor-${sponsor.data.slug}-title`}
 					>

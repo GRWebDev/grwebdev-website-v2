@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import boardPlaceholder from "../../assets/board/placeholder.svg";
 import Layout from "../../layouts/Layout.astro";
 
+const baseUrl = import.meta.env.BASE_URL;
 const board = await getCollection("board");
 const boardToUse = board
 	.filter((member) => member.data.active)
@@ -63,7 +64,7 @@ const boardToUse = board
 		<section class="grid">
 			<div class="container">
 				<a
-					href={`${import.meta.env.BASE_URL}board/${member.data.slug}`}
+					href={`${baseUrl}board/${member.data.slug}`}
 					class="image-text"
 					aria-labelledby={`board-${member.data.slug}-title`}
 				>

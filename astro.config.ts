@@ -19,8 +19,7 @@ const pruneUnusedRasterAssetsIntegration = {
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://grwebdev.github.io",
-	base: "/grwebdev-website-v2/",
+	site: "https://grwebdev.org",
 	integrations: [pruneUnusedRasterAssetsIntegration],
 	experimental: {
 		svgOptimizer: svgoOptimizer({
