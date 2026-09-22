@@ -83,13 +83,11 @@ npm run update:events -- --event https://www.meetup.com/grwebdev/events/31533065
 npm run update:events -- --feed-file ./events.ics --today 2026-07-09
 ```
 
-## FAQ
-
 ## Browser tests
 
 With the project's Node version active, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser`.
 
-The suite builds temporary copies of the site immediately before and at the showcase submission cutoff, serves them on ports 4328 and 4329, and checks the rendered homepage. The build clocks and timezones are controlled only in the test harness. Production builds use the current time. Run `npm test` for the unit tests, type checks, lint, and production build.
+The suite builds temporary copies of the site immediately before and at the showcase submission cutoff, serves them on ports 4328 and 4329, and checks the rendered homepage and dialog interactions. It covers cookies, dismissal, keyboard focus, mobile layout, and the static fallback. The build clocks and timezones are controlled only in the test harness. Production builds use the current time. Run `npm test` for the unit tests, type checks, lint, and production build.
 
 ## FAQ
 

@@ -1,0 +1,119 @@
+---
+import ShowcaseInvitation from "./ShowcaseInvitation.astro";
+---
+
+<dialog id="showcase-dialog" aria-labelledby="showcase-dialog-heading">
+	<button class="close" type="button" aria-label="Close invitation">×</button>
+	<ShowcaseInvitation headingId="showcase-dialog-heading" />
+	<button class="later" type="button">Maybe later</button>
+	<button class="submitted" type="button">I've already submitted</button>
+</dialog>
+
+<script>
+	const dialog = document.querySelector<HTMLDialogElement>("#showcase-dialog");
+	const seenCookie = "grwebdev-showcase-2026-seen";
+	const submittedCookie = "grwebdev-showcase-2026-submitted";
+	const cookieAttributes = `Path=/; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+	const hasCookie = (name: string) => {
+		try {
+			return document.cookie
+				.split(";")
+				.some((cookie) => cookie.trim() === `${name}=1`);
+		} catch {
+			return false;
+		}
+	};
+	const saveCookie = (name: string, expires = "") => {
+		try {
+			// biome-ignore lint/suspicious/noDocumentCookie: Synchronous session-cookie verification also works in browsers without Cookie Store.
+			document.cookie = `${name}=1; ${cookieAttributes}${expires}`;
+			return hasCookie(name);
+		} catch {
+			return false;
+		}
+	};
+	if (
+		dialog &&
+		typeof dialog.showModal === "function" &&
+		!hasCookie(seenCookie) &&
+		!hasCookie(submittedCookie)
+	) {
+		dialog.addEventListener("keydown", (event) => {
+			if (event.key !== "Tab") return;
+			const controls = dialog.querySelectorAll<HTMLElement>("button, a[href]");
+			const first = controls[0];
+			const last = controls[controls.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last?.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first?.focus();
+			}
+		});
+		dialog
+			.querySelector(".close")
+			?.addEventListener("click", () => dialog.close());
+		dialog
+			.querySelector(".later")
+			?.addEventListener("click", () => dialog.close());
+		dialog.querySelector("a")?.addEventListener("click", () => {
+			window.setTimeout(() => dialog.close(), 500);
+		});
+		dialog.querySelector(".submitted")?.addEventListener("click", () => {
+			saveCookie(submittedCookie, "; Expires=Fri, 01 Jan 2027 05:00:00 GMT");
+			dialog.close();
+		});
+		dialog.addEventListener("close", () => {
+			document
+				.querySelector<HTMLAnchorElement>(".showcase a")
+				?.focus({ preventScroll: true });
+		});
+		// Without a saved session cookie, avoid repeatedly interrupting the visitor.
+		if (saveCookie(seenCookie)) dialog.showModal();
+	}
+</script>
+
+<style>
+	dialog {
+		margin: auto;
+		inline-size: min(42rem, calc(100% - 2rem));
+		max-block-size: calc(100dvh - 2rem);
+		padding: 3.5rem clamp(1.25rem, 4vw, 2.5rem) 2rem;
+		border: 0;
+		background: var(--tertiary-clr);
+		color: var(--primary-clr);
+	}
+	dialog::backdrop {
+		background: rgb(0 0 0 / 65%);
+	}
+	.close {
+		position: absolute;
+		inset-block-start: 0.5rem;
+		inset-inline-end: 0.5rem;
+		inline-size: 44px;
+		block-size: 44px;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font-size: 2rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+	button:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+	.later,
+	.submitted {
+		display: block;
+		margin-block-start: 1em;
+		min-block-size: 44px;
+		padding: 0.5em 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+</style>

@@ -1,4 +1,5 @@
 ---
+import ShowcaseDialog from "./ShowcaseDialog.astro";
 import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 
 // Static rendering: both invitation surfaces disappear only after a new build.
@@ -6,10 +7,13 @@ const acceptingSubmissions = Date.now() < Date.parse("2026-11-14T05:00:00Z");
 ---
 
 {acceptingSubmissions && (
-<section class="grid showcase" aria-labelledby="showcase-heading">
-	<div><ShowcaseInvitation headingId="showcase-heading" /></div>
-</section>
-)}
+		<>
+			<section class="grid showcase" aria-labelledby="showcase-heading">
+				<div><ShowcaseInvitation headingId="showcase-heading" /></div>
+			</section>
+			<ShowcaseDialog />
+		</>
+	)}
 
 <style>
 	.showcase {
