@@ -85,6 +85,14 @@ npm run update:events -- --feed-file ./events.ics --today 2026-07-09
 
 ## FAQ
 
+## Browser tests
+
+With the project's Node version active, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser`.
+
+The suite builds temporary copies of the site immediately before and at the showcase submission cutoff, serves them on ports 4328 and 4329, and checks the rendered homepage. The build clocks and timezones are controlled only in the test harness. Production builds use the current time. Run `npm test` for the unit tests, type checks, lint, and production build.
+
+## FAQ
+
 **Why use `npm ci`?**
 
 `npm ci` is more predictable across a team. [Read more](https://support.deploybot.com/build-tools/why-developers-should-use-npm-ci-instead-of-npm-install-and-its-benefits#why-use-npm-ci).

@@ -1,0 +1,20 @@
+---
+import ShowcaseInvitation from "./ShowcaseInvitation.astro";
+
+// Static rendering: both invitation surfaces disappear only after a new build.
+const acceptingSubmissions = Date.now() < Date.parse("2026-11-14T05:00:00Z");
+---
+
+{acceptingSubmissions && (
+<section class="grid showcase" aria-labelledby="showcase-heading">
+	<div><ShowcaseInvitation headingId="showcase-heading" /></div>
+</section>
+)}
+
+<style>
+	.showcase {
+		margin-block: 2em;
+		padding-block: clamp(1.5rem, 4vw, 3rem);
+		border-block: 1px solid currentColor;
+	}
+</style>
