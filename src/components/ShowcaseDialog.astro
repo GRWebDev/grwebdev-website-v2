@@ -1,9 +1,12 @@
 ---
+import CloseIcon from "../assets/icons/x.svg";
 import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 ---
 
 <dialog id="showcase-dialog" aria-labelledby="showcase-dialog-heading">
-	<button class="close" type="button" aria-label="Close invitation">×</button>
+	<button class="close" type="button" aria-label="Close invitation">
+		<CloseIcon aria-hidden="true" focusable="false" />
+	</button>
 	<ShowcaseInvitation headingId="showcase-dialog-heading" />
 	<button class="later" type="button">Maybe later</button>
 	<button class="submitted" type="button">I've already submitted</button>
@@ -88,6 +91,8 @@ import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 		background: rgb(0 0 0 / 65%);
 	}
 	.close {
+		display: grid;
+		place-items: center;
 		position: absolute;
 		inset-block-start: 0.5rem;
 		inset-inline-end: 0.5rem;
@@ -96,8 +101,6 @@ import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 		border: 0;
 		background: transparent;
 		color: inherit;
-		font-size: 2rem;
-		line-height: 1;
 		cursor: pointer;
 	}
 	button:focus-visible {
