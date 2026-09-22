@@ -1,0 +1,50 @@
+---
+interface Props {
+	headingId: string;
+}
+const { headingId } = Astro.props;
+---
+
+<div class="showcase-copy">
+	<h2 id={headingId}>Show us what you've been building</h2>
+	<p>
+		Have a project, tool, or development discovery to share? Present at
+		GRWebDev's Community Code Showcase on Monday, November 23 at 6 p.m. Demos
+		and talks can be up to 10 minutes. No slide deck required.
+	</p>
+	<p class="deadline">Submit your idea by Friday, November 13.</p>
+	<a
+		href="https://forms.gle/2GJXyVBTEgTXV2uy5"
+		target="_blank"
+		rel="noopener noreferrer"
+	>
+		Submit your idea <span class="new-tab">(opens in a new tab)</span>
+	</a>
+</div>
+
+<style>
+	.showcase-copy {
+		max-inline-size: 65ch;
+	}
+	h2 {
+		margin-block-start: 0;
+		font-size: clamp(1.5rem, 3vw, 2.5rem);
+		line-height: 1.2;
+	}
+	.deadline {
+		font-weight: 650;
+	}
+	a {
+		display: inline-block;
+		margin-block-start: 1.25em;
+		padding: 0.75em 1em;
+		background: var(--primary-clr);
+		color: var(--tertiary-clr);
+		font-weight: 650;
+	}
+	.new-tab {
+		display: block;
+		font-size: 0.75em;
+		font-weight: 400;
+	}
+</style>
