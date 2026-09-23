@@ -1,4 +1,5 @@
 ---
+import ShowcaseDialog from "./ShowcaseDialog.astro";
 import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 
 // Static rendering: both invitation surfaces disappear only after a new build.
@@ -6,15 +7,42 @@ const acceptingSubmissions = Date.now() < Date.parse("2026-11-14T05:00:00Z");
 ---
 
 {acceptingSubmissions && (
-<section class="grid showcase" aria-labelledby="showcase-heading">
-	<div><ShowcaseInvitation headingId="showcase-heading" /></div>
-</section>
+	<>
+		<section class="grid showcase" aria-labelledby="showcase-heading">
+			<div><ShowcaseInvitation headingId="showcase-heading" /></div>
+		</section>
+		<ShowcaseDialog />
+	</>
 )}
 
 <style>
 	.showcase {
-		margin-block: 2em;
-		padding-block: clamp(1.5rem, 4vw, 3rem);
-		border-block: 1px solid currentColor;
+		margin-block: 2rem;
+		padding-block: 2rem;
+	}
+	.showcase :global(.showcase-copy) {
+		max-inline-size: none;
+	}
+	@media (min-width: 800px) {
+		.showcase :global(.showcase-copy) {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+			column-gap: clamp(2rem, 5vw, 5rem);
+			align-items: start;
+		}
+		.showcase :global(h2) {
+			grid-column: 1;
+			grid-row: 1 / 4;
+		}
+		.showcase :global(p) {
+			grid-column: 2;
+		}
+		.showcase :global(p:first-of-type) {
+			margin-block-start: 0;
+		}
+		.showcase :global(a) {
+			grid-column: 2;
+			justify-self: start;
+		}
 	}
 </style>

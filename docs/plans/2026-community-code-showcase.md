@@ -1,10 +1,12 @@
 # Community Code Showcase invitation
 
-Status: Design confirmed. The homepage invitation and build-time cutoff are implemented; the dialog is the next PR in the stack.
+Status: Implemented in two stacked changes: the homepage invitation and build-time cutoff, followed by the session-based dialog.
 
 ## Agreed test boundaries
 
 The user approved testing the built homepage with a controlled build clock, and the browser UI for dialog interactions, cookies, navigation, keyboard focus, and no-JavaScript or blocked-cookie fallbacks. Tests observe rendered behavior rather than private helpers.
+
+Run `npm run test:browser` for the browser checks. The suite builds immediately before and at the cutoff in non-Eastern timezones, and checks desktop and mobile dialog layouts. Core behaviors were implemented through failing-test-first cycles.
 
 ## GitHub issues
 

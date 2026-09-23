@@ -21,15 +21,12 @@ test("visitors can find the showcase form above Events without JavaScript", asyn
 	);
 	await expect(link).toHaveAttribute("target", "_blank");
 	await expect(link).toHaveAccessibleName(/new tab/i);
-	const sections = await page.getByRole("main").getByRole("region").all();
-	expect(
-		await sections
-			.map(async (section) => section.getAttribute("aria-labelledby"))
-			.reduce(
-				async (previous, item) => [...(await previous), await item],
-				Promise.resolve<(string | null)[]>([]),
-			),
-	).toEqual(["showcase-heading", "community-calendar-heading"]);
+	await expect(
+		invitation.locator("xpath=following-sibling::section[1]"),
+	).toHaveAccessibleName("Events");
+	await expect(
+		page.getByRole("dialog", { name: "Show us what you've been building" }),
+	).not.toBeVisible();
 	await context.close();
 });
 
@@ -49,7 +46,10 @@ test("a build at midnight Eastern after the deadline omits the invitation", asyn
 	await expect(
 		page.getByRole("link", { name: /Submit your idea/, includeHidden: true }),
 	).toHaveCount(0);
-	await expect(page.getByRole("dialog", { includeHidden: true })).toHaveCount(
-		0,
-	);
+	await expect(
+		page.getByRole("dialog", {
+			name: "Show us what you've been building",
+			includeHidden: true,
+		}),
+	).toHaveCount(0);
 });
