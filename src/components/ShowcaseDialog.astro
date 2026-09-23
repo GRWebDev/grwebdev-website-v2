@@ -7,9 +7,7 @@ import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 	<button class="close" type="button" aria-label="Close invitation">
 		<CloseIcon aria-hidden="true" focusable="false" />
 	</button>
-	<ShowcaseInvitation headingId="showcase-dialog-heading" />
-	<button class="later" type="button">Maybe later</button>
-	<button class="submitted" type="button">I've already submitted</button>
+	<ShowcaseInvitation headingId="showcase-dialog-heading" showSubmittedAction />
 </dialog>
 
 <script>
@@ -57,9 +55,6 @@ import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 		dialog
 			.querySelector(".close")
 			?.addEventListener("click", () => dialog.close());
-		dialog
-			.querySelector(".later")
-			?.addEventListener("click", () => dialog.close());
 		dialog.querySelector("a")?.addEventListener("click", () => {
 			window.setTimeout(() => dialog.close(), 500);
 		});
@@ -106,17 +101,5 @@ import ShowcaseInvitation from "./ShowcaseInvitation.astro";
 	button:focus-visible {
 		outline: 2px solid currentColor;
 		outline-offset: 2px;
-	}
-	.later,
-	.submitted {
-		display: block;
-		margin-block-start: 1em;
-		min-block-size: 44px;
-		padding: 0.5em 0;
-		border: 0;
-		background: transparent;
-		color: inherit;
-		text-decoration: underline;
-		cursor: pointer;
 	}
 </style>

@@ -3,26 +3,32 @@ import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
 
 interface Props {
 	headingId: string;
+	showSubmittedAction?: boolean;
 }
-const { headingId } = Astro.props;
+const { headingId, showSubmittedAction = false } = Astro.props;
 ---
 
 <div class="showcase-copy">
-	<h2 id={headingId}>Show us what you've been building</h2>
+	<h2 id={headingId}>Community Code Showcase on Monday, November 23</h2>
 	<p>
-		Have a project, tool, or development discovery to share? Present at
-		GRWebDev's Community Code Showcase on Monday, November 23 at 6 p.m. Demos
-		and talks can be up to 10 minutes. No slide deck required.
+		Have a project, tool, or development discovery to share? Share at GRWebDev's
+		Community Code Showcase. Demos and talks can be up to 10 minutes. No slide
+		deck required.
 	</p>
 	<p class="deadline">Submit your idea by Friday, November 13.</p>
-	<a
-		href="https://forms.gle/2GJXyVBTEgTXV2uy5"
-		target="_blank"
-		rel="noopener noreferrer"
-		aria-label="Submit your idea (opens in a new tab)"
-	>
-		Submit your idea <ExternalLink aria-hidden="true" focusable="false" />
-	</a>
+	<div class="actions">
+		<a
+			href="https://forms.gle/2GJXyVBTEgTXV2uy5"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="Submit your idea (opens in a new tab)"
+		>
+			Submit your idea <ExternalLink aria-hidden="true" focusable="false" />
+		</a>
+		<button class="submitted" type="button" hidden={!showSubmittedAction}>
+			I've already submitted
+		</button>
+	</div>
 </div>
 
 <style>
@@ -37,12 +43,18 @@ const { headingId } = Astro.props;
 	.deadline {
 		font-weight: 650;
 	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		gap: 0.75rem;
+		margin-block-start: 1.25em;
+	}
 	a {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		margin-block-start: 1.25em;
 		min-block-size: 56px;
 		padding: 0.75rem 1rem;
 		border: 4px solid #b40000;
@@ -74,6 +86,27 @@ const { headingId } = Astro.props;
 		inline-size: 1.125rem;
 		block-size: 1.125rem;
 		flex: none;
+	}
+	.submitted {
+		min-block-size: 56px;
+		padding: 0.75rem 1rem;
+		border: 4px solid #b40000;
+		border-radius: 30px;
+		background: var(--tertiary-clr);
+		color: #b40000;
+		font: inherit;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.5;
+		cursor: pointer;
+	}
+	.submitted:hover {
+		background: #b40000;
+		color: #fff;
+	}
+	.submitted:focus-visible {
+		outline: 2px solid var(--primary-clr);
+		outline-offset: 4px;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		a {
