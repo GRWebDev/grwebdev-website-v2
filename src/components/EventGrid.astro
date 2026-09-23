@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { formatEventDate, isEventUpcoming } from "../utils/event-date.ts";
+import EventLogisticsPrototype from "./prototypes/event-logistics/EventLogisticsPrototype.astro";
 
 const gridSize = 8;
 const old = 2;
@@ -51,6 +52,9 @@ while (
 		eventsToUse.unshift(shift);
 	}
 }
+const prototypeEnabled =
+	import.meta.env.DEV &&
+	import.meta.env.PUBLIC_EVENT_LOGISTICS_PROTOTYPE === "1";
 ---
 
 <style>
@@ -103,7 +107,10 @@ while (
 		}
 	}
 </style>
-<section class="grid" aria-labelledby="community-calendar-heading">
+{prototypeEnabled && (
+	<EventLogisticsPrototype events={eventsToUse.slice(-6)} />
+)}
+{!prototypeEnabled && <section class="grid" aria-labelledby="community-calendar-heading">
 	<div>
 		<h2 id="community-calendar-heading">Events</h2>
 		{eventsToUse.length > 0 && (
@@ -143,4 +150,4 @@ while (
 					<p>No events are listed right now. Check back soon.</p>
 				)}
 	</div>
-</section>
+</section>}

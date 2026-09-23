@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import type { PrototypeEvent } from "./event-prototype-types.ts";
+
+interface Props {
+	events: PrototypeEvent[];
+}
+
+const { events } = Astro.props;
+---
+
+<section
+	class="grid poster-caption-prototype"
+	aria-labelledby="prototype-a-heading"
+>
+	<div>
+		<h2 id="prototype-a-heading">Events</h2>
+		<p class="prototype-note">
+			Flyers stay primary. Essential details become real captions.
+		</p>
+		<div class="poster-grid">
+			{events.map((event) => (
+				<article>
+					<a href={event.href} target="_blank" rel="noopener noreferrer">
+						<Image
+							src={event.image.src}
+							alt=""
+							layout="full-width"
+							quality="low"
+							widths={[360, 720]}
+							sizes="(min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
+						/>
+						<div class="caption">
+							<h3>{event.name}</h3>
+							<p><time datetime={event.dateTime}>{event.dateLabel}</time> · {event.time}</p>
+							<p>{event.venue} · {event.format}</p>
+							<p class="address">{event.address}</p>
+						</div>
+					</a>
+				</article>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.prototype-note {
+		max-inline-size: 65ch;
+	}
+
+	.poster-grid {
+		display: grid;
+		gap: 2ch;
+		grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+		margin-block-start: 1.25em;
+	}
+
+	article {
+		border-block-end: 4px solid var(--secondary-clr);
+	}
+
+	a {
+		display: block;
+		text-decoration: none;
+	}
+
+	.caption {
+		padding-block: 0.75rem 1rem;
+	}
+
+	h3,
+	p {
+		margin-block-start: 0;
+	}
+
+	h3 {
+		font-size: 1.125rem;
+		line-height: 1.25;
+	}
+
+	p {
+		font-size: 0.875em;
+		line-height: 1.4;
+	}
+
+	.address {
+		color: var(--gray-300);
+	}
+
+	a:hover h3,
+	a:focus-visible h3 {
+		text-decoration: underline;
+		text-decoration-color: var(--secondary-clr);
+		text-decoration-thickness: 0.12em;
+		text-underline-offset: 0.2em;
+	}
+</style>
