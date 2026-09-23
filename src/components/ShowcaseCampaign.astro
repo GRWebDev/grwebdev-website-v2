@@ -17,8 +17,7 @@ const acceptingSubmissions = Date.now() < Date.parse("2026-11-14T05:00:00Z");
 
 <style>
 	.showcase {
-		margin-block: 2rem;
-		padding-block: 2rem;
+		margin-block-start: 3cap;
 	}
 	.showcase :global(.showcase-copy) {
 		max-inline-size: none;
@@ -26,8 +25,8 @@ const acceptingSubmissions = Date.now() < Date.parse("2026-11-14T05:00:00Z");
 	@media (min-width: 800px) {
 		.showcase :global(.showcase-copy) {
 			display: grid;
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
-			column-gap: clamp(2rem, 5vw, 5rem);
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			column-gap: 1.25rem;
 			align-items: start;
 		}
 		.showcase :global(h2) {

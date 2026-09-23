@@ -1,11 +1,13 @@
 import { expect, test } from "playwright/test";
 
+const dialogName = "Community Code Showcase on Monday, November 23";
+
 test("a first homepage visit opens an accessible showcase dialog", async ({
 	page,
 }) => {
 	await page.goto("/");
 	const dialog = page.getByRole("dialog", {
-		name: "Show us what you've been building",
+		name: dialogName,
 	});
 	await expect(dialog).toBeVisible();
 	await expect(
@@ -21,12 +23,10 @@ test("showing the invitation prevents another opening throughout the browser ses
 	context,
 }) => {
 	await page.goto("/");
-	await expect(
-		page.getByRole("dialog", { name: "Show us what you've been building" }),
-	).toBeVisible();
+	await expect(page.getByRole("dialog", { name: dialogName })).toBeVisible();
 	await page.reload();
 	await expect(
-		page.getByRole("dialog", { name: "Show us what you've been building" }),
+		page.getByRole("dialog", { name: dialogName }),
 	).not.toBeVisible();
 	const cookies = await context.cookies();
 	expect(
@@ -36,32 +36,32 @@ test("showing the invitation prevents another opening throughout the browser ses
 	await page.goto("/about/");
 	await expect(
 		page.getByRole("dialog", {
-			name: "Show us what you've been building",
+			name: dialogName,
 			includeHidden: true,
 		}),
 	).toHaveCount(0);
 	await page.goto("/");
 	await expect(
-		page.getByRole("dialog", { name: "Show us what you've been building" }),
+		page.getByRole("dialog", { name: dialogName }),
 	).not.toBeVisible();
 	const anotherTab = await context.newPage();
 	await anotherTab.goto("/");
 	await expect(
 		anotherTab.getByRole("dialog", {
-			name: "Show us what you've been building",
+			name: dialogName,
 		}),
 	).not.toBeVisible();
 });
 
-test("visitors can dismiss with the close X, Maybe later, or Escape and keep the form link", async ({
+test("visitors can dismiss with the close X or Escape and keep the form link", async ({
 	browser,
 }) => {
-	for (const action of ["Close invitation", "Maybe later", "Escape"]) {
+	for (const action of ["Close invitation", "Escape"]) {
 		const context = await browser.newContext();
 		const page = await context.newPage();
 		await page.goto("http://127.0.0.1:4328/");
 		const dialog = page.getByRole("dialog", {
-			name: "Show us what you've been building",
+			name: dialogName,
 		});
 		await expect(dialog).toBeVisible();
 		if (action === "Escape") await page.keyboard.press("Escape");
@@ -69,7 +69,7 @@ test("visitors can dismiss with the close X, Maybe later, or Escape and keep the
 			await dialog.getByRole("button", { name: action, exact: true }).click();
 		await expect(dialog).not.toBeVisible();
 		const formLink = page
-			.getByRole("region", { name: "Show us what you've been building" })
+			.getByRole("region", { name: dialogName })
 			.getByRole("link", { name: /Submit your idea/ });
 		await expect(formLink).toBeVisible();
 		await expect(formLink).toBeFocused();
@@ -94,7 +94,7 @@ test("already-submitted visitors can suppress the invitation until January 1 Eas
 	await expect(submitted).toBeVisible();
 	await submitted.click();
 	await expect(
-		page.getByRole("dialog", { name: "Show us what you've been building" }),
+		page.getByRole("dialog", { name: dialogName }),
 	).not.toBeVisible();
 	const persistent = (await context.cookies()).filter(
 		(cookie) => cookie.name === "grwebdev-showcase-2026-submitted",
@@ -108,11 +108,11 @@ test("already-submitted visitors can suppress the invitation until January 1 Eas
 	const nextPage = await nextSession.newPage();
 	await nextPage.goto("http://127.0.0.1:4328/");
 	await expect(
-		nextPage.getByRole("dialog", { name: "Show us what you've been building" }),
+		nextPage.getByRole("dialog", { name: dialogName }),
 	).not.toBeVisible();
 	await expect(
 		nextPage
-			.getByRole("region", { name: "Show us what you've been building" })
+			.getByRole("region", { name: dialogName })
 			.getByRole("link", { name: /Submit your idea/ }),
 	).toBeVisible();
 	await nextSession.close();
@@ -129,7 +129,7 @@ test("opening the form uses a new tab and closes the invitation after 500 ms wit
 	await page.clock.pauseAt(new Date("2026-10-01T12:00:00Z"));
 	await page.goto("/");
 	const dialog = page.getByRole("dialog", {
-		name: "Show us what you've been building",
+		name: dialogName,
 	});
 	const popupPromise = context.waitForEvent("page");
 	await dialog.getByRole("link", { name: /Submit your idea/ }).click();
@@ -167,11 +167,11 @@ test("unavailable cookies leave the static invitation usable without opening the
 		page.on("pageerror", (error) => errors.push(error.message));
 		await page.goto("http://127.0.0.1:4328/");
 		await expect(
-			page.getByRole("dialog", { name: "Show us what you've been building" }),
+			page.getByRole("dialog", { name: dialogName }),
 		).not.toBeVisible();
 		await expect(
 			page
-				.getByRole("region", { name: "Show us what you've been building" })
+				.getByRole("region", { name: dialogName })
 				.getByRole("link", { name: /Submit your idea/ }),
 		).toBeVisible();
 		expect(errors).toEqual([]);
@@ -190,13 +190,14 @@ test("the modal contains keyboard focus and fits mobile and desktop screens", as
 		const page = await context.newPage();
 		await page.goto("http://127.0.0.1:4328/");
 		const dialog = page.getByRole("dialog", {
-			name: "Show us what you've been building",
+			name: dialogName,
 		});
 		await expect(dialog).toBeVisible();
 		const close = dialog.getByRole("button", { name: "Close invitation" });
 		const submitted = dialog.getByRole("button", {
 			name: "I've already submitted",
 		});
+		const submit = dialog.getByRole("link", { name: /Submit your idea/ });
 		await expect(close).toBeFocused();
 		await close.press("Shift+Tab");
 		await expect(submitted).toBeFocused();
@@ -208,6 +209,20 @@ test("the modal contains keyboard focus and fits mobile and desktop screens", as
 		expect(bounds.y).toBeGreaterThanOrEqual(0);
 		expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width);
 		expect(bounds.y + bounds.height).toBeLessThanOrEqual(viewport.height);
+		const submitBounds = await submit.boundingBox();
+		const submittedBounds = await submitted.boundingBox();
+		if (!submitBounds || !submittedBounds)
+			throw new Error("Action button bounds unavailable");
+		if (viewport.width >= 800) {
+			expect(submittedBounds.x).toBeGreaterThanOrEqual(
+				submitBounds.x + submitBounds.width,
+			);
+			expect(submittedBounds.y).toBe(submitBounds.y);
+		} else {
+			expect(submittedBounds.y).toBeGreaterThanOrEqual(
+				submitBounds.y + submitBounds.height,
+			);
+		}
 		await page.screenshot({
 			path: testInfo.outputPath(`dialog-${viewport.width}.png`),
 		});
