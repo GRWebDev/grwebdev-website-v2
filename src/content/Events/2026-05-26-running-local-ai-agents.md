@@ -7,4 +7,9 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/314635862/"
 date: 2026-05-26
 timeZone: "America/New_York"
+startDateTime: "2026-05-26T18:00:00-04:00"
+endDateTime: "2026-05-26T20:00:00-04:00"
+attendanceMode: "in-person"
+locationName: "LaFleur Marketing"
+locationAddress: "549 Ottawa Ave NW Suite 201, Grand Rapids, MI"
 ---

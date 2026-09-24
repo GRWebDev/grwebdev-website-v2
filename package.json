@@ -8,7 +8,6 @@
 	},
 	"scripts": {
 		"dev": "astro dev",
-		"prototype:events": "PUBLIC_EVENT_LOGISTICS_PROTOTYPE=1 astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
