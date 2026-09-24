@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { formatEventDate, isEventUpcoming } from "../src/utils/event-date.ts";
+import {
+	formatEventDate,
+	formatEventTime,
+	isEventUpcoming,
+} from "../src/utils/event-date.ts";
 
 test("event calendar dates keep their published day in the event time zone", () => {
 	assert.equal(
@@ -20,5 +24,15 @@ test("events stay upcoming through their local calendar day", () => {
 			timeZone: "America/New_York",
 		}),
 		true,
+	);
+});
+
+test("event times use the event's published time zone", () => {
+	assert.equal(
+		formatEventTime({
+			startDateTime: "2026-07-24T08:00:00-04:00",
+			timeZone: "America/New_York",
+		}),
+		"8:00 AM EDT",
 	);
 });
