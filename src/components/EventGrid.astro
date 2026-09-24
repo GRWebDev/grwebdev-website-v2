@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
 import {
 	formatEventDate,
 	formatEventTime,
@@ -130,6 +131,14 @@ while (
 		line-height: 1.25;
 	}
 
+	.event-caption h3 :global(svg) {
+		display: inline-block;
+		inline-size: 1em;
+		block-size: 1em;
+		margin-inline-start: 0.2em;
+		vertical-align: -0.125em;
+	}
+
 	.event-caption p {
 		font-size: 0.875em;
 		line-height: 1.4;
@@ -137,6 +146,15 @@ while (
 
 	.event-caption .address {
 		color: var(--gray-300);
+	}
+
+	.event-grid article:focus-within {
+		outline: 2px solid var(--secondary-clr);
+		outline-offset: 0.2em;
+	}
+
+	.event-grid a:focus-visible {
+		outline: none;
 	}
 
 	.event-grid a:hover h3,
@@ -172,10 +190,13 @@ while (
 									loading={isLikelyFirstVisible ? "eager" : "lazy"}
 									quality="low"
 									sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
-									widths={[360, 720]}
+									widths={[360, 680]}
 								/>
 								<div class="event-caption">
-									<h3>{event.data.name}</h3>
+									<h3>
+										{event.data.name}
+										<ExternalLink role="img" aria-label="Opens in a new tab" focusable="false" />
+									</h3>
 									<p>
 										<time datetime={event.data.startDateTime}>
 											{formatEventDate({ date: event.data.date })} · {formatEventTime({
