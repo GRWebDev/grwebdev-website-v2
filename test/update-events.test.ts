@@ -16,6 +16,13 @@ import { fileURLToPath } from "node:url";
 const importerPath = fileURLToPath(
 	new URL("../scripts/update-events.ts", import.meta.url),
 );
+const eventPage = `<script type="application/ld+json">{
+	"@type":"Event",
+	"startDate":"2026-07-24T08:00:00-04:00",
+	"endDate":"2026-07-24T09:00:00-04:00",
+	"eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode",
+	"location":{"@type":"VirtualLocation","url":"https://www.meetup.com/grwebdev/events/313908053/"}
+}</script>`;
 test("Meetup imports preserve the event time zone in Markdown", async (t) => {
 	const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-events-"));
 	t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
@@ -26,6 +33,8 @@ test("Meetup imports preserve the event time zone in Markdown", async (t) => {
 	await mkdir(flyersDir, { recursive: true });
 
 	const feedPath = path.join(fixtureRoot, "meetup.ics");
+	const pagePath = path.join(fixtureRoot, "event-page.html");
+	await writeFile(pagePath, eventPage);
 	await writeFile(
 		feedPath,
 		`BEGIN:VCALENDAR
@@ -45,6 +54,8 @@ END:VCALENDAR
 			importerPath,
 			"--feed-file",
 			feedPath,
+			"--page-file",
+			pagePath,
 			"--skip-flyers",
 			"--no-cleanup",
 			"--today",
@@ -59,6 +70,8 @@ END:VCALENDAR
 	const [eventFile] = await readdir(eventsDir);
 	const markdown = await readFile(path.join(eventsDir, eventFile), "utf8");
 	assert.match(markdown, /^timeZone: "America\/New_York"$/m);
+	assert.match(markdown, /^startDateTime: "2026-07-24T08:00:00-04:00"$/m);
+	assert.match(markdown, /^locationName: "Online event"$/m);
 });
 
 test("Meetup imports refresh the time zone for existing events", async (t) => {
@@ -83,6 +96,8 @@ timeZone: "UTC"
 	);
 
 	const feedPath = path.join(fixtureRoot, "meetup.ics");
+	const pagePath = path.join(fixtureRoot, "event-page.html");
+	await writeFile(pagePath, eventPage);
 	await writeFile(
 		feedPath,
 		`BEGIN:VCALENDAR
@@ -102,6 +117,8 @@ END:VCALENDAR
 			importerPath,
 			"--feed-file",
 			feedPath,
+			"--page-file",
+			pagePath,
 			"--skip-flyers",
 			"--no-cleanup",
 			"--today",
@@ -115,4 +132,5 @@ END:VCALENDAR
 
 	const markdown = await readFile(eventFile, "utf8");
 	assert.match(markdown, /^timeZone: "America\/New_York"$/m);
+	assert.match(markdown, /^startDateTime: "2026-07-24T08:00:00-04:00"$/m);
 });

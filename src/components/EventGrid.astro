@@ -1,7 +1,12 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { formatEventDate, isEventUpcoming } from "../utils/event-date.ts";
+import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
+import {
+	formatEventDate,
+	formatEventTime,
+	isEventUpcoming,
+} from "../utils/event-date.ts";
 
 const gridSize = 8;
 const old = 2;
@@ -75,72 +80,144 @@ while (
 	}
 
 	.event-grid img {
-		height: revert;
+		height: auto;
 	}
 
-	.event-grid a:nth-child(-n + 2),
-	.event-grid a:nth-child(n + 6) {
+	.event-grid article:nth-child(-n + 2),
+	.event-grid article:nth-child(n + 6) {
 		display: none;
 	}
 
 	@container (width > 620px) {
-		.event-grid a:nth-child(6) {
+		.event-grid article:nth-child(6) {
 			display: block;
 		}
 	}
 
 	@container (width > 960px) {
-		.event-grid a:nth-child(2),
-		.event-grid a:nth-child(7) {
+		.event-grid article:nth-child(2),
+		.event-grid article:nth-child(7) {
 			display: block;
 		}
 	}
 
 	@container (width > 1280px) {
-		.event-grid a:nth-child(1),
-		.event-grid a:nth-child(8) {
+		.event-grid article:nth-child(1),
+		.event-grid article:nth-child(8) {
 			display: block;
 		}
+	}
+
+	.event-grid article {
+		border-block-end: 4px solid var(--secondary-clr);
+	}
+
+	.event-grid a {
+		display: block;
+		text-decoration: none;
+	}
+
+	.event-caption {
+		padding-block: 0.75rem 1rem;
+	}
+
+	.event-caption h3,
+	.event-caption p {
+		margin-block-start: 0;
+	}
+
+	.event-caption h3 {
+		font-size: 1.125rem;
+		line-height: 1.25;
+	}
+
+	.event-caption h3 :global(svg) {
+		display: inline-block;
+		inline-size: 1em;
+		block-size: 1em;
+		margin-inline-start: 0.2em;
+		vertical-align: -0.125em;
+	}
+
+	.event-caption p {
+		font-size: 0.875em;
+		line-height: 1.4;
+	}
+
+	.event-caption .address {
+		color: var(--gray-300);
+	}
+
+	.event-grid article:has(:focus-visible) {
+		outline: 2px solid var(--secondary-clr);
+		outline-offset: 0.2em;
+	}
+
+	.event-grid a:focus-visible {
+		outline: none;
+	}
+
+	.event-grid a:hover h3,
+	.event-grid a:focus-visible h3 {
+		text-decoration: underline;
+		text-decoration-color: var(--secondary-clr);
+		text-decoration-thickness: 0.12em;
+		text-underline-offset: 0.2em;
 	}
 </style>
 <section class="grid" aria-labelledby="community-calendar-heading">
 	<div>
 		<h2 id="community-calendar-heading">Events</h2>
 		{eventsToUse.length > 0 && (
-					<div class="event-grid">
-						{eventsToUse.map((event, index) => {
-							const image =
-								index % 2 === 0 ? event.data.images.light : event.data.images.dark;
-							const isLikelyFirstVisible = index === 2;
-							const eventLabel = `${event.data.name}, ${formatEventDate({
-								date: event.data.date,
-							})} on Meetup`;
-
-							return (
-								<a
-									href={event.data.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label={eventLabel}
-								>
-									<Image
-										src={image.src}
-										alt={image.alt}
-										decoding={isLikelyFirstVisible ? "sync" : "async"}
-										fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
-										layout="full-width"
-										loading={isLikelyFirstVisible ? "eager" : "lazy"}
-										quality="low"
-										sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
-										widths={[360, 720]}
-									/>
-								</a>
-							);
-						})}
-					</div>
-				)}
+			<div class="event-grid">
+				{eventsToUse.map((event, index) => {
+					const image =
+						index % 2 === 0 ? event.data.images.light : event.data.images.dark;
+					const isLikelyFirstVisible = index === 2;
+					return (
+						<article>
+							<a
+								href={event.data.url}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Image
+									src={image.src}
+									alt=""
+									decoding={isLikelyFirstVisible ? "sync" : "async"}
+									fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
+									layout="full-width"
+									loading={isLikelyFirstVisible ? "eager" : "lazy"}
+									quality="low"
+									sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
+									widths={[360, 680]}
+								/>
+								<div class="event-caption">
+									<h3>
+										{event.data.name}
+										<ExternalLink role="img" aria-label="Opens in a new tab" focusable="false" />
+									</h3>
+									<p>
+										<time datetime={event.data.startDateTime}>
+											{formatEventDate({ date: event.data.date })} · {formatEventTime({
+												startDateTime: event.data.startDateTime,
+												timeZone: event.data.timeZone,
+											})}
+										</time>
+									</p>
+									<p>{event.data.locationName}</p>
+									{event.data.locationAddress && (
+										<p class="address">{event.data.locationAddress}</p>
+									)}
+								</div>
+							</a>
+						</article>
+					);
+				})}
+			</div>
+		)}
 		{eventsToUse.length === 0 && (
-					<p>No events are listed right now. Check back soon.</p>
-				)}
+			<p>No events are listed right now. Check back soon.</p>
+		)}
 	</div>
 </section>

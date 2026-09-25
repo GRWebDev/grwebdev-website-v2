@@ -7,4 +7,9 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/313914502/"
 date: 2026-04-16
 timeZone: "America/New_York"
+startDateTime: "2026-04-16T08:00:00-04:00"
+endDateTime: "2026-04-16T09:00:00-04:00"
+attendanceMode: "in-person"
+locationName: "The Factory"
+locationAddress: "77 Monroe Center St NW Suite 600, Grand Rapids, MI"
 ---
