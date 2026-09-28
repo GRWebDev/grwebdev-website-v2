@@ -53,6 +53,16 @@ const boardToUse = board
 	img {
 		object-fit: cover;
 	}
+
+	@container container (width < 14rem) {
+		.image-text {
+			grid-template-areas:
+				"image"
+				"title"
+				"body";
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
 </style>
 <Layout title="Board">
 	<section class="grid">

@@ -8,11 +8,11 @@ import Layout from "../../layouts/Layout.astro";
 	section {
 		.inner-wrapper {
 			display: grid;
-			grid-template-columns: auto;
+			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: auto auto;
 			gap: 2ch;
 			@container (width > 960px) {
-				grid-template-columns: 1fr 1fr;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
 				grid-template-rows: auto;
 			}
 
