@@ -131,12 +131,14 @@ section.grid {
 
 	&.large {
 		grid-template-areas: "image" "title" "body";
+		grid-template-columns: minmax(0, 1fr);
 
 		.title {
 			place-content: center;
 		}
 
 		@container (width > 620px) {
+			grid-template-columns: auto minmax(0, 1fr);
 			grid-template-rows: auto auto 1fr;
 			grid-template-areas: "image title" "image body" "image body";
 			place-items: revert;
@@ -191,6 +193,7 @@ section.grid {
 		&.stacked {
 			display: grid;
 			gap: 0.15em;
+			grid-template-columns: minmax(0, 1fr);
 		}
 
 		&.role {
@@ -200,6 +203,7 @@ section.grid {
 		}
 
 		&.name {
+			overflow-wrap: anywhere;
 			text-box: cap alphabetic;
 		}
 	}
