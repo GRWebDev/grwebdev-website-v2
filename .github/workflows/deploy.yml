@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "17 0 * * 2"
       timezone: "America/New_York"
+    # Deploy shortly after the 2026 showcase cutoff. The guard skips future years.
+    - cron: "17 0 14 11 *"
+      timezone: "America/New_York"
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
@@ -19,16 +22,33 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.schedule.outputs.should_deploy }}
     steps:
+      - name: Check whether this run should deploy
+        id: schedule
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          should_deploy=true
+          if [[ "$EVENT_NAME" == "schedule" && "$SCHEDULE" == "17 0 14 11 *" && "$(TZ=America/New_York date +%Y)" != "2026" ]]; then
+            should_deploy=false
+          fi
+          echo "should_deploy=$should_deploy" >> "$GITHUB_OUTPUT"
       - name: Checkout your repository using git
+        if: steps.schedule.outputs.should_deploy == 'true'
         uses: actions/checkout@v7
       - name: Install, build, and upload your site output
+        if: steps.schedule.outputs.should_deploy == 'true'
         uses: withastro/action@v6
         with:
           node-version: "26"
 
   deploy:
     needs: build
+    if: needs.build.outputs.should_deploy == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
