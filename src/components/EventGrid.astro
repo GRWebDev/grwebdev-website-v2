@@ -107,40 +107,40 @@ while (
 	<div>
 		<h2 id="community-calendar-heading">Events</h2>
 		{eventsToUse.length > 0 && (
-					<div class="event-grid">
-						{eventsToUse.map((event, index) => {
-							const image =
-								index % 2 === 0 ? event.data.images.light : event.data.images.dark;
-							const isLikelyFirstVisible = index === 2;
-							const eventLabel = `${event.data.name}, ${formatEventDate({
-								date: event.data.date,
-							})} on Meetup`;
+			<div class="event-grid">
+				{eventsToUse.map((event, index) => {
+					const image =
+						index % 2 === 0 ? event.data.images.light : event.data.images.dark;
+					const isLikelyFirstVisible = index === 2;
+					const eventLabel = `${event.data.name}, ${formatEventDate({
+						date: event.data.date,
+					})} on Meetup`;
 
-							return (
-								<a
-									href={event.data.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label={eventLabel}
-								>
-									<Image
-										src={image.src}
-										alt={image.alt}
-										decoding={isLikelyFirstVisible ? "sync" : "async"}
-										fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
-										layout="full-width"
-										loading={isLikelyFirstVisible ? "eager" : "lazy"}
-										quality="low"
-										sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
-										widths={[360, 720]}
-									/>
-								</a>
-							);
-						})}
-					</div>
-				)}
+					return (
+						<a
+							href={event.data.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label={eventLabel}
+						>
+							<Image
+								src={image.src}
+								alt={image.alt}
+								decoding={isLikelyFirstVisible ? "sync" : "async"}
+								fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
+								layout="full-width"
+								loading={isLikelyFirstVisible ? "eager" : "lazy"}
+								quality="low"
+								sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
+								widths={[360, 720]}
+							/>
+						</a>
+					);
+				})}
+			</div>
+		)}
 		{eventsToUse.length === 0 && (
-					<p>No events are listed right now. Check back soon.</p>
-				)}
+			<p>No events are listed right now. Check back soon.</p>
+		)}
 	</div>
 </section>
