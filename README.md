@@ -55,7 +55,7 @@ Install the browser before running tests for the first time, or after updating P
 npx playwright install chromium --only-shell
 ```
 
-The browser tests start an isolated copy of the site and clean it up afterward. Fixture content uses entry IDs that differ from the generated route slugs, so the tests exercise the board and sponsor missing-entry guards. They verify HTTP 404, the original URL, no redirect, and the custom error page. GitHub Actions runs the full suite on pull requests to `main`.
+The browser tests start an isolated copy of the site and clean it up afterward. Fixture content uses entry IDs that differ from the generated route slugs, so the tests exercise the board and sponsor missing-entry guards. They verify HTTP 404, the original URL, no redirect, and the custom error page. GitHub Actions runs the full suite on pull requests to `main` or `codex/update-dependencies`.
 
 ## Updating Events
 
