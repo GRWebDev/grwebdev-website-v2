@@ -4,7 +4,7 @@ images: {
   light: { src: "../../assets/event-flyers/2026-10-15-coffee-with-creators-light.jpg", alt: "Coffee with Creators" },
   dark: { src: "../../assets/event-flyers/2026-10-15-coffee-with-creators-dark.jpg", alt: "Coffee with Creators" }
 }
-url: "https://www.meetup.com/grwebdev/events/jdkdwtyjcnbtb/"
+url: "https://www.meetup.com/grwebdev/events/316708017/"
 date: 2026-10-15
 timeZone: "America/New_York"
 ---

@@ -1,7 +1,8 @@
 {
 	"extends": "astro/tsconfigs/strict",
 	"include": [".astro/types.d.ts", "**/*"],
-	"exclude": ["dist"],
+	// The fixture imports resolve only after it is copied into the temporary site.
+	"exclude": ["dist", "test/e2e/fixtures/content.config.ts"],
 	"compilerOptions": {
 		"strictNullChecks": true,
 		"allowJs": true

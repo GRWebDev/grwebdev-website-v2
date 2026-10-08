@@ -45,7 +45,17 @@ All commands are run from the root of the project, from a terminal:
 | `npm run lint`            | List out linting issues                                   |
 | `npm run lint:fix`        | Correct automatically fixable lint issues and list others |
 | `npm run typecheck`       | Check Astro and TypeScript types                          |
+| `npm test`               | Run unit tests, typecheck, lint, build, and browser tests |
+| `npm run test:e2e`       | Run Playwright routing regression tests                  |
 | `npm run update:events`   | Update event content and flyer images from Meetup         |
+
+Install the browser before running tests for the first time, or after updating Playwright:
+
+```sh
+npx playwright install chromium --only-shell
+```
+
+The browser tests start an isolated copy of the site and clean it up afterward. Fixture content uses entry IDs that differ from the generated route slugs, so the tests exercise the board and sponsor missing-entry guards. They verify HTTP 404, the original URL, no redirect, and the custom error page. GitHub Actions runs the full suite on all pull requests.
 
 ## Updating Events
 
