@@ -11,7 +11,7 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"test": "node --test test/*.test.ts && npm run typecheck && npm run lint && npm run build && npm run test:e2e",
+		"test": "node --test test/*.test.ts && npm run typecheck && npm run lint && npm run build && npm run test:e2e && npm run test:browser",
 		"test:e2e": "playwright test",
 		"test:browser": "playwright test --config test/browser/playwright.config.ts",
 		"typecheck": "astro check",
