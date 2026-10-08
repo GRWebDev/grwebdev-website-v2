@@ -1,5 +1,4 @@
 :root {
-	--hero-min-block-size: clamp(24rem, 42vw, 36rem);
 	--main-max-width: 400px;
 
 	@media screen and (width > 480px) {
