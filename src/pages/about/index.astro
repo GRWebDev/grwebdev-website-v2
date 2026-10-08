@@ -5,6 +5,17 @@ import Layout from "../../layouts/Layout.astro";
 ---
 
 <style>
+	.about-heading {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
 	section {
 		.inner-wrapper {
 			display: grid;
@@ -58,11 +69,6 @@ import Layout from "../../layouts/Layout.astro";
 	}
 </style>
 <Layout title="About">
-	<section class="grid">
-		<div>
-			<h1>Grand Rapids Web Development Group</h1>
-		</div>
-	</section>
 	<BlackRedSection> <MissionStatement /> </BlackRedSection>
 	<section class="grid">
 		<div class="inner-wrapper">
