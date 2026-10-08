@@ -97,11 +97,13 @@ npm run update:events -- --feed-file ./events.ics --today 2026-07-09
 
 [Deploy to GitHub Pages](.github/workflows/deploy.yml) builds and publishes the site on pushes to `main`, on manual runs, and weekly on Tuesday at 12:17 a.m. Eastern time using `America/New_York`, including daylight saving time.
 
+The 2026 Community Code Showcase invitation also has a dedicated deployment scheduled for November 14, 2026 at 12:17 a.m. Eastern, shortly after its midnight cutoff. This cron repeats annually, so remove the temporary November 14 schedule and this paragraph by November 13, 2027. [Cleanup issue](https://github.com/GRWebDev/grwebdev-website-v2/issues/115) tracks that work. The weekly Tuesday schedule continues after cleanup.
+
 Astro evaluates date-dependent content during the build. The weekly deployment refreshes upcoming and past event selection, and any date-gated campaign content, without requiring a commit. It rebuilds the content already in the repository. Import new Meetup data separately with `npm run update:events`, then commit the resulting event files and flyers.
 
-GitHub runs scheduled workflows from the latest commit on the default branch, currently `main`. The schedule starts after this workflow reaches that branch. GitHub can delay or drop scheduled runs, so this is a weekly refresh target, not an exact expiry guarantee. In public repositories, GitHub disables schedules after 60 days without repository activity. See [GitHub's schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+GitHub runs scheduled workflows from the latest commit on the default branch, currently `main`. The schedule starts after this workflow reaches that branch. GitHub can delay or drop scheduled runs, so the weekly refresh and dedicated showcase run are best-effort targets, not exact expiry guarantees. In public repositories, GitHub disables schedules after 60 days without repository activity. See [GitHub's schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
-After a cutoff between scheduled Tuesday runs, or after a missed run, open **Actions → Deploy to GitHub Pages → Run workflow**, select `main`, and run it. If GitHub disabled the workflow, enable it on that workflow's Actions page first. Confirm that both the build and deployment jobs succeed before treating the published site as refreshed.
+Maintainers must trigger a manual deployment after a cutoff without a dedicated schedule, or after a missed weekly or showcase run. Open **Actions → Deploy to GitHub Pages → Run workflow**, select `main`, and run it. If GitHub disabled the workflow, enable it on that workflow's Actions page first. Confirm that both the build and deployment jobs succeed before treating the published site as refreshed.
 
 ## FAQ
 

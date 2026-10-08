@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "17 0 * * 2"
       timezone: "America/New_York"
+    # Deploy shortly after the showcase cutoff; remove before November 14, 2027.
+    - cron: "17 0 14 11 *"
+      timezone: "America/New_York"
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
