@@ -13,6 +13,7 @@
 		"astro": "astro",
 		"test": "node --test test/*.test.ts && npm run typecheck && npm run lint && npm run build && npm run test:e2e",
 		"test:e2e": "playwright test",
+		"test:browser": "playwright test --config test/browser/playwright.config.ts",
 		"typecheck": "astro check",
 		"update:events": "node scripts/update-events.ts",
 		"lint": "biome check",
