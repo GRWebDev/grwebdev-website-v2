@@ -5,6 +5,10 @@ on:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
+  # Refresh date-sensitive content even when no commits land.
+  schedule:
+    - cron: "17 0 * * 2"
+      timezone: "America/New_York"
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
