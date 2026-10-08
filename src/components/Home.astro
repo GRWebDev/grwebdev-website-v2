@@ -1,10 +1,57 @@
 ---
-import BlackRedSection from "./BlackRedSection.astro";
+import { getImage } from "astro:assets";
+import heroImage from "../assets/hero/hero.jpg";
+
+const heroBackground = await getImage({
+	src: heroImage,
+	width: 2000,
+	format: "webp",
+});
 ---
 
-<section class="grid">
-	<div>
-		<h1>Grand Rapids Web Development Group</h1>
-	</div>
-</section>
-<BlackRedSection></BlackRedSection>
+<div
+	class="hero"
+	style={{
+		backgroundImage: `linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), url("${heroBackground.src}")`,
+	}}
+>
+	<section class="grid hero__layout" aria-labelledby="hero-heading">
+		<div class="hero__content">
+			<h1 id="hero-heading">For the community, by the community.</h1>
+			<p>
+				Grand Rapids Web Development Group is a group of tech enthusiasts in the
+				Grand Rapids, MI area, offering meetups and more.
+			</p>
+		</div>
+	</section>
+</div>
+
+<style>
+	.hero {
+		background-color: var(--primary-clr);
+		color: #fff;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+	.hero__layout {
+		align-items: center;
+	}
+
+	.hero__content {
+		max-inline-size: 52rem;
+		padding-block: clamp(3rem, 8vw, 6rem);
+	}
+
+	h1 {
+		margin-block-start: 0;
+		font-size: clamp(2.25rem, 4.5vw, 4rem);
+		line-height: 1.15;
+	}
+
+	p {
+		max-inline-size: 55ch;
+		font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+	}
+</style>
