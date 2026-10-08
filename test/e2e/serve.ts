@@ -41,7 +41,7 @@ try {
 		path.join(fixtureRoot, "src/content.production.ts"),
 	);
 	await cp(
-		path.join(repoRoot, "test/e2e/fixtures/content.config.ts.txt"),
+		path.join(repoRoot, "test/e2e/fixtures/content.config.ts"),
 		path.join(fixtureRoot, "src/content.config.ts"),
 	);
 	// These entries generate static paths whose slugs have no matching entry ID.
