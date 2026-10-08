@@ -1,4 +1,6 @@
 ---
+import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
+
 interface Props {
 	headingId: string;
 }
@@ -17,8 +19,9 @@ const { headingId } = Astro.props;
 		href="https://forms.gle/2GJXyVBTEgTXV2uy5"
 		target="_blank"
 		rel="noopener noreferrer"
+		aria-label="Submit your idea (opens in a new tab)"
 	>
-		Submit your idea <span class="new-tab">(opens in a new tab)</span>
+		Submit your idea <ExternalLink aria-hidden="true" focusable="false" />
 	</a>
 </div>
 
@@ -35,16 +38,49 @@ const { headingId } = Astro.props;
 		font-weight: 650;
 	}
 	a {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
 		margin-block-start: 1.25em;
-		padding: 0.75em 1em;
-		background: var(--primary-clr);
-		color: var(--tertiary-clr);
-		font-weight: 650;
+		min-block-size: 56px;
+		padding: 0.75rem 1rem;
+		border: 4px solid #b40000;
+		border-radius: 30px;
+		background: #b40000;
+		color: #fff;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.5;
+		text-decoration: none;
+		box-shadow: 0 4px 6px rgb(0 0 0 / 15%);
+		transition: transform 150ms ease-out;
+
+		&:hover {
+			transform: scale(1.05);
+			text-decoration: none;
+		}
+
+		&:active {
+			transform: scale(1);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--primary-clr);
+			outline-offset: 4px;
+		}
 	}
-	.new-tab {
-		display: block;
-		font-size: 0.75em;
-		font-weight: 400;
+	a :global(svg) {
+		inline-size: 1.125rem;
+		block-size: 1.125rem;
+		flex: none;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		a {
+			transition: none;
+			&:hover {
+				transform: none;
+			}
+		}
 	}
 </style>
