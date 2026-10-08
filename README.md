@@ -55,7 +55,7 @@ The site can update event entries from the GRWebDev Meetup iCal feed:
 npm run update:events
 ```
 
-The updater compares Meetup events against local files in `src/content/Events/` by event date and Meetup URL. It creates missing event markdown files, updates stale Meetup URLs when the match is unambiguous, exports light and dark flyer images into `src/assets/event-flyers/`, and removes events and matching flyers that are six months old or older.
+The updater compares Meetup events against local files in `src/content/Events/` by event date and Meetup URL. It creates missing event markdown files, updates stale Meetup URLs when the match is unambiguous, exports light and dark flyer images into `src/assets/event-flyers/`, and removes events and matching flyers that are six months old or older. It also reads each event page's structured data for the start time, attendance mode, and public venue. Online listings are labeled "Online event" because Meetup does not expose the private meeting-room provider in that data.
 
 Start with a dry run when checking what will change:
 
@@ -69,9 +69,11 @@ npm run update:events -- --dry-run
 |:----------------|:---------------------------------------------------------------------|
 | `--dry-run`     | Print planned changes without writing files                          |
 | `--skip-flyers` | Create or update markdown without exporting flyer images             |
+| `--details-only` | Refresh page details for existing local events without feed changes |
 | `--no-cleanup`  | Do not remove events older than six months                           |
 | `--event <url>` | Process one Meetup event URL from the iCal feed                      |
 | `--feed-file`   | Read iCal text from a local file instead of Meetup                   |
+| `--page-file`   | Read event page HTML from a local file instead of Meetup             |
 | `--today`       | Override today's date for cleanup checks, using `YYYY-MM-DD` format  |
 | `--help`        | Show the updater help text                                           |
 

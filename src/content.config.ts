@@ -55,6 +55,11 @@ const events = defineCollection({
 			url: z.string(),
 			date: z.date(),
 			timeZone: z.string(),
+			startDateTime: z.string(),
+			endDateTime: z.string().optional(),
+			attendanceMode: z.enum(["online", "in-person", "hybrid"]),
+			locationName: z.string(),
+			locationAddress: z.string().optional(),
 		}),
 });
 export const collections = { board, sponsors, events };

@@ -6,6 +6,8 @@ dist/
 
 # generated types
 .astro/
+output/
+test-results/
 
 # local live-mode recovery state
 .impeccable/live/sessions/

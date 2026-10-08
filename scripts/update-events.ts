@@ -3,6 +3,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import {
+	type MeetupEventDetails,
+	parseMeetupEventDetails,
+} from "./meetup-event-details.ts";
 
 interface CliArgs {
 	dryRun: boolean;
@@ -11,6 +15,8 @@ interface CliArgs {
 	help: boolean;
 	event: string;
 	feedFile: string;
+	pageFile: string;
+	detailsOnly: boolean;
 	today: string;
 }
 
@@ -66,6 +72,7 @@ interface EventMarkdown {
 	slug: string;
 	timeZone: string;
 	url: string;
+	details: MeetupEventDetails;
 }
 
 interface FlyerExport {
@@ -93,6 +100,37 @@ main().catch((error: unknown) => {
 });
 
 async function main(): Promise<void> {
+	if (args.detailsOnly) {
+		const localEvents = (await readLocalEvents()).filter(
+			(event) => !args.event || event.url === args.event,
+		);
+		if (args.event && localEvents.length === 0) {
+			throw new Error(`No local event found for ${args.event}`);
+		}
+		if (args.dryRun) {
+			console.log(
+				`Would refresh details for ${localEvents.length} local events.`,
+			);
+			return;
+		}
+		const failures: string[] = [];
+		for (const event of localEvents) {
+			if (!event.url) continue;
+			try {
+				const details = await readEventDetails(event.url);
+				await updateEventDetails(event.file, details);
+			} catch (error) {
+				failures.push(`${relative(event.file)}: ${String(error)}`);
+			}
+		}
+		if (failures.length > 0) {
+			throw new Error(
+				`Could not refresh event details:\n${failures.join("\n")}`,
+			);
+		}
+		return;
+	}
+
 	const feedText = await readFeed();
 	const feedEvents = parseIcal(feedText)
 		.filter((event) => !args.event || event.url === args.event)
@@ -131,6 +169,15 @@ async function main(): Promise<void> {
 		return;
 	}
 
+	// Fetch details before changing local files, so a failed page does not leave
+	// new event content without the fields the site needs to render it.
+	const detailsByUrl = new Map<string, MeetupEventDetails>();
+	for (const event of feedEvents) {
+		if (!detailsByUrl.has(event.url)) {
+			detailsByUrl.set(event.url, await readEventDetails(event.url));
+		}
+	}
+
 	if (!args.noCleanup) {
 		for (const event of oldEvents) {
 			await removeEvent(event);
@@ -157,6 +204,7 @@ async function main(): Promise<void> {
 			slug: outputBase,
 			timeZone: event.timeZone,
 			url: event.url,
+			details: requireEventDetails(detailsByUrl, event.url),
 		});
 
 		if (!args.skipFlyers) {
@@ -167,7 +215,26 @@ async function main(): Promise<void> {
 		}
 	}
 
+	const currentEvents = await readLocalEvents();
+	for (const feed of feedEvents) {
+		const local = currentEvents.find((event) => event.url === feed.url);
+		if (!local) continue;
+		await updateEventDetails(
+			local.file,
+			requireEventDetails(detailsByUrl, feed.url),
+		);
+	}
+
 	console.log("\nDone.");
+}
+
+function requireEventDetails(
+	detailsByUrl: Map<string, MeetupEventDetails>,
+	url: string,
+): MeetupEventDetails {
+	const details = detailsByUrl.get(url);
+	if (!details) throw new Error(`Missing event details for ${url}`);
+	return details;
 }
 
 function parseArgs(argv: string[]): CliArgs {
@@ -178,6 +245,8 @@ function parseArgs(argv: string[]): CliArgs {
 		help: false,
 		event: "",
 		feedFile: "",
+		pageFile: "",
+		detailsOnly: false,
 		today: "",
 	};
 
@@ -185,6 +254,7 @@ function parseArgs(argv: string[]): CliArgs {
 		const arg = argv[index];
 
 		if (arg === "--dry-run") parsed.dryRun = true;
+		else if (arg === "--details-only") parsed.detailsOnly = true;
 		else if (arg === "--skip-flyers") parsed.skipFlyers = true;
 		else if (arg === "--no-cleanup") parsed.noCleanup = true;
 		else if (arg === "--help" || arg === "-h") parsed.help = true;
@@ -195,6 +265,10 @@ function parseArgs(argv: string[]): CliArgs {
 			parsed.feedFile = readValue(argv, ++index, arg);
 		else if (arg.startsWith("--feed-file="))
 			parsed.feedFile = arg.slice("--feed-file=".length);
+		else if (arg === "--page-file")
+			parsed.pageFile = readValue(argv, ++index, arg);
+		else if (arg.startsWith("--page-file="))
+			parsed.pageFile = arg.slice("--page-file=".length);
 		else if (arg === "--today") parsed.today = readValue(argv, ++index, arg);
 		else if (arg.startsWith("--today="))
 			parsed.today = arg.slice("--today=".length);
@@ -223,6 +297,20 @@ async function readFeed(): Promise<string> {
 	}
 
 	return response.text();
+}
+
+async function readEventDetails(url: string): Promise<MeetupEventDetails> {
+	const html = args.pageFile
+		? await fs.readFile(path.resolve(repoRoot, args.pageFile), "utf8")
+		: await fetch(url).then((response) => {
+				if (!response.ok) {
+					throw new Error(
+						`Could not fetch Meetup event page: ${response.status} ${response.statusText}`,
+					);
+				}
+				return response.text();
+			});
+	return parseMeetupEventDetails(html);
 }
 
 function parseIcal(text: string): FeedEvent[] {
@@ -427,6 +515,38 @@ async function updateEventTimeZone(
 	console.log(`Updated time zone in ${relative(file)}`);
 }
 
+async function updateEventDetails(
+	file: string,
+	details: MeetupEventDetails,
+): Promise<void> {
+	const text = await fs.readFile(file, "utf8");
+	const closingIndex = text.indexOf("\n---", 4);
+	if (!text.startsWith("---\n") || closingIndex < 0) {
+		throw new Error(`Event has no YAML frontmatter: ${relative(file)}`);
+	}
+
+	const detailKeys = [
+		"startDateTime",
+		"endDateTime",
+		"attendanceMode",
+		"locationName",
+		"locationAddress",
+	];
+	const frontmatter = text
+		.slice(4, closingIndex)
+		.split("\n")
+		.filter((line) => !detailKeys.some((key) => line.startsWith(`${key}:`)));
+	for (const key of detailKeys) {
+		const value = details[key as keyof MeetupEventDetails];
+		if (value) frontmatter.push(`${key}: "${escapeYamlString(value)}"`);
+	}
+	const updated = `---\n${frontmatter.join("\n")}${text.slice(closingIndex)}`;
+	if (updated !== text) {
+		await fs.writeFile(file, updated);
+		console.log(`Updated details in ${relative(file)}`);
+	}
+}
+
 async function writeEventMarkdown({
 	file,
 	date,
@@ -434,8 +554,12 @@ async function writeEventMarkdown({
 	slug,
 	timeZone,
 	url,
+	details,
 }: EventMarkdown): Promise<void> {
-	const markdown = `---\nname: "${escapeYamlString(name)}"\nimages: {\n  light: { src: "../../assets/event-flyers/${slug}-light.jpg", alt: "${escapeYamlString(name)}" },\n  dark: { src: "../../assets/event-flyers/${slug}-dark.jpg", alt: "${escapeYamlString(name)}" }\n}\nurl: "${url}"\ndate: ${date}\ntimeZone: "${escapeYamlString(timeZone)}"\n---\n`;
+	const detailLines = Object.entries(details).map(
+		([key, value]) => `${key}: "${escapeYamlString(value)}"`,
+	);
+	const markdown = `---\nname: "${escapeYamlString(name)}"\nimages: {\n  light: { src: "../../assets/event-flyers/${slug}-light.jpg", alt: "${escapeYamlString(name)}" },\n  dark: { src: "../../assets/event-flyers/${slug}-dark.jpg", alt: "${escapeYamlString(name)}" }\n}\nurl: "${url}"\ndate: ${date}\ntimeZone: "${escapeYamlString(timeZone)}"\n${detailLines.join("\n")}\n---\n`;
 
 	await fs.writeFile(file, markdown, { flag: "wx" });
 	console.log(`Created ${relative(file)}`);
@@ -592,9 +716,11 @@ Usage:
 Options:
   --dry-run       Print planned changes without writing files.
   --skip-flyers   Create/update markdown without exporting flyer images.
+  --details-only  Refresh structured details for existing local events only.
   --no-cleanup    Do not remove events older than six months.
   --event <url>   Process one Meetup event URL from the iCal feed.
   --feed-file     Read iCal text from a local file instead of Meetup.
+  --page-file     Read event page HTML from a local file instead of Meetup.
   --today         Override today's date for cleanup checks. YYYY-MM-DD.
   --help          Show this help.
 `);

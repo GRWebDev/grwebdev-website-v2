@@ -13,6 +13,22 @@ export function formatEventDate({ date }: { date: Date }): string {
 	return eventDateFormatter.format(date);
 }
 
+/** Format the published start time where the event takes place. */
+export function formatEventTime({
+	startDateTime,
+	timeZone,
+}: {
+	startDateTime: string;
+	timeZone: string;
+}): string {
+	return new Intl.DateTimeFormat("en-US", {
+		hour: "numeric",
+		minute: "2-digit",
+		timeZone,
+		timeZoneName: "short",
+	}).format(new Date(startDateTime));
+}
+
 /**
  * Compare date-only event content against the current calendar date where the
  * event takes place. Events remain upcoming for their whole local day.
