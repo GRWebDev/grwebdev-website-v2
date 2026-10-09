@@ -1,6 +1,7 @@
 <section class="grid">
 	<div class="on-top">
-		<p class="condensed-light">
+		<h1>About Us</h1>
+		<p>
 			At GRWebDev, we’re developing a different kind of tech community, where
 			everyone belongs. Whether you’re an industry professional, tech
 			enthusiast, student, or creative, our events offer a welcoming environment
@@ -9,3 +10,23 @@
 		</p>
 	</div>
 </section>
+
+<style>
+	/* Match typography to the home page hero banner (see Home.astro) */
+	.on-top {
+		max-inline-size: 52rem;
+		padding-block: clamp(3rem, 8vw, 6rem);
+	}
+
+	h1 {
+		margin-block-start: 0;
+		font-size: clamp(2.25rem, 4.5vw, 4rem);
+		line-height: 1.15;
+	}
+
+	p {
+		max-inline-size: 55ch;
+		font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+		line-height: 1.5;
+	}
+</style>
