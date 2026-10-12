@@ -1,0 +1,81 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+	image: ImageMetadata;
+	headingId?: string;
+}
+
+const { image, headingId } = Astro.props;
+---
+
+<section class="grid hero" aria-labelledby={headingId}>
+	<!-- The tall mobile cover crop needs more image width than the viewport. -->
+	<Picture
+		pictureAttributes={{ class: "hero__picture" }}
+		class="hero__image"
+		src={image}
+		alt=""
+		width={2000}
+		widths={[720, 1080, 1440, 2000]}
+		sizes="(max-width: 44rem) 44rem, 100vw"
+		quality={"low"}
+		formats={["avif"]}
+		fallbackFormat="webp"
+		loading="eager"
+		fetchpriority="high"
+	/>
+	<div class="hero__content">
+		<slot />
+	</div>
+</section>
+
+<style>
+	.hero {
+		align-items: center;
+		position: relative;
+		isolation: isolate;
+		background-color: var(--primary-clr);
+		color: var(--tertiary-clr);
+	}
+
+	.hero::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-color: var(--hero-overlay-clr);
+		pointer-events: none;
+	}
+
+	.hero__picture {
+		grid-area: full;
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero__image {
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.hero__content {
+		position: relative;
+		z-index: 1;
+		max-inline-size: 52rem;
+		padding-block: clamp(3rem, 8vw, 6rem);
+	}
+
+	.hero__content > :global(h1) {
+		margin-block-start: 0;
+		font-size: clamp(2.25rem, 4.5vw, 4rem);
+		line-height: 1.15;
+	}
+
+	.hero__content > :global(p) {
+		max-inline-size: 55ch;
+		font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+	}
+</style>

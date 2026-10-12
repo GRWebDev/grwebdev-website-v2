@@ -48,6 +48,16 @@
           "oklch(80% 0 0)",
           "oklch(95% 0 0)"
         ]
+      },
+      "overlay-black": {
+        "role": "neutral",
+        "displayName": "Overlay Black",
+        "canonical": "var(--overlay-base-clr), derived from --gray-base at zero lightness"
+      },
+      "hero-overlay": {
+        "role": "neutral",
+        "displayName": "Hero Overlay",
+        "canonical": "var(--hero-overlay-clr), Overlay Black at 55% opacity"
       }
     },
     "typographyMeta": {
@@ -128,7 +138,7 @@
       "name": "Event Flyer Tile",
       "kind": "card",
       "refersTo": "event-flyer",
-      "description": "Full image event tile with no decorative frame.",
+      "description": "Full image event tile with no decorative frame. Flyers load lazily with asynchronous decoding and normal priority.",
       "html": "<a class=\"ds-event-flyer\" href=\"#\"><img src=\"/event-flyers/2026-05-26-running-local-ai-agents-light.jpg\" alt=\"GRWebDev event flyer\"></a>",
       "css": ".ds-event-flyer { display: block; color: inherit; text-decoration: none; } .ds-event-flyer img { display: block; width: 100%; height: auto; border-radius: 0; } .ds-event-flyer:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.35em; }"
     },
@@ -155,6 +165,14 @@
       "description": "A future-compatible button derived from the existing link and black/red vocabulary.",
       "html": "<button class=\"ds-button-primary\">Attend an event</button>",
       "css": ".ds-button-primary { appearance: none; border: 1px solid var(--primary-clr); border-radius: 0; background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; padding: 0.75em 1em; cursor: pointer; } .ds-button-primary:hover { text-decoration: underline; } .ds-button-primary:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.25em; } .ds-button-primary:disabled { opacity: 0.55; cursor: not-allowed; }"
+    },
+    {
+      "name": "Hero",
+      "kind": "custom",
+      "refersTo": "hero",
+      "description": "Hero.astro accepts an imported image, default-slot text, and an optional headingId. Its responsive AVIF image has a WebP fallback and loads eagerly at high priority. This preview shows the fallback surface.",
+      "html": "<section class=\"ds-hero\"><div><h1>For the community, by the community.</h1><p>Meetups for the Grand Rapids web community.</p></div></section>",
+      "css": ".ds-hero { background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; padding: clamp(3rem, 8vw, 6rem) 2ch; } .ds-hero > div { max-inline-size: 52rem; } .ds-hero h1 { margin: 0; font-size: clamp(2.25rem, 4.5vw, 4rem); line-height: 1.15; text-wrap: balance; } .ds-hero p { max-inline-size: 55ch; font-size: clamp(1.125rem, 1.6vw, 1.5rem); }"
     }
   ],
   "narrative": {
