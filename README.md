@@ -99,6 +99,16 @@ With the project's Node version active, install Chromium once with `npx playwrig
 
 The suite builds a temporary copy of the site, serves it on port 4328, and checks navigation and page content at 200% text size. Run `npm test` for unit tests, type checks, lint, the production build, and both browser suites.
 
+## Deployment
+
+[Deploy to GitHub Pages](.github/workflows/deploy.yml) builds and publishes the site on pushes to `main`, on manual runs, and weekly on Tuesday at 12:17 a.m. Eastern time using `America/New_York`, including daylight saving time.
+
+Astro evaluates date-dependent content during the build. The weekly deployment refreshes upcoming and past event selection without requiring a commit. It rebuilds the content already in the repository. Import new Meetup data separately with `npm run update:events`, then commit the resulting event files and flyers.
+
+GitHub runs scheduled workflows from the latest commit on the default branch, currently `main`. The schedule starts after this workflow reaches that branch. GitHub can delay or drop scheduled runs, so this is a weekly refresh target, not an exact refresh guarantee. In public repositories, GitHub disables schedules after 60 days without repository activity. See [GitHub's schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+To refresh date-dependent content between scheduled Tuesday runs, or after a missed run, open **Actions → Deploy to GitHub Pages → Run workflow**, select `main`, and run it. If GitHub disabled the workflow, enable it on that workflow's Actions page first. Confirm that both the build and deployment jobs succeed before treating the published site as refreshed.
+
 ## FAQ
 
 **Why use `npm ci`?**
