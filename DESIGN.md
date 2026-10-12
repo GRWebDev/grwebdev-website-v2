@@ -7,6 +7,9 @@ colors:
   room-light: "oklch(from var(--gray-1000) l c h)"
   charcoal-shadow: "oklch(from var(--gray-700) l c h)"
   footer-red-wash: "oklch(from var(--red-950) l c h / 0.075)"
+  overlay-black: "var(--overlay-base-clr)"
+  hero-overlay: "var(--hero-overlay-clr)"
+  dialog-backdrop: "var(--dialog-backdrop-clr)"
 typography:
   display:
     fontFamily: "\"Open Sans Variable\", sans-serif"
@@ -37,6 +40,11 @@ spacing:
   lg: "2ch"
   xl: "3em"
 components:
+  hero:
+    backgroundColor: "{colors.stage-black}"
+    textColor: "{colors.room-light}"
+    rounded: "{rounded.none}"
+    width: "100%"
   nav-link:
     textColor: "{colors.stage-black}"
     typography: "{typography.nav}"
@@ -91,6 +99,9 @@ The palette is a committed black/red community identity: Stage Black carries str
 - **Room Light**: The page background and light-on-dark text color. Use it to keep the site welcoming and readable.
 - **Charcoal Shadow**: The header shadow color. Use it only for structural separation.
 - **Footer Red Wash**: A low-opacity footer surface tint. Use it when a surface needs warmth without becoming a red block.
+- **Overlay Black** (`--overlay-base-clr`): Pure black derived from the neutral ramp at zero lightness. Keep it separate from Stage Black so scrims preserve their existing darkness and text contrast.
+- **Hero Overlay** (`--hero-overlay-clr`): Overlay Black at 55% opacity, paired with Room Light text over the home photograph.
+- **Dialog Backdrop** (`--dialog-backdrop-clr`): Overlay Black at 65% opacity, used behind the showcase invitation to separate it from the page.
 
 ### Named Rules
 
@@ -166,13 +177,21 @@ Navigation is a sticky top bar on Room Light with the GRWebDev logo and plain te
 - **Hover:** Underline.
 - **Active State:** Not currently defined. Add one only if it helps orientation.
 
+### Hero
+
+`Hero.astro` accepts an imported image through its typed `image` prop and heading/body content through its default slot. Set `headingId` to the slotted heading's ID to label the section.
+
+- **Image:** Decorative, centered cover crop with responsive AVIF sources, a responsive WebP fallback, and eager, high-priority loading.
+- **Colors:** Stage Black fallback, Room Light text, and the shared Hero Overlay at 55% opacity.
+- **Content:** Outdent grid placement, fluid vertical padding, and scoped typography for direct slotted headings and paragraphs.
+
 ### Event Flyer Grid
 
 Event discovery relies on real flyer imagery, shown in a one-column grid on small screens and three columns above `940px` container width.
 
 - **Style:** Full image tiles, no decorative frame.
 - **Spacing:** `2ch` gap.
-- **Behavior:** Alternate between light and dark event flyer assets as currently implemented.
+- **Behavior:** Alternate between light and dark event flyer assets as currently implemented. Flyers load lazily with asynchronous decoding and normal priority so the hero takes priority during initial loading.
 
 ### Image/Text Rows
 
