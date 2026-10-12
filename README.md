@@ -93,6 +93,12 @@ npm run update:events -- --event https://www.meetup.com/grwebdev/events/31533065
 npm run update:events -- --feed-file ./events.ics --today 2026-07-09
 ```
 
+## Browser tests
+
+With the project's Node version active, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser`.
+
+The suite builds a temporary copy of the site, serves it on port 4328, and checks navigation and page content at 200% text size. Run `npm test` for unit tests, type checks, lint, the production build, and both browser suites.
+
 ## FAQ
 
 **Why use `npm ci`?**
