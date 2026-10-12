@@ -111,7 +111,6 @@ while (
 				{eventsToUse.map((event, index) => {
 					const image =
 						index % 2 === 0 ? event.data.images.light : event.data.images.dark;
-					const isLikelyFirstVisible = index === 2;
 					const eventLabel = `${event.data.name}, ${formatEventDate({
 						date: event.data.date,
 					})} on Meetup`;
@@ -126,10 +125,9 @@ while (
 							<Image
 								src={image.src}
 								alt={image.alt}
-								decoding={isLikelyFirstVisible ? "sync" : "async"}
-								fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
+								decoding="async"
 								layout="full-width"
-								loading={isLikelyFirstVisible ? "eager" : "lazy"}
+								loading="lazy"
 								quality="low"
 								sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
 								widths={[360, 720]}

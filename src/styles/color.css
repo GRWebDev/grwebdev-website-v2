@@ -77,4 +77,7 @@
 	--primary-clr: var(--gray-100);
 	--secondary-clr: var(--red-500);
 	--tertiary-clr: var(--gray-1000);
+
+	--overlay-base-clr: oklch(from var(--gray-base) 0 c h);
+	--hero-overlay-clr: oklch(from var(--overlay-base-clr) l c h / 55%);
 }
