@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
@@ -27,6 +27,11 @@
 		"enabled": true,
 		"rules": {
 			"preset": "recommended",
+			"correctness": {
+				// Biome 2.6.2 rejects valid grids: https://github.com/biomejs/biome/issues/12502
+				// Re-enable after upgrading to a release containing https://github.com/biomejs/biome/pull/12508.
+				"noInvalidGridAreas": "off"
+			},
 			"suspicious": {
 				"noExplicitAny": "error"
 			}
@@ -38,6 +43,15 @@
 			"indentScriptAndStyle": true
 		},
 		"experimentalFullSupportEnabled": true
+	},
+	"markdown": {
+		"parser": {
+			"frontmatter": true
+		},
+		"formatter": {
+			"proseWrap": "preserve",
+			"formatEmbeds": false
+		}
 	},
 	"javascript": {
 		"formatter": {
