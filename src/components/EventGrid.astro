@@ -195,11 +195,16 @@ while (
 								<div class="event-caption">
 									<h3>
 										{event.data.name}
-										<ExternalLink role="img" aria-label="Opens in a new tab" focusable="false" />
+										<ExternalLink
+											role="img"
+											aria-label="Opens in a new tab"
+											focusable="false"
+										/>
 									</h3>
 									<p>
 										<time datetime={event.data.startDateTime}>
-											{formatEventDate({ date: event.data.date })} · {formatEventTime({
+											{formatEventDate({ date: event.data.date })} ·{" "}
+											{formatEventTime({
 												startDateTime: event.data.startDateTime,
 												timeZone: event.data.timeZone,
 											})}

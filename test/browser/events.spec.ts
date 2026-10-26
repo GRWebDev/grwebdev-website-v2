@@ -37,8 +37,9 @@ test("event grid keeps its original visible counts and flyer proportions", async
 		const cards = page.locator(".event-grid article:visible");
 		await expect(cards).toHaveCount(expectedCount);
 		const image = cards.first().locator("img");
-		const proportions = await image.evaluate((element) => {
+		const proportions = await image.evaluate(async (element) => {
 			const img = element as HTMLImageElement;
+			await img.decode();
 			return {
 				intrinsic: img.naturalWidth / img.naturalHeight,
 				rendered: img.clientWidth / img.clientHeight,
