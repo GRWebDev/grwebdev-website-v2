@@ -1,9 +1,11 @@
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { mkdir, mkdtemp, rm } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { build, preview } from "astro";
 
-const outDir = await mkdtemp(join(tmpdir(), "grwebdev-browser-"));
+// Astro renames prerendered assets, which cannot cross filesystem boundaries.
+const buildRoot = new URL("../../.astro/", import.meta.url);
+await mkdir(buildRoot, { recursive: true });
+const outDir = await mkdtemp(fileURLToPath(new URL("browser-", buildRoot)));
 let server: Awaited<ReturnType<typeof preview>> | undefined;
 
 async function stop() {
