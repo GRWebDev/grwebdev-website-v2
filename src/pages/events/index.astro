@@ -1,0 +1,14 @@
+---
+import EventGrid from "../../components/EventGrid.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Events">
+	<section class="grid">
+		<div>
+			<h1>Events</h1>
+		</div>
+	</section>
+	<EventGrid heading="Upcoming" gridSize={8} old={0} />
+	<EventGrid heading="Recent" gridSize={8} old={8} />
+</Layout>
