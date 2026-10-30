@@ -1,0 +1,230 @@
+---
+import "../styles/typography-prototype.css";
+
+interface Props {
+	placement: "head" | "controls";
+}
+
+const { placement } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+{placement === "head" ? (
+	<script is:inline>
+		{
+			const params = new URLSearchParams(location.search);
+			const variant = params.get("variant");
+			if (["A", "B", "C"].includes(variant)) {
+				document.documentElement.dataset.typographyPrototype = variant;
+				if (params.get("text") === "200") {
+					document.documentElement.style.fontSize = "200%";
+				}
+			}
+		}
+	</script>
+) : (
+	<aside class="typography-prototype" aria-label="Throwaway text sizing prototype" hidden>
+		<details class="typography-prototype__settings">
+			<summary>Text sizing prototype</summary>
+			<div class="typography-prototype__settings-body">
+				<p>Question: which layout keeps navigation and profile names readable at 200% text?</p>
+				<p id="typography-prototype-description"></p>
+				<label>
+					Text size
+					<select id="typography-prototype-text">
+						<option value="100">100%</option>
+						<option value="200">200%</option>
+					</select>
+				</label>
+				<label>
+					Donation
+					<select id="typography-prototype-donation">
+						<option value="live">Live widget, requires network</option>
+						<option value="fallback">Anchor fallback</option>
+					</select>
+				</label>
+				<nav aria-label="Prototype examples">
+					<a href={baseUrl}>Home</a>
+					<a href={`${baseUrl}board/anwesha-pradhananga/`}>Long profile name</a>
+					<a href={`${baseUrl}sponsors/`}>Sponsors</a>
+				</nav>
+				<output id="typography-prototype-state" aria-live="polite"></output>
+				<a href={Astro.url.pathname} data-prototype-exit>Exit prototype</a>
+			</div>
+		</details>
+		<div class="typography-prototype__switcher">
+			<button type="button" id="typography-prototype-previous" aria-label="Previous variant">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="m14 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+			</button>
+			<strong id="typography-prototype-label" aria-live="polite"></strong>
+			<button type="button" id="typography-prototype-next" aria-label="Next variant">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="m10 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+			</button>
+		</div>
+	</aside>
+)}
+
+<script>
+	const prototype = document.querySelector<HTMLElement>(".typography-prototype");
+	const variantKeys = ["A", "B", "C"];
+	const variants = [
+		{
+			name: "Fit before folding",
+			description: "Keep text links while the row fits, then use the menu mark. At the next fit threshold, move the same Donate button into the menu. Profiles retain the portrait-first layout.",
+		},
+		{
+			name: "Separate support row",
+			description: "Brand and menu sit above a full-width donation row. Profiles place the name above a portrait-and-biography layout.",
+		},
+		{
+			name: "Menu-first reading",
+			description: "A static header keeps donation inside the expandable menu. Profiles use a single reading column with the name before the portrait.",
+		},
+	];
+	const textControl = document.querySelector<HTMLSelectElement>("#typography-prototype-text");
+	const donationControl = document.querySelector<HTMLSelectElement>("#typography-prototype-donation");
+	const label = document.querySelector<HTMLElement>("#typography-prototype-label");
+	const description = document.querySelector<HTMLElement>("#typography-prototype-description");
+	const state = document.querySelector<HTMLOutputElement>("#typography-prototype-state");
+	const header = document.querySelector<HTMLElement>(".site-header__bar");
+	const donation = document.querySelector<HTMLElement>(".site-header__donation");
+	const menu = document.querySelector<HTMLDetailsElement>(".site-header__mobile-menu");
+	const menuList = menu?.querySelector("ul");
+	const donationItem = document.createElement("li");
+	donationItem.className = "site-header__menu-donation";
+	donationItem.hidden = true;
+	menuList?.append(donationItem);
+	let headerFrame = 0;
+
+	const moveDonation = (parent: HTMLElement, before: Element | null = null) => {
+		if (!donation || donation.parentElement === parent) return;
+		if (typeof parent.moveBefore === "function") parent.moveBefore(donation, before);
+		else parent.insertBefore(donation, before);
+	};
+
+	const fitHeader = () => {
+		headerFrame = 0;
+		if (!header || !donation || !menu) return;
+		if (document.documentElement.dataset.typographyPrototype !== "A") {
+			moveDonation(header, menu);
+			donationItem.hidden = true;
+			delete header.dataset.navigationStage;
+			return;
+		}
+		const wasOpen = menu.open;
+		if (donation.parentElement === donationItem) menu.open = true;
+		header.dataset.navigationStage = "measure";
+		donation.dataset.measuring = "";
+		const brandWidth = header.querySelector(".site-header__brand")!.getBoundingClientRect().width;
+		const linksWidth = header.querySelector(".site-header__desktop-links")!.getBoundingClientRect().width;
+		const donationWidth = donation.getBoundingClientRect().width;
+		const menuWidth = Number.parseFloat(getComputedStyle(menu.querySelector("summary")!).inlineSize);
+		const gap = Number.parseFloat(getComputedStyle(header).columnGap);
+		const available = header.getBoundingClientRect().width;
+		const linksBreakpoint = Math.ceil(brandWidth + linksWidth + donationWidth + 2 * gap);
+		const donationBreakpoint = Math.ceil(brandWidth + menuWidth + donationWidth + 2 * gap);
+		const stage = available >= linksBreakpoint ? "links" : available >= donationBreakpoint ? "menu" : "menu-donation";
+		delete donation.dataset.measuring;
+		menu.open = wasOpen;
+		header.dataset.navigationStage = stage;
+		if (stage === "menu-donation") {
+			if (donation.contains(document.activeElement)) menu.open = true;
+			donationItem.hidden = false;
+			moveDonation(donationItem);
+		} else {
+			moveDonation(header, menu);
+			donationItem.hidden = true;
+		}
+		if (stage === "links") menu.open = false;
+		if (state) {
+			state.textContent = `Variant A; root ${getComputedStyle(document.documentElement).fontSize}; viewport ${innerWidth}px; header ${Math.round(available)}px; document ${document.documentElement.scrollWidth}px; navigation ${stage}; links fit at ${linksBreakpoint}px, outside donation fits at ${donationBreakpoint}px of header space.`;
+		}
+	};
+	const scheduleHeaderFit = () => {
+		if (!headerFrame) headerFrame = requestAnimationFrame(fitHeader);
+	};
+	if (header && donation) {
+		const observer = new ResizeObserver(scheduleHeaderFit);
+		observer.observe(header);
+		observer.observe(donation);
+		document.fonts.ready.then(scheduleHeaderFit);
+		customElements.whenDefined("givebutter-widget").then(() => {
+			requestAnimationFrame(() => {
+				const widget = donation.querySelector("givebutter-widget");
+				if (widget?.shadowRoot) {
+					new MutationObserver(scheduleHeaderFit).observe(widget.shadowRoot, { childList: true, subtree: true });
+				}
+				scheduleHeaderFit();
+			});
+		});
+	}
+
+	if (prototype && textControl && donationControl && label && description && state) {
+		const render = () => {
+			const params = new URLSearchParams(location.search);
+			const key = params.get("variant") ?? "";
+			const index = variantKeys.indexOf(key);
+			prototype.hidden = index < 0;
+			if (index < 0) {
+				delete document.documentElement.dataset.typographyPrototype;
+				document.documentElement.style.removeProperty("font-size");
+				scheduleHeaderFit();
+				return;
+			}
+			document.documentElement.dataset.typographyPrototype = key;
+			textControl.value = params.get("text") === "200" ? "200" : "100";
+			donationControl.value = params.get("donation") === "fallback" ? "fallback" : "live";
+			document.documentElement.style.fontSize = `${textControl.value}%`;
+			label.textContent = `${key} / ${variants[index].name}`;
+			description.textContent = variants[index].description;
+			for (const link of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
+				const url = new URL(link.href);
+				if (url.origin === location.origin && !link.hasAttribute("data-prototype-exit") && !url.hash) {
+					for (const name of ["variant", "text", "donation"]) {
+						const value = params.get(name);
+						if (value) url.searchParams.set(name, value);
+						else url.searchParams.delete(name);
+					}
+					link.href = url.href;
+				}
+			}
+			requestAnimationFrame(() => {
+				state.textContent = `Variant ${key}; root ${getComputedStyle(document.documentElement).fontSize}; viewport ${innerWidth}px; document ${document.documentElement.scrollWidth}px; donation ${donationControl.value}.`;
+				scheduleHeaderFit();
+			});
+		};
+
+		const cycle = (direction: number) => {
+			const url = new URL(location.href);
+			const index = variantKeys.indexOf(url.searchParams.get("variant") ?? "A");
+			url.searchParams.set("variant", variantKeys[(index + direction + variants.length) % variants.length]);
+			history.replaceState(null, "", url);
+			render();
+		};
+
+		document.querySelector("#typography-prototype-previous")?.addEventListener("click", () => cycle(-1));
+		document.querySelector("#typography-prototype-next")?.addEventListener("click", () => cycle(1));
+		textControl.addEventListener("change", () => {
+			const url = new URL(location.href);
+			url.searchParams.set("text", textControl.value);
+			history.replaceState(null, "", url);
+			render();
+		});
+		donationControl.addEventListener("change", () => {
+			const url = new URL(location.href);
+			url.searchParams.set("donation", donationControl.value);
+			location.assign(url);
+		});
+		window.addEventListener("keydown", (event) => {
+			if (prototype.hidden || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+			if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]:not([contenteditable='false'])")) return;
+			if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+				event.preventDefault();
+				cycle(event.key === "ArrowLeft" ? -1 : 1);
+			}
+		});
+		window.addEventListener("popstate", render);
+		window.addEventListener("resize", render);
+		render();
+	}
+</script>

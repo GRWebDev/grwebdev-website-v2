@@ -2,7 +2,7 @@
 import Logo from "../assets/grwebdev.svg";
 
 const baseUrl = import.meta.env.BASE_URL;
-const donateUrl = "https://givebutter.com/gRBJRg";
+const donateUrl = "https://givebutter.com/grwebdev-build-fund-23";
 const isActivePath = (path: string) => Astro.url.pathname.includes(path);
 const links = [
 	{ label: "Board", path: "board" },
@@ -13,6 +13,13 @@ const links = [
 
 <script is:inline>
 	const loadGivebutter = () => {
+		if (
+			document.documentElement.dataset.typographyPrototype &&
+			new URLSearchParams(location.search).get("donation") === "fallback"
+		) {
+			return;
+		}
+
 		if (document.querySelector("script[data-givebutter-widget]")) {
 			return;
 		}

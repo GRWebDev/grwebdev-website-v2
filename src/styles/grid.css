@@ -89,7 +89,7 @@ section.grid {
 	margin-block-start: 1em;
 	display: grid;
 	grid-template-columns: auto 1fr;
-	grid-template-areas: "image title" "body body";
+	grid-template-areas: "image image" "title title" "body body";
 	column-gap: 2ch;
 
 	.image {
@@ -97,9 +97,17 @@ section.grid {
 	}
 
 	.title {
+		margin-block-start: 1em;
 		grid-area: title;
 		display: flow-root;
 		place-content: end;
+	}
+
+	@container (width > 16.6667em) {
+		grid-template-areas: "image title" "body body";
+		.title {
+			margin-block-start: 0;
+		}
 	}
 
 	.body {
@@ -154,7 +162,7 @@ section.grid {
 			margin-block-start: 1ex;
 			text-box: trim-start cap text;
 
-			@container (width > 620px) {
+			@container (width > 34.5em) {
 				margin-block-start: 0;
 			}
 		}
@@ -164,7 +172,7 @@ section.grid {
 				margin-block-start: 0.75ex;
 				text-box: cap alphabetic;
 
-				@container (width > 620px) {
+				@container (width > 34.5em) {
 					margin-block-start: 0;
 				}
 			}
@@ -189,6 +197,7 @@ section.grid {
 		text-decoration: none;
 
 		&.stacked {
+			margin-block-start: 0;
 			display: grid;
 			gap: 0.15em;
 		}
