@@ -159,12 +159,14 @@ No form field system exists in the current code. If fields are added, they shoul
 
 ### Navigation
 
-Navigation is a sticky top bar on Room Light with the GRWebDev logo and plain text links. Links are separated by pipe characters, remain inherited color, and underline on hover.
+Navigation is a sticky top bar on Room Light with the GRWebDev logo, plain text links, and one donation widget. Rendered content determines when links become a native disclosure menu and when the donation button moves into its full-width list. Measuring never reparents the widget; only a change of destination moves it.
 
-- **Desktop/Mobile Style:** Flex row with `2ch` gaps in the outdent grid column.
-- **Logo:** About `6em` wide.
+- **Desktop/Mobile Style:** Keep one row while space allows. Replace links with the menu mark first, then move donation into `details > ul`. Without JavaScript, retain native disclosure navigation and a wrapping donation fallback.
+- **Logo:** Fluid between `4.7rem` and `6.4rem` wide.
 - **Hover:** Underline.
-- **Active State:** Not currently defined. Add one only if it helps orientation.
+- **Active State:** Bold, red underline, and `aria-current="page"`.
+- **Donation:** Load Givebutter when idle; retain a real campaign link if it cannot load. Do not add an auto start margin to the donation button.
+- **Decision:** Variant A is selected, including the user's board spacing and text-relative breakpoints. Prototype alternatives are captured at commit `4e893d4` on `prototype/text-sizing-reflow`.
 
 ### Event Flyer Grid
 
@@ -182,6 +184,7 @@ Board and sponsor listings use a compact image/text row.
 - **Spacing:** `2ch` column gap.
 - **Images:** Board images cover the square. Sponsor logos contain within the wider logo rail and should not be forced into a portrait or square treatment.
 - **Motion:** View-transition names preserve image/title continuity between list and detail pages.
+- **Reflow:** Shrinkable tracks and natural word wrapping keep long names readable. Compact rows stack below `16.6667em`; large profiles stack below `40em`. Preserve the separate `34.5em` role/name spacing adjustment. Do not truncate names or reduce type to fit.
 
 ### Black/Red Community Section
 

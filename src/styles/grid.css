@@ -88,9 +88,20 @@ section.grid {
 .image-text {
 	margin-block-start: 1em;
 	display: grid;
-	grid-template-columns: auto 1fr;
+	grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+	min-inline-size: 0;
 	grid-template-areas: "image image" "title title" "body body";
 	column-gap: 2ch;
+
+	> * {
+		min-inline-size: 0;
+		max-inline-size: 100%;
+	}
+
+	.title,
+	.body {
+		overflow-wrap: anywhere;
+	}
 
 	.image {
 		grid-area: image;
@@ -138,15 +149,18 @@ section.grid {
 	}
 
 	&.large {
+		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas: "image" "title" "body";
+		grid-template-rows: auto;
 
 		.title {
 			place-content: center;
 		}
 
-		@container (width > 620px) {
-			grid-template-rows: auto auto 1fr;
-			grid-template-areas: "image title" "image body" "image body";
+		@container (width > 40em) {
+			grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+			grid-template-rows: auto 1fr;
+			grid-template-areas: "image title" "image body";
 			place-items: revert;
 
 			.title {
@@ -155,6 +169,8 @@ section.grid {
 		}
 
 		.image {
+			block-size: auto;
+			max-inline-size: 100%;
 			place-self: center;
 		}
 
@@ -192,6 +208,8 @@ section.grid {
 
 	.board-title {
 		display: block;
+		min-inline-size: 0;
+		overflow-wrap: anywhere;
 		font-weight: 700;
 		line-height: 1.125;
 		text-decoration: none;
@@ -199,6 +217,7 @@ section.grid {
 		&.stacked {
 			margin-block-start: 0;
 			display: grid;
+			grid-template-columns: minmax(0, 1fr);
 			gap: 0.15em;
 		}
 
