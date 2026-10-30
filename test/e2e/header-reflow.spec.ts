@@ -1,101 +1,135 @@
 import { expect, test } from "playwright/test";
 
-for (const textSize of [100, 200]) {
-	test(`header reflows without replacing donation at ${textSize}% text`, async ({
-		page,
-	}) => {
-		await page.route("https://widgets.givebutter.com/**", (route) =>
-			route.abort(),
-		);
-		await page.goto("/board/");
-		await expect(page.locator(".site-header__bar")).toHaveAttribute(
-			"data-navigation-stage",
-			/^(links|menu|menu-donation)$/,
-		);
-		await page.evaluate(async (size) => {
-			document.documentElement.style.fontSize = `${size}%`;
-			await document.fonts.ready;
-		}, textSize);
-		const widget = await page.locator("givebutter-widget").elementHandle();
-		const stages = new Set<string>();
-		for (const width of [
-			1920, 1440, 1000, 768, 560, 390, 375, 320, 280, 375, 768, 1440, 1920,
-		]) {
-			await page.setViewportSize({ width, height: 900 });
-			await page.evaluate(
-				() =>
-					new Promise<void>((resolve) => {
-						requestAnimationFrame(() =>
-							requestAnimationFrame(() =>
-								requestAnimationFrame(() => resolve()),
-							),
-						);
-					}),
-			);
-			const header = page.locator(".site-header__bar");
-			const stage = await header.getAttribute("data-navigation-stage");
-			expect(stage).toMatch(/^(links|menu|menu-donation)$/);
-			stages.add(stage ?? "");
-			expect(
-				await page.evaluate(() => document.documentElement.scrollWidth),
-			).toBe(width);
-			expect(
-				await page.evaluate(
-					(original) =>
-						original === document.querySelector("givebutter-widget"),
-					widget,
-				),
-			).toBe(true);
-			await expect(page.locator("givebutter-widget")).toHaveCount(1);
-			const toggle = page.getByLabel("Toggle navigation menu");
-			if (stage === "links") {
-				await expect(toggle).toBeHidden();
-				await expect(page.locator(".site-header__desktop-links")).toBeVisible();
-			} else {
-				await expect(toggle).toBeVisible();
-				await toggle.click();
-				await expect(page.locator("details ul")).toBeVisible();
-				if (stage === "menu-donation") {
+for (const javaScriptEnabled of [true, false]) {
+	test.describe(`header with JavaScript ${javaScriptEnabled ? "enabled" : "disabled"}`, () => {
+		test.use({ javaScriptEnabled });
+
+		for (const textSize of [100, 200]) {
+			test(`container queries reflow one donation widget at ${textSize}% text`, async ({
+				page,
+			}) => {
+				await page.route("https://widgets.givebutter.com/**", (route) =>
+					route.abort(),
+				);
+				await page.goto("/board/", { waitUntil: "networkidle" });
+				await page.evaluate(async (size) => {
+					document.documentElement.style.fontSize = `${size}%`;
+					await document.fonts.ready;
+				}, textSize);
+				const widget = await page.locator("givebutter-widget").elementHandle();
+				const stages = new Set<string>();
+				const toggle = page.getByLabel("Toggle navigation menu");
+				const donation = page.getByRole("link", {
+					name: "Donate to GRWebDev",
+					exact: true,
+				});
+				const links = page.locator(".site-header__page-links");
+
+				for (const width of [
+					1920, 1440, 1000, 768, 560, 390, 375, 320, 280, 375, 768, 1440, 1920,
+				]) {
+					await page.setViewportSize({ width, height: 900 });
+					const stage = !(await toggle.isVisible())
+						? "links"
+						: (await donation.isVisible())
+							? "menu"
+							: "menu-donation";
+					stages.add(stage);
+					expect(
+						await page
+							.locator(".site-header__bar")
+							.evaluate((header, layout) => {
+								const selectors =
+									layout === "links"
+										? [
+												".site-header__brand",
+												".site-header__page-links",
+												".site-header__donation",
+											]
+										: layout === "menu"
+											? [
+													".site-header__brand",
+													".site-header__donation",
+													"summary",
+												]
+											: [".site-header__brand", "summary"];
+								const bar = header.getBoundingClientRect();
+								const rectangles = selectors.map((selector) =>
+									header.querySelector(selector)?.getBoundingClientRect(),
+								);
+								return rectangles.every(
+									(rect, index) =>
+										rect &&
+										rect.top >= bar.top &&
+										rect.bottom <= bar.bottom &&
+										(index === 0 ||
+											rect.left >= (rectangles[index - 1]?.right ?? 0)),
+								);
+							}, stage),
+					).toBe(true);
+					expect(
+						await page.evaluate(() => document.documentElement.scrollWidth),
+					).toBe(width);
+					expect(
+						await page.evaluate(
+							(original) =>
+								original === document.querySelector("givebutter-widget"),
+							widget,
+						),
+					).toBe(true);
+					await expect(page.locator("givebutter-widget")).toHaveCount(1);
 					await expect(
-						page.locator("details .site-header__donate-fallback"),
-					).toBeVisible();
+						page.locator(
+							".site-header__donation-list > .site-header__donation > givebutter-widget",
+						),
+					).toHaveCount(1);
+
+					if (stage === "links") {
+						await expect(links).toBeVisible();
+						await expect(donation).toBeVisible();
+					} else {
+						await expect(links).toBeHidden();
+						await toggle.click();
+						await expect(links).toBeVisible();
+						await expect(donation).toBeVisible();
+						expect(
+							await page.evaluate(() => document.documentElement.scrollWidth),
+						).toBe(width);
+						await toggle.click();
+						if (stage === "menu") {
+							await page.keyboard.press("Tab");
+							await expect(donation).toBeFocused();
+						}
+					}
 				}
-				expect(
-					await page.evaluate(() => document.documentElement.scrollWidth),
-				).toBe(width);
-				await toggle.click();
-			}
+				expect([...stages].sort()).toEqual(["links", "menu", "menu-donation"]);
+				await expect(donation).toHaveAttribute(
+					"href",
+					"https://givebutter.com/grwebdev-build-fund-23",
+				);
+				await expect(page.locator("[data-navigation-stage]")).toHaveCount(0);
+			});
 		}
-		expect([...stages].sort()).toEqual(["links", "menu", "menu-donation"]);
-		await expect(page.locator(".site-header__donate-fallback")).toHaveAttribute(
-			"href",
-			"https://givebutter.com/grwebdev-build-fund-23",
-		);
-		await expect(page.locator(".typography-prototype")).toHaveCount(0);
 	});
 }
 
-test("navigation and campaign link work without JavaScript", async ({
-	browser,
+test("native disclosure stays open across container breakpoints", async ({
+	page,
 }) => {
-	const context = await browser.newContext({
-		javaScriptEnabled: false,
-		viewport: { width: 375, height: 900 },
-	});
-	try {
-		const page = await context.newPage();
-		await page.goto("/board");
-		await expect(page.locator(".site-header__donate-fallback")).toBeVisible();
-		await page.getByLabel("Toggle navigation menu").click();
+	await page.route("https://widgets.givebutter.com/**", (route) =>
+		route.abort(),
+	);
+	await page.setViewportSize({ width: 375, height: 900 });
+	await page.goto("/board/");
+	await page.getByLabel("Toggle navigation menu").click();
+	for (const width of [768, 1440, 375]) {
+		await page.setViewportSize({ width, height: 900 });
+		await expect(page.locator(".site-header__mobile-menu")).toHaveAttribute(
+			"open",
+			"",
+		);
 		await expect(
-			page
-				.locator("details")
-				.getByRole("link", { name: "Sponsors", exact: true }),
+			page.getByRole("link", { name: "Sponsors", exact: true }).first(),
 		).toBeVisible();
-		expect(
-			await page.evaluate(() => document.documentElement.scrollWidth),
-		).toBe(375);
-	} finally {
-		await context.close();
 	}
 });

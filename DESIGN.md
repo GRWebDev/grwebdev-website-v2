@@ -159,9 +159,10 @@ No form field system exists in the current code. If fields are added, they shoul
 
 ### Navigation
 
-Navigation is a sticky top bar on Room Light with the GRWebDev logo, plain text links, and one donation widget. Rendered content determines when links become a native disclosure menu and when the donation button moves into its full-width list. Measuring never reparents the widget; only a change of destination moves it.
+Navigation is a sticky top bar on Room Light with the GRWebDev logo, one set of plain text links, and one donation widget. A named inline-size container and CSS grid create the three layouts without measuring or moving DOM nodes. Both lists remain inside native `details` markup.
 
-- **Desktop/Mobile Style:** Keep one row while space allows. Replace links with the menu mark first, then move donation into `details > ul`. Without JavaScript, retain native disclosure navigation and a wrapping donation fallback.
+- **Desktop/Mobile Style:** At `40em` of header space, show links and donation on one row. Between `25em` and `40em`, show the menu mark beside donation. Below `25em`, show donation in the full-width disclosure panel. Container-relative `em` thresholds follow text size and reserve room for the longer campaign fallback rather than measuring the live button exactly.
+- **Progressive enhancement:** The same layout works without JavaScript. With `::details-content` support, CSS grid places donation outside the closed panel at wider sizes. Browsers without that selector retain the native menu with links and donation inside at every width. Keep native open state when resizing.
 - **Logo:** Fluid between `4.7rem` and `6.4rem` wide.
 - **Hover:** Underline.
 - **Active State:** Bold, red underline, and `aria-current="page"`.
