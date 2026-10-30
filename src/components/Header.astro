@@ -13,6 +13,13 @@ const links = [
 
 <script is:inline>
 	const loadGivebutter = () => {
+		if (
+			document.documentElement.dataset.typographyPrototype &&
+			new URLSearchParams(location.search).get("donation") === "fallback"
+		) {
+			return;
+		}
+
 		if (document.querySelector("script[data-givebutter-widget]")) {
 			return;
 		}
