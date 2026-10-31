@@ -17,6 +17,45 @@ for (const deviceScaleFactor of [1, 2]) {
 	test.describe(`homepage media at ${deviceScaleFactor}x density`, () => {
 		test.use({ deviceScaleFactor, javaScriptEnabled: false });
 
+		test("waits for its container before requesting a hero image", async ({
+			page,
+		}) => {
+			await page.setViewportSize({ width: 481, height: 900 });
+			await page.route("https://widgets.givebutter.com/**", (route) =>
+				route.abort(),
+			);
+			await page.route("http://127.0.0.1:4397/", async (route) => {
+				const response = await route.fetch();
+				const html = await response.text();
+				await route.fulfill({
+					response,
+					body: html.replace(
+						"</head>",
+						`<style id="deferred-container">body { container-type: normal !important; }</style></head>`,
+					),
+				});
+			});
+			const heroRequests: string[] = [];
+			page.on("request", (request) => {
+				if (
+					request.resourceType() === "image" &&
+					request.url().includes("hero")
+				) {
+					heroRequests.push(request.url());
+				}
+			});
+			await page.goto("/", { waitUntil: "networkidle" });
+			expect(heroRequests).toHaveLength(0);
+			await page
+				.locator("#deferred-container")
+				.evaluate((style) => style.remove());
+			await expect
+				.poll(() =>
+					heroRequests.map((url) => new URL(url).searchParams.get("w")),
+				)
+				.toEqual([String(1024 * deviceScaleFactor)]);
+		});
+
 		for (const { width, imageWidth } of screenSizes) {
 			test(`loads only the matching hero at ${width}px`, async ({ page }) => {
 				await page.setViewportSize({ width, height: 900 });
