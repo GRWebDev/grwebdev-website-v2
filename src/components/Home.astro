@@ -48,8 +48,6 @@ const [
 
 <style>
 	.hero {
-		--hero-image: var(--small);
-		--hero-image-retina: var(--smallRetina);
 		background-image:
 			linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), var(--hero-image);
 		background-color: var(--primary-clr);
@@ -62,6 +60,20 @@ const [
 			background-image:
 				linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)),
 				image-set(var(--hero-image) 1x, var(--hero-image-retina) 2x);
+		}
+	}
+
+	@supports not (container-type: inline-size) {
+		.hero {
+			--hero-image: var(--small);
+			--hero-image-retina: var(--smallRetina);
+		}
+	}
+
+	@container (width <= 480px) {
+		.hero {
+			--hero-image: var(--small);
+			--hero-image-retina: var(--smallRetina);
 		}
 	}
 
