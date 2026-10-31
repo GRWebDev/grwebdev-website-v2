@@ -67,6 +67,12 @@ npm run update:events
 
 The updater compares Meetup events against local files in `src/content/Events/` by event date and Meetup URL. It creates missing event markdown files, updates stale Meetup URLs when the match is unambiguous, exports light and dark flyer images into `src/assets/event-flyers/`, and removes events and matching flyers that are six months old or older.
 
+### Event details
+
+Event entries can include a quoted `startTime` in 24-hour `HH:mm` format and a quoted `location` containing the venue/address or verified online attendance information. Times are local to the required IANA `timeZone`. The grid renders these details as text below the flyer and points to Meetup when a detail is unavailable.
+
+The updater imports start times and structured iCal `LOCATION` values, including folded lines. It refreshes supplied details on existing entries and retains manually verified locations when the feed omits them. Verify locations against the specific event or its flyer; do not infer them from recurring event names. Flyer images supplement the text rather than supplying the only event logistics.
+
 Start with a dry run when checking what will change:
 
 ```sh

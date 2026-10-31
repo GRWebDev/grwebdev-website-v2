@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/317145487/"
 date: 2026-11-23
 timeZone: "America/New_York"
+startTime: "18:00"
+location: "Grand Rapids coLab, 38 Fulton St W, Grand Rapids, MI 49503"
 ---

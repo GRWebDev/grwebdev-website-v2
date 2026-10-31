@@ -1,7 +1,11 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { formatEventDate, isEventUpcoming } from "../utils/event-date.ts";
+import {
+	formatEventDate,
+	formatEventTime,
+	isEventUpcoming,
+} from "../utils/event-date.ts";
 
 interface Props {
 	gridSize: number;
@@ -89,6 +93,30 @@ while (
 		height: revert;
 	}
 
+	.event-grid > a {
+		min-inline-size: 0;
+	}
+
+	.event-details {
+		margin-block-start: 0.75em;
+		overflow-wrap: anywhere;
+	}
+
+	.event-details h3 {
+		font-size: 1em;
+		margin-block-start: 0;
+	}
+
+	.event-details p {
+		margin-block-start: 0.25em;
+	}
+
+	.event-destination {
+		display: block;
+		margin-block-start: 0.5em;
+		text-decoration: underline;
+	}
+
 	@container events (inline-size >= 0px) {
 		.event-grid--limited a:nth-child(-n + 2),
 		.event-grid--limited a:nth-child(n + 6) {
@@ -130,20 +158,12 @@ while (
 					const image =
 						index % 2 === 0 ? event.data.images.light : event.data.images.dark;
 					const isLikelyFirstVisible = index === (hideFlyers ? 2 : 0);
-					const eventLabel = `${event.data.name}, ${formatEventDate({
-						date: event.data.date,
-					})} on Meetup`;
 
 					return (
-						<a
-							href={event.data.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={eventLabel}
-						>
+						<a href={event.data.url} target="_blank" rel="noopener noreferrer">
 							<Image
 								src={image.src}
-								alt={image.alt}
+								alt=""
 								decoding={isLikelyFirstVisible ? "sync" : "async"}
 								fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
 								layout="full-width"
@@ -152,6 +172,29 @@ while (
 								sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
 								widths={[360, 720]}
 							/>
+							<div class="event-details">
+								<h3 dir="auto">{event.data.name}</h3>
+								<p>
+									<time datetime={event.data.date.toISOString().slice(0, 10)}>
+										{formatEventDate({ date: event.data.date })}
+									</time>
+								</p>
+								<p>
+									{event.data.startTime ? (
+										<time datetime={event.data.startTime}>
+											{formatEventTime({
+												date: event.data.date,
+												startTime: event.data.startTime,
+												timeZone: event.data.timeZone,
+											})}
+										</time>
+									) : (
+										"Start time on Meetup"
+									)}
+								</p>
+								<p dir="auto">{event.data.location ?? "Location on Meetup"}</p>
+								<span class="event-destination">Event details on Meetup</span>
+							</div>
 						</a>
 					);
 				})}

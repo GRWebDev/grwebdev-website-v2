@@ -19,6 +19,8 @@ interface FeedEvent {
 	summary: string;
 	name: string;
 	timeZone: string;
+	startTime?: string;
+	location?: string;
 	url: string;
 }
 
@@ -28,6 +30,8 @@ interface LocalEvent {
 	name?: string;
 	slug: string;
 	timeZone?: string;
+	startTime?: string;
+	location?: string;
 	url?: string;
 }
 
@@ -53,7 +57,7 @@ interface EventSummary {
 	localEvents: LocalEvent[];
 	missing: FeedEvent[];
 	stale: EventUpdate[];
-	timeZoneUpdates: EventUpdate[];
+	detailUpdates: EventUpdate[];
 	ambiguousStale: AmbiguousStaleEvents[];
 	oldEvents: LocalEvent[];
 	cutoff: Date;
@@ -65,6 +69,8 @@ interface EventMarkdown {
 	name: string;
 	slug: string;
 	timeZone: string;
+	startTime?: string;
+	location?: string;
 	url: string;
 }
 
@@ -113,14 +119,14 @@ async function main(): Promise<void> {
 		feedEvents,
 		localEvents,
 	);
-	const timeZoneUpdates = findTimeZoneUpdates(feedEvents, localEvents);
+	const detailUpdates = findEventDetailUpdates(feedEvents, localEvents, stale);
 
 	printSummary({
 		feedEvents,
 		localEvents,
 		missing,
 		stale,
-		timeZoneUpdates,
+		detailUpdates,
 		ambiguousStale,
 		oldEvents,
 		cutoff,
@@ -141,8 +147,8 @@ async function main(): Promise<void> {
 		await updateEventUrl(event.local.file, event.feed.url);
 	}
 
-	for (const event of timeZoneUpdates) {
-		await updateEventTimeZone(event.local.file, event.feed.timeZone);
+	for (const event of detailUpdates) {
+		await updateEventDetails(event.local.file, event.feed);
 	}
 
 	for (const event of missing) {
@@ -156,6 +162,8 @@ async function main(): Promise<void> {
 			name: siteNameFor(event.summary),
 			slug: outputBase,
 			timeZone: event.timeZone,
+			startTime: event.startTime,
+			location: event.location,
 			url: event.url,
 		});
 
@@ -227,17 +235,18 @@ async function readFeed(): Promise<string> {
 
 function parseIcal(text: string): FeedEvent[] {
 	return text
+		.replace(/\r\n/g, "\n")
+		.replace(/\n[ \t]/g, "")
 		.split("BEGIN:VEVENT")
 		.slice(1)
 		.map((block) => block.split("END:VEVENT")[0])
-		.map((block) => {
-			const dtStartMatch = block.match(
-				/^DTSTART(?:;TZID=([^:]+))?:([0-9TZ]+)/m,
-			);
-			const timeZone = dtStartMatch?.[1] ?? "UTC";
+		.map((block): FeedEvent | null => {
+			const dtStartMatch = block.match(/^DTSTART((?:;[^:\n]+)*):([0-9TZ]+)$/m);
+			const timeZone = dtStartMatch?.[1].match(/;TZID=([^;]+)/)?.[1] ?? "UTC";
 			const dtStart = dtStartMatch?.[2];
 			const summary = unescapeIcal(matchLine(block, /^SUMMARY:(.+)$/m) ?? "");
 			const url = matchLine(block, /^URL;VALUE=URI:(.+)$/m);
+			const location = matchLine(block, /^LOCATION(?:;[^:]*)?:(.+)$/m);
 
 			if (!dtStart || !url) return null;
 
@@ -246,6 +255,10 @@ function parseIcal(text: string): FeedEvent[] {
 				summary,
 				name: siteNameFor(summary),
 				timeZone,
+				startTime: dtStart.includes("T")
+					? `${dtStart.slice(9, 11)}:${dtStart.slice(11, 13)}`
+					: undefined,
+				location: location ? unescapeIcal(location) : undefined,
 				url: url.trim(),
 			};
 		})
@@ -283,6 +296,14 @@ async function readLocalEvents(): Promise<LocalEvent[]> {
 		const slug = entry.name
 			.replace(/\.md$/, "")
 			.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+		const startTimeValue = matchLine(frontmatter, /^startTime:\s*(.+)$/m);
+		const locationValue = matchLine(frontmatter, /^location:\s*(.+)$/m);
+		const startTime: string | undefined = startTimeValue
+			? JSON.parse(startTimeValue)
+			: undefined;
+		const location: string | undefined = locationValue
+			? JSON.parse(locationValue)
+			: undefined;
 
 		if (!date) continue;
 
@@ -292,6 +313,8 @@ async function readLocalEvents(): Promise<LocalEvent[]> {
 			name,
 			slug,
 			timeZone,
+			startTime,
+			location,
 			url,
 		});
 	}
@@ -344,15 +367,24 @@ function compareEvents(
 	return { missing, stale, ambiguousStale };
 }
 
-function findTimeZoneUpdates(
+function findEventDetailUpdates(
 	feedEvents: FeedEvent[],
 	localEvents: LocalEvent[],
+	stale: EventUpdate[],
 ): EventUpdate[] {
 	return localEvents.flatMap((local) => {
-		const feed = feedEvents.find(
-			(event) => event.date === local.date && event.url === local.url,
-		);
-		if (!feed || feed.timeZone === local.timeZone) return [];
+		const feed =
+			stale.find((event) => event.local.file === local.file)?.feed ??
+			feedEvents.find(
+				(event) => event.date === local.date && event.url === local.url,
+			);
+		if (
+			!feed ||
+			(feed.timeZone === local.timeZone &&
+				(!feed.startTime || feed.startTime === local.startTime) &&
+				(!feed.location || feed.location === local.location))
+		)
+			return [];
 		return [{ feed, local }];
 	});
 }
@@ -414,17 +446,23 @@ async function updateEventUrl(file: string, url: string): Promise<void> {
 	console.log(`Updated URL in ${relative(file)}`);
 }
 
-async function updateEventTimeZone(
+async function updateEventDetails(
 	file: string,
-	timeZone: string,
+	feed: FeedEvent,
 ): Promise<void> {
 	const text = await fs.readFile(file, "utf8");
-	const escapedTimeZone = escapeYamlString(timeZone);
-	const updated = /^timeZone:\s*"[^"]+"/m.test(text)
-		? text.replace(/^timeZone:\s*"[^"]+"/m, `timeZone: "${escapedTimeZone}"`)
-		: text.replace(/^(date:\s*.+)$/m, `$1\ntimeZone: "${escapedTimeZone}"`);
+	let updated = text;
+	for (const key of ["timeZone", "startTime", "location"] as const) {
+		const value = feed[key];
+		if (!value) continue;
+		const line = `${key}: ${JSON.stringify(value)}`;
+		const pattern = new RegExp(`^${key}:.*$`, "m");
+		updated = pattern.test(updated)
+			? updated.replace(pattern, () => line)
+			: updated.replace(/\n---(?:\n|$)/, () => `\n${line}\n---\n`);
+	}
 	await fs.writeFile(file, updated);
-	console.log(`Updated time zone in ${relative(file)}`);
+	console.log(`Updated event details in ${relative(file)}`);
 }
 
 async function writeEventMarkdown({
@@ -433,11 +471,22 @@ async function writeEventMarkdown({
 	name,
 	slug,
 	timeZone,
+	startTime,
+	location,
 	url,
 }: EventMarkdown): Promise<void> {
 	const markdown = `---\nname: "${escapeYamlString(name)}"\nimages: {\n  light: { src: "../../assets/event-flyers/${slug}-light.jpg", alt: "${escapeYamlString(name)}" },\n  dark: { src: "../../assets/event-flyers/${slug}-dark.jpg", alt: "${escapeYamlString(name)}" }\n}\nurl: "${url}"\ndate: ${date}\ntimeZone: "${escapeYamlString(timeZone)}"\n---\n`;
 
-	await fs.writeFile(file, markdown, { flag: "wx" });
+	const details = [
+		startTime ? `startTime: ${JSON.stringify(startTime)}` : "",
+		location ? `location: ${JSON.stringify(location)}` : "",
+	]
+		.filter(Boolean)
+		.join("\n");
+	const withDetails = details
+		? markdown.replace(/\n---\n$/, () => `\n${details}\n---\n`)
+		: markdown;
+	await fs.writeFile(file, withDetails, { flag: "wx" });
 	console.log(`Created ${relative(file)}`);
 }
 
@@ -522,7 +571,7 @@ function printSummary({
 	localEvents,
 	missing,
 	stale,
-	timeZoneUpdates,
+	detailUpdates,
 	ambiguousStale,
 	oldEvents,
 	cutoff,
@@ -532,7 +581,7 @@ function printSummary({
 	console.log(`Cleanup cutoff: ${formatDate(cutoff)}`);
 	console.log(`Missing events: ${missing.length}`);
 	console.log(`Stale URLs: ${stale.length}`);
-	console.log(`Time zone updates: ${timeZoneUpdates.length}`);
+	console.log(`Event detail updates: ${detailUpdates.length}`);
 	console.log(`Ambiguous stale dates: ${ambiguousStale.length}`);
 	console.log(`Old events: ${args.noCleanup ? "skipped" : oldEvents.length}`);
 
@@ -547,8 +596,8 @@ function printSummary({
 		(event) => `${relative(event.local.file)} -> ${event.feed.url}`,
 	);
 	printItems(
-		"\nTime zone updates",
-		timeZoneUpdates,
+		"\nEvent detail updates",
+		detailUpdates,
 		(event) => `${relative(event.local.file)} -> ${event.feed.timeZone}`,
 	);
 	printItems("\nOld events", args.noCleanup ? [] : oldEvents, (event) =>

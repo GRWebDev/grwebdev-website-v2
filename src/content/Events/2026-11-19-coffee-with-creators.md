@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/jdkdwtyjcpbzb/"
 date: 2026-11-19
 timeZone: "America/New_York"
+startTime: "08:00"
+location: "The Factory, 77 Monroe Center St NW, Suite 600"
 ---
