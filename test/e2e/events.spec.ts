@@ -91,9 +91,12 @@ test("event captions wrap long and multilingual text at enlarged sizes", async (
 	});
 	for (const width of [320, 390, 768, 1440, 1920]) {
 		await page.setViewportSize({ width, height: 900 });
+		const contentWidth = await page.evaluate(
+			() => document.documentElement.getBoundingClientRect().width,
+		);
 		expect(
 			await page.evaluate(() => document.documentElement.scrollWidth),
-		).toBe(width);
+		).toBe(contentWidth);
 		await expect(page.locator(".event-grid a:visible")).toHaveCount(count);
 	}
 });
