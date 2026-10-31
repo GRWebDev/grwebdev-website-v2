@@ -6,6 +6,24 @@ export default defineConfig({
 	outputDir: "./test-results/e2e",
 	workers: 1,
 	forbidOnly: !!process.env.CI,
+	projects: [
+		{
+			name: "overlay-scrollbars",
+			use: {
+				launchOptions: {
+					args: ["--enable-features=OverlayScrollbar,FluentOverlayScrollbar"],
+				},
+			},
+		},
+		{
+			name: "classic-scrollbars",
+			use: {
+				launchOptions: {
+					args: ["--disable-features=OverlayScrollbar,FluentOverlayScrollbar"],
+				},
+			},
+		},
+	],
 	use: {
 		baseURL: "http://127.0.0.1:4397",
 		browserName: "chromium",
