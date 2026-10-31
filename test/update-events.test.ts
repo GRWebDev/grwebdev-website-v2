@@ -16,6 +16,117 @@ import { fileURLToPath } from "node:url";
 const importerPath = fileURLToPath(
 	new URL("../scripts/update-events.ts", import.meta.url),
 );
+
+for (const [name, start, location, expectedLocation] of [
+	[
+		"online",
+		"2026-11-13T13:00:00Z",
+		{ "@type": "VirtualLocation" },
+		"Online event",
+	],
+	[
+		"in-person",
+		"2026-11-13T08:00:00-05:00",
+		{
+			"@type": "Place",
+			name: "The Factory",
+			address: { streetAddress: "77 Monroe Center" },
+		},
+		"The Factory, 77 Monroe Center",
+	],
+] as const) {
+	test(`details-only imports ${name} logistics into existing wall-clock metadata`, async (t) => {
+		const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-details-"));
+		t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
+		const eventsDir = path.join(fixtureRoot, "src/content/Events");
+		await mkdir(eventsDir, { recursive: true });
+		const eventFile = path.join(eventsDir, "2026-11-13-example.md");
+		const original = `---\nname: "Example"\nurl: "https://www.meetup.com/grwebdev/events/123/"\ndate: 2026-11-13\ntimeZone: "America/New_York"\n---\n`;
+		await writeFile(eventFile, original);
+		const pageFile = path.join(fixtureRoot, "event.html");
+		await writeFile(
+			pageFile,
+			`<script type="application/ld+json">${JSON.stringify({
+				"@type": "Event",
+				startDate: start,
+				location,
+			})}</script>`,
+		);
+		const command = [
+			importerPath,
+			"--details-only",
+			"--event",
+			"https://www.meetup.com/grwebdev/events/123/",
+			"--page-file",
+			pageFile,
+		];
+		const dryRun = spawnSync(process.execPath, [...command, "--dry-run"], {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+		});
+		assert.equal(dryRun.status, 0, dryRun.stderr);
+		assert.equal(await readFile(eventFile, "utf8"), original);
+		const result = spawnSync(process.execPath, command, {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+			env: { ...process.env, TZ: "Pacific/Honolulu" },
+		});
+		assert.equal(result.status, 0, result.stderr);
+		const markdown = await readFile(eventFile, "utf8");
+		assert.match(markdown, /^startTime: "08:00"$/m);
+		assert.ok(
+			markdown.includes(`location: ${JSON.stringify(expectedLocation)}`),
+		);
+		assert.equal((await readdir(eventsDir)).length, 1);
+		await writeFile(pageFile, "<html>No event details</html>");
+		const failed = spawnSync(process.execPath, command, {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+		});
+		assert.notEqual(failed.status, 0);
+		assert.equal(await readFile(eventFile, "utf8"), markdown);
+	});
+}
+
+for (const [name, start, expectedTime] of [
+	["UTC", "DTSTART:20260724T120000Z", "12:00"],
+	["date-only", "DTSTART;VALUE=DATE:20260724", undefined],
+] as const) {
+	test(`Meetup imports ${name} dates without inventing logistics`, async (t) => {
+		const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-events-"));
+		t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
+		const eventsDir = path.join(fixtureRoot, "src/content/Events");
+		await mkdir(eventsDir, { recursive: true });
+		const feedPath = path.join(fixtureRoot, "meetup.ics");
+		await writeFile(
+			feedPath,
+			[
+				"BEGIN:VCALENDAR",
+				"BEGIN:VEVENT",
+				start,
+				"SUMMARY:Example event",
+				"URL;VALUE=URI:https://www.meetup.com/grwebdev/events/123/",
+				"END:VEVENT",
+				"END:VCALENDAR",
+				"",
+			].join("\r\n"),
+		);
+		const result = spawnSync(
+			process.execPath,
+			[importerPath, "--feed-file", feedPath, "--skip-flyers", "--no-cleanup"],
+			{ cwd: fixtureRoot, encoding: "utf8" },
+		);
+		assert.equal(result.status, 0, result.stderr || result.stdout);
+		const [eventFile] = await readdir(eventsDir);
+		const markdown = await readFile(path.join(eventsDir, eventFile), "utf8");
+		assert.match(markdown, /^timeZone: "UTC"$/m);
+		if (expectedTime)
+			assert.match(markdown, new RegExp(`^startTime: "${expectedTime}"$`, "m"));
+		else assert.doesNotMatch(markdown, /^startTime:/m);
+		assert.doesNotMatch(markdown, /^location:/m);
+		assert.doesNotMatch(markdown, /undefined/);
+	});
+}
 test("Meetup imports preserve the event time zone in Markdown", async (t) => {
 	const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-events-"));
 	t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
@@ -33,6 +144,8 @@ VERSION:2.0
 BEGIN:VEVENT
 DTSTART;TZID=America/New_York:20260724T080000
 SUMMARY:Friday Morning Code + Commiserate
+LOCATION:The Factory\\, 77 Monroe Center St NW\\,
+  Suite 600
 URL;VALUE=URI:https://www.meetup.com/grwebdev/events/313908053/
 END:VEVENT
 END:VCALENDAR
@@ -59,6 +172,11 @@ END:VCALENDAR
 	const [eventFile] = await readdir(eventsDir);
 	const markdown = await readFile(path.join(eventsDir, eventFile), "utf8");
 	assert.match(markdown, /^timeZone: "America\/New_York"$/m);
+	assert.match(markdown, /^startTime: "08:00"$/m);
+	assert.match(
+		markdown,
+		/^location: "The Factory, 77 Monroe Center St NW, Suite 600"$/m,
+	);
 });
 
 test("Meetup imports refresh the time zone for existing events", async (t) => {
@@ -75,9 +193,11 @@ test("Meetup imports refresh the time zone for existing events", async (t) => {
 		eventFile,
 		`---
 name: "Code + Commiserate"
-url: "https://www.meetup.com/grwebdev/events/313908053/"
+url: "https://www.meetup.com/grwebdev/events/313908052/"
 date: 2026-07-24
 timeZone: "UTC"
+startTime: "07:30"
+location: "Verified venue"
 ---
 `,
 	);
@@ -115,4 +235,10 @@ END:VCALENDAR
 
 	const markdown = await readFile(eventFile, "utf8");
 	assert.match(markdown, /^timeZone: "America\/New_York"$/m);
+	assert.match(markdown, /^startTime: "08:00"$/m);
+	assert.match(markdown, /^location: "Verified venue"$/m);
+	assert.match(
+		markdown,
+		/^url: "https:\/\/www.meetup.com\/grwebdev\/events\/313908053\/"$/m,
+	);
 });

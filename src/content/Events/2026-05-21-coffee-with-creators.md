@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/314496354/"
 date: 2026-05-21
 timeZone: "America/New_York"
+startTime: "08:00"
+location: "The Factory, 77 Monroe Center St NW Suite 600, Grand Rapids, MI"
 ---

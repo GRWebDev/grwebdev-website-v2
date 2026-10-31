@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/316831148/"
 date: 2026-10-26
 timeZone: "America/New_York"
+startTime: "18:00"
+location: "1034 Wealthy St SE, Grand Rapids, MI 49506"
 ---
