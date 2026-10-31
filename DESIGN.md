@@ -175,6 +175,10 @@ Keep the community photo centered with `background-size: cover` and a 55% black 
 
 The nearest ancestor inline-size container selects 768px images through 480px of available width, 1024px through 1024px, 1440px through 1440px, and 1920px above that. The smallest image retains enough height for the narrow hero's wrapped text. Each range includes a double-resolution candidate selected by CSS `image-set()`. Declare image URL variables once on the hero section; do not use `define:vars` to repeat them on every descendant. Image selection needs no JavaScript; browsers without `image-set()` retain a single-resolution background, and browsers without container queries retain the smallest range.
 
+Assign every hero image range, including the smallest, inside a container query. Keep the smallest-range fallback outside those queries only for browsers without container-query support, so initializing a container does not download a fallback image before the matching image.
+
+Reserve viewport scrollbar space with `scrollbar-gutter: stable` on `html` to prevent container widths from changing as scrollbars appear or disappear. Responsive tests cover classic and overlay scrollbars and measure content width separately from viewport width.
+
 ### Event Flyer Grid
 
 Event discovery relies on real flyer imagery, shown in a one-column grid on small screens and three columns above `940px` container width.
