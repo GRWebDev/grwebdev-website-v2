@@ -54,7 +54,19 @@ const events = defineCollection({
 			}),
 			url: z.string(),
 			date: z.date(),
-			timeZone: z.string(),
+			timeZone: z.string().refine((value) => {
+				try {
+					new Intl.DateTimeFormat("en-US", { timeZone: value });
+					return true;
+				} catch {
+					return false;
+				}
+			}, "Use a valid IANA time zone"),
+			startTime: z
+				.string()
+				.regex(/^([01]\d|2[0-3]):[0-5]\d$/)
+				.optional(),
+			location: z.string().trim().min(1).optional(),
 		}),
 });
 export const collections = { board, sponsors, events };
