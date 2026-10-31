@@ -177,6 +177,8 @@ The nearest ancestor inline-size container selects 768px images through 480px of
 
 Assign every hero image range, including the smallest, inside a container query. Keep the smallest-range fallback outside those queries only for browsers without container-query support, so initializing a container does not download a fallback image before the matching image.
 
+Reserve viewport scrollbar space with `scrollbar-gutter: stable` on `html` to prevent container widths from changing as scrollbars appear or disappear. Responsive tests cover classic and overlay scrollbars and measure content width separately from viewport width.
+
 ### Event Flyer Grid
 
 Event discovery relies on real flyer imagery, shown in a one-column grid on small screens and three columns above `940px` container width.
