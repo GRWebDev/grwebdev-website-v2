@@ -4,6 +4,9 @@
 # build output
 dist/
 
+# ai artifacts
+output/
+
 # browser test output
 test-results/
 playwright-report/

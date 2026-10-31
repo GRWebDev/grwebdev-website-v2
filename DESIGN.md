@@ -159,12 +159,15 @@ No form field system exists in the current code. If fields are added, they shoul
 
 ### Navigation
 
-Navigation is a sticky top bar on Room Light with the GRWebDev logo and plain text links. Links are separated by pipe characters, remain inherited color, and underline on hover.
+Navigation is a sticky top bar on Room Light with the GRWebDev logo, one set of plain text links, and one donation widget. A named inline-size container and CSS grid create the three layouts without measuring or moving DOM nodes. Both lists remain inside native `details` markup.
 
-- **Desktop/Mobile Style:** Flex row with `2ch` gaps in the outdent grid column.
-- **Logo:** About `6em` wide.
+- **Desktop/Mobile Style:** At `40em` of header space, show links and donation on one row. Between `25em` and `40em`, show the menu mark beside donation. Below `25em`, show donation in the full-width disclosure panel. Container-relative `em` thresholds follow text size and reserve room for the longer campaign fallback rather than measuring the live button exactly.
+- **Progressive enhancement:** The same layout works without JavaScript. With `::details-content` support, CSS grid places donation outside the closed panel at wider sizes. Browsers without that selector retain the native menu with links and donation inside at every width. Keep native open state when resizing.
+- **Logo:** Fluid between `4.7rem` and `6.4rem` wide.
 - **Hover:** Underline.
-- **Active State:** Not currently defined. Add one only if it helps orientation.
+- **Active State:** Bold, red underline, and `aria-current="page"`.
+- **Donation:** Load Givebutter when idle; retain a real campaign link if it cannot load. Do not add an auto start margin to the donation button.
+- **Decision:** Variant A is selected, including the user's board spacing and text-relative breakpoints. Prototype alternatives are captured at commit `4e893d4` on `prototype/text-sizing-reflow`.
 
 ### Event Flyer Grid
 
@@ -182,6 +185,7 @@ Board and sponsor listings use a compact image/text row.
 - **Spacing:** `2ch` column gap.
 - **Images:** Board images cover the square. Sponsor logos contain within the wider logo rail and should not be forced into a portrait or square treatment.
 - **Motion:** View-transition names preserve image/title continuity between list and detail pages.
+- **Reflow:** Shrinkable tracks and natural word wrapping keep long names readable. Compact rows stack below `16.6667em`; large profiles stack below `40em`. Preserve the separate `34.5em` role/name spacing adjustment. Do not truncate names or reduce type to fit.
 
 ### Black/Red Community Section
 

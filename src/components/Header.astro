@@ -2,7 +2,7 @@
 import Logo from "../assets/grwebdev.svg";
 
 const baseUrl = import.meta.env.BASE_URL;
-const donateUrl = "https://givebutter.com/gRBJRg";
+const donateUrl = "https://givebutter.com/grwebdev-build-fund-23";
 const isActivePath = (path: string) => Astro.url.pathname.includes(path);
 const links = [
 	{ label: "Board", path: "board" },
@@ -34,56 +34,47 @@ const links = [
 
 <header class="site-header">
 	<nav class="grid" aria-label="Primary navigation">
-		<div class="site-header__bar outdent">
-			<a class="site-header__brand" href={baseUrl} aria-label="GRWebDev home">
-				<Logo />
-			</a>
+		<div class="site-header__container outdent">
+			<div class="site-header__bar">
+				<a class="site-header__brand" href={baseUrl} aria-label="GRWebDev home">
+					<Logo />
+				</a>
 
-			<ul class="site-header__desktop-links">
-				{links.map(({ label, path }) => (
-					<li>
-						<a
-							aria-current={isActivePath(path) ? "page" : undefined}
-							class={isActivePath(path) ? "active" : ""}
-							href={`${baseUrl}${path}`}
-						>
-							{label}
-						</a>
-					</li>
-				))}
-			</ul>
-
-			<span class="site-header__donation">
-				<givebutter-widget id="gRBJRg">
-					<a
-						class="site-header__donate-fallback"
-						href={donateUrl}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Donate to GRWebDev
-					</a>
-				</givebutter-widget>
-			</span>
-
-			<details class="site-header__mobile-menu">
-				<summary aria-label="Toggle navigation menu">
-					<span class="site-header__menu-mark" aria-hidden="true"></span>
-				</summary>
-				<ul>
-					{links.map(({ label, path }) => (
-						<li>
-							<a
-								aria-current={isActivePath(path) ? "page" : undefined}
-								class={isActivePath(path) ? "active" : ""}
-								href={`${baseUrl}${path}`}
-							>
-								{label}
-							</a>
-						</li>
-					))}
-				</ul>
-			</details>
+				<details class="site-header__mobile-menu">
+					<summary aria-label="Toggle navigation menu">
+						<span class="site-header__menu-mark" aria-hidden="true"></span>
+					</summary>
+					<div class="site-header__menu-content">
+						<ul class="site-header__page-links">
+							{links.map(({ label, path }) => (
+								<li>
+									<a
+										aria-current={isActivePath(path) ? "page" : undefined}
+										class={isActivePath(path) ? "active" : ""}
+										href={`${baseUrl}${path}`}
+									>
+										{label}
+									</a>
+								</li>
+							))}
+						</ul>
+						<ul class="site-header__donation-list">
+							<li class="site-header__donation">
+								<givebutter-widget id="gRBJRg">
+									<a
+										class="site-header__donate-fallback"
+										href={donateUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										Donate to GRWebDev
+									</a>
+								</givebutter-widget>
+							</li>
+						</ul>
+					</div>
+				</details>
+			</div>
 		</div>
 	</nav>
 </header>
