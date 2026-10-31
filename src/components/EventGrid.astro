@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
 import {
 	formatEventDate,
 	formatEventTime,
@@ -94,11 +95,20 @@ while (
 	}
 
 	.event-grid > a {
+		display: block;
 		min-inline-size: 0;
+		border-block-end: 4px solid var(--secondary-clr);
+		text-decoration: none;
+	}
+
+	.event-grid > a:focus-visible {
+		outline: 2px solid var(--secondary-clr);
+		outline-offset: 0.2em;
 	}
 
 	.event-details {
 		margin-block-start: 0.75em;
+		padding-block-end: 1em;
 		overflow-wrap: anywhere;
 	}
 
@@ -107,8 +117,24 @@ while (
 		margin-block-start: 0;
 	}
 
+	.event-details h3 :global(svg) {
+		display: inline-block;
+		inline-size: 1em;
+		block-size: 1em;
+		margin-inline-start: 0.2em;
+		vertical-align: -0.125em;
+	}
+
 	.event-details p {
 		margin-block-start: 0.25em;
+	}
+
+	.event-grid > a:hover h3,
+	.event-grid > a:focus-visible h3 {
+		text-decoration: underline;
+		text-decoration-color: var(--secondary-clr);
+		text-decoration-thickness: 0.12em;
+		text-underline-offset: 0.2em;
 	}
 
 	.event-destination {
@@ -173,7 +199,10 @@ while (
 								widths={[360, 720]}
 							/>
 							<div class="event-details">
-								<h3 dir="auto">{event.data.name}</h3>
+								<h3 dir="auto">
+									{event.data.name}
+									<ExternalLink aria-hidden="true" focusable="false" />
+								</h3>
 								<p>
 									<time datetime={event.data.date.toISOString().slice(0, 10)}>
 										{formatEventDate({ date: event.data.date })}

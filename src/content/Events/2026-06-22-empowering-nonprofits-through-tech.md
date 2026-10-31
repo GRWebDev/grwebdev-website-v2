@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/315151869/"
 date: 2026-06-22
 timeZone: "America/New_York"
+startTime: "18:00"
+location: "Start Garden, 2 Fulton St. West, Grand Rapids, MI"
 ---

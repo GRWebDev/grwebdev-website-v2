@@ -73,6 +73,10 @@ Event entries can include a quoted `startTime` in 24-hour `HH:mm` format and a q
 
 The updater imports start times and structured iCal `LOCATION` values, including folded lines. It refreshes supplied details on existing entries and retains manually verified locations when the feed omits them. Verify locations against the specific event or its flyer; do not infer them from recurring event names. Flyer images supplement the text rather than supplying the only event logistics.
 
+Live updates also read each event page JSON-LD before changing files. The importer converts the published start instant into the local `startTime` and `timeZone` fields and combines the public venue name and address into `location`. Online listings use "Online event" because the structured data does not expose private meeting-room details.
+
+Use `--details-only` to refresh existing event logistics without changing URLs, flyers, or removing old events. `--feed-file` stays offline unless `--page-file` is also supplied. `--page-file` requires `--event` to prevent applying one fixture to multiple events. Dry runs never fetch pages or write files.
+
 Start with a dry run when checking what will change:
 
 ```sh
@@ -85,6 +89,8 @@ npm run update:events -- --dry-run
 |:----------------|:---------------------------------------------------------------------|
 | `--dry-run`     | Print planned changes without writing files                          |
 | `--skip-flyers` | Create or update markdown without exporting flyer images             |
+| `--details-only` | Refresh page details for existing local events only                |
+| `--page-file` | Read event HTML from a local file, requires `--event`                  |
 | `--no-cleanup`  | Do not remove events older than six months                           |
 | `--event <url>` | Process one Meetup event URL from the iCal feed                      |
 | `--feed-file`   | Read iCal text from a local file instead of Meetup                   |
