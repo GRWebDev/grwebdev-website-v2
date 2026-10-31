@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/313767837/"
 date: 2026-06-12
 timeZone: "America/New_York"
+startTime: "08:00"
+location: "Online event"
 ---

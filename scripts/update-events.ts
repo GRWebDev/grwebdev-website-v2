@@ -3,6 +3,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { parseMeetupEventDetails } from "./meetup-event-details.ts";
 
 interface CliArgs {
 	dryRun: boolean;
@@ -11,6 +12,8 @@ interface CliArgs {
 	help: boolean;
 	event: string;
 	feedFile: string;
+	pageFile: string;
+	detailsOnly: boolean;
 	today: string;
 }
 
@@ -99,6 +102,35 @@ main().catch((error: unknown) => {
 });
 
 async function main(): Promise<void> {
+	if (args.pageFile && !args.event) {
+		throw new Error(
+			"--page-file requires --event to identify the fixture event",
+		);
+	}
+	if (args.detailsOnly) {
+		const events = (await readLocalEvents()).filter(
+			(event) => !args.event || event.url === args.event,
+		);
+		if (args.event && events.length === 0) {
+			throw new Error(`No local event found for ${args.event}`);
+		}
+		if (args.dryRun) {
+			console.log(`Would refresh details for ${events.length} local events.`);
+			return;
+		}
+		const updates = [];
+		for (const event of events) {
+			if (!event.url || !event.timeZone) continue;
+			updates.push({
+				file: event.file,
+				details: await readEventDetails(event.url, event.date, event.timeZone),
+			});
+		}
+		for (const update of updates) {
+			await updateEventDetails(update.file, update.details);
+		}
+		return;
+	}
 	const feedText = await readFeed();
 	const feedEvents = parseIcal(feedText)
 		.filter((event) => !args.event || event.url === args.event)
@@ -119,6 +151,14 @@ async function main(): Promise<void> {
 		feedEvents,
 		localEvents,
 	);
+	if (!args.dryRun && (!args.feedFile || args.pageFile)) {
+		for (const event of feedEvents) {
+			Object.assign(
+				event,
+				await readEventDetails(event.url, event.date, event.timeZone),
+			);
+		}
+	}
 	const detailUpdates = findEventDetailUpdates(feedEvents, localEvents, stale);
 
 	printSummary({
@@ -186,6 +226,8 @@ function parseArgs(argv: string[]): CliArgs {
 		help: false,
 		event: "",
 		feedFile: "",
+		pageFile: "",
+		detailsOnly: false,
 		today: "",
 	};
 
@@ -193,6 +235,7 @@ function parseArgs(argv: string[]): CliArgs {
 		const arg = argv[index];
 
 		if (arg === "--dry-run") parsed.dryRun = true;
+		else if (arg === "--details-only") parsed.detailsOnly = true;
 		else if (arg === "--skip-flyers") parsed.skipFlyers = true;
 		else if (arg === "--no-cleanup") parsed.noCleanup = true;
 		else if (arg === "--help" || arg === "-h") parsed.help = true;
@@ -203,6 +246,10 @@ function parseArgs(argv: string[]): CliArgs {
 			parsed.feedFile = readValue(argv, ++index, arg);
 		else if (arg.startsWith("--feed-file="))
 			parsed.feedFile = arg.slice("--feed-file=".length);
+		else if (arg === "--page-file")
+			parsed.pageFile = readValue(argv, ++index, arg);
+		else if (arg.startsWith("--page-file="))
+			parsed.pageFile = arg.slice("--page-file=".length);
 		else if (arg === "--today") parsed.today = readValue(argv, ++index, arg);
 		else if (arg.startsWith("--today="))
 			parsed.today = arg.slice("--today=".length);
@@ -231,6 +278,43 @@ async function readFeed(): Promise<string> {
 	}
 
 	return response.text();
+}
+
+async function readEventDetails(url: string, date: string, timeZone: string) {
+	const html = args.pageFile
+		? await fs.readFile(path.resolve(repoRoot, args.pageFile), "utf8")
+		: await fetch(url).then((response) => {
+				if (!response.ok) {
+					throw new Error(
+						`Could not fetch Meetup event page: ${response.status}`,
+					);
+				}
+				return response.text();
+			});
+	const details = parseMeetupEventDetails(html);
+	const startsAt = new Date(details.startDateTime);
+	const parts = new Intl.DateTimeFormat("en-CA", {
+		timeZone,
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+		hourCycle: "h23",
+	}).formatToParts(startsAt);
+	const part = (type: Intl.DateTimeFormatPartTypes) =>
+		parts.find((value) => value.type === type)?.value;
+	const localDate = `${part("year")}-${part("month")}-${part("day")}`;
+	if (localDate !== date) {
+		throw new Error(`Meetup event date ${localDate} does not match ${date}`);
+	}
+	return {
+		timeZone,
+		startTime: `${part("hour")}:${part("minute")}`,
+		location: [details.locationName, details.locationAddress]
+			.filter(Boolean)
+			.join(", "),
+	};
 }
 
 function parseIcal(text: string): FeedEvent[] {
@@ -448,7 +532,7 @@ async function updateEventUrl(file: string, url: string): Promise<void> {
 
 async function updateEventDetails(
 	file: string,
-	feed: FeedEvent,
+	feed: Pick<FeedEvent, "timeZone" | "startTime" | "location">,
 ): Promise<void> {
 	const text = await fs.readFile(file, "utf8");
 	let updated = text;
@@ -641,6 +725,8 @@ Usage:
 Options:
   --dry-run       Print planned changes without writing files.
   --skip-flyers   Create/update markdown without exporting flyer images.
+  --details-only  Refresh page details for existing local events only.
+  --page-file     Read event HTML from a local file. Requires --event.
   --no-cleanup    Do not remove events older than six months.
   --event <url>   Process one Meetup event URL from the iCal feed.
   --feed-file     Read iCal text from a local file instead of Meetup.

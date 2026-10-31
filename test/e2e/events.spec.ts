@@ -7,6 +7,39 @@ import {
 
 test.use({ javaScriptEnabled: false });
 
+test("event hover and keyboard focus emphasize only the title", async ({
+	page,
+}) => {
+	await page.goto("/events/");
+	const event = page.locator(".event-grid > a").first();
+	const title = event.getByRole("heading", { level: 3 });
+	await expect(event).toHaveCSS("border-bottom-width", "4px");
+	await expect(title).toHaveCSS("text-decoration-line", "none");
+	await expect(title.locator("svg")).toHaveAttribute("aria-hidden", "true");
+	await event.hover();
+	await expect(event).toHaveCSS("text-decoration-line", "none");
+	await expect(title).toHaveCSS("text-decoration-line", "underline");
+	await expect(event.locator("p").first()).toHaveCSS(
+		"text-decoration-line",
+		"none",
+	);
+	await page.mouse.move(0, 0);
+	await event.focus();
+	await page.keyboard.press("Tab");
+	await page.keyboard.press("Shift+Tab");
+	await expect(event).toBeFocused();
+	await expect(event).toHaveCSS("outline-width", "2px");
+	await expect(event).toHaveCSS("outline-style", "solid");
+	await expect(event).toHaveCSS("text-decoration-line", "none");
+	await expect(title).toHaveCSS("text-decoration-line", "underline");
+	await expect(title).toHaveCSS(
+		"text-decoration-color",
+		await event.evaluate(
+			(element) => getComputedStyle(element).borderBottomColor,
+		),
+	);
+});
+
 test("event logistics remain readable and accessible without flyer images", async ({
 	page,
 }) => {

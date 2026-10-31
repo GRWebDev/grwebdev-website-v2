@@ -17,6 +17,77 @@ const importerPath = fileURLToPath(
 	new URL("../scripts/update-events.ts", import.meta.url),
 );
 
+for (const [name, start, location, expectedLocation] of [
+	[
+		"online",
+		"2026-11-13T13:00:00Z",
+		{ "@type": "VirtualLocation" },
+		"Online event",
+	],
+	[
+		"in-person",
+		"2026-11-13T08:00:00-05:00",
+		{
+			"@type": "Place",
+			name: "The Factory",
+			address: { streetAddress: "77 Monroe Center" },
+		},
+		"The Factory, 77 Monroe Center",
+	],
+] as const) {
+	test(`details-only imports ${name} logistics into existing wall-clock metadata`, async (t) => {
+		const fixtureRoot = await mkdtemp(path.join(tmpdir(), "grwebdev-details-"));
+		t.after(() => rm(fixtureRoot, { force: true, recursive: true }));
+		const eventsDir = path.join(fixtureRoot, "src/content/Events");
+		await mkdir(eventsDir, { recursive: true });
+		const eventFile = path.join(eventsDir, "2026-11-13-example.md");
+		const original = `---\nname: "Example"\nurl: "https://www.meetup.com/grwebdev/events/123/"\ndate: 2026-11-13\ntimeZone: "America/New_York"\n---\n`;
+		await writeFile(eventFile, original);
+		const pageFile = path.join(fixtureRoot, "event.html");
+		await writeFile(
+			pageFile,
+			`<script type="application/ld+json">${JSON.stringify({
+				"@type": "Event",
+				startDate: start,
+				location,
+			})}</script>`,
+		);
+		const command = [
+			importerPath,
+			"--details-only",
+			"--event",
+			"https://www.meetup.com/grwebdev/events/123/",
+			"--page-file",
+			pageFile,
+		];
+		const dryRun = spawnSync(process.execPath, [...command, "--dry-run"], {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+		});
+		assert.equal(dryRun.status, 0, dryRun.stderr);
+		assert.equal(await readFile(eventFile, "utf8"), original);
+		const result = spawnSync(process.execPath, command, {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+			env: { ...process.env, TZ: "Pacific/Honolulu" },
+		});
+		assert.equal(result.status, 0, result.stderr);
+		const markdown = await readFile(eventFile, "utf8");
+		assert.match(markdown, /^startTime: "08:00"$/m);
+		assert.ok(
+			markdown.includes(`location: ${JSON.stringify(expectedLocation)}`),
+		);
+		assert.equal((await readdir(eventsDir)).length, 1);
+		await writeFile(pageFile, "<html>No event details</html>");
+		const failed = spawnSync(process.execPath, command, {
+			cwd: fixtureRoot,
+			encoding: "utf8",
+		});
+		assert.notEqual(failed.status, 0);
+		assert.equal(await readFile(eventFile, "utf8"), markdown);
+	});
+}
+
 for (const [name, start, expectedTime] of [
 	["UTC", "DTSTART:20260724T120000Z", "12:00"],
 	["date-only", "DTSTART;VALUE=DATE:20260724", undefined],
