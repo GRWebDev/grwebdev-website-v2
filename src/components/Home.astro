@@ -2,41 +2,88 @@
 import { getImage } from "astro:assets";
 import heroImage from "../assets/hero/hero.jpg";
 
-const heroBackground = await getImage({
-	src: heroImage,
-	width: 2000,
-	format: "webp",
-});
+const [
+	small,
+	medium,
+	large,
+	smallRetina,
+	wide,
+	mediumRetina,
+	largeRetina,
+	wideRetina,
+] = await Promise.all(
+	[768, 1024, 1440, 1536, 1920, 2048, 2880, 3840].map(async (width) => {
+		const image = await getImage({
+			src: heroImage,
+			width,
+			format: "webp",
+		});
+		return `url("${image.src}")`;
+	}),
+);
 ---
 
-<div
-	class="hero"
+<section
+	class="grid hero"
+	aria-labelledby="hero-heading"
 	style={{
-		backgroundImage: `linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), url("${heroBackground.src}")`,
+		"--small": small,
+		"--medium": medium,
+		"--large": large,
+		"--wide": wide,
+		"--smallRetina": smallRetina,
+		"--mediumRetina": mediumRetina,
+		"--largeRetina": largeRetina,
+		"--wideRetina": wideRetina,
 	}}
 >
-	<section class="grid hero__layout" aria-labelledby="hero-heading">
-		<div class="hero__content">
-			<h1 id="hero-heading">For the community, by the community.</h1>
-			<p>
-				Grand Rapids Web Development Group is a group of tech enthusiasts in the
-				Grand Rapids, MI area, offering meetups and more.
-			</p>
-		</div>
-	</section>
-</div>
+	<div class="hero__content">
+		<h1 id="hero-heading">For the community, by the community.</h1>
+		<p>
+			Grand Rapids Web Development Group is a group of tech enthusiasts in the
+			Grand Rapids, MI area, offering meetups and more.
+		</p>
+	</div>
+</section>
 
 <style>
 	.hero {
+		--hero-image: var(--small);
+		--hero-image-retina: var(--smallRetina);
+		background-image:
+			linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), var(--hero-image);
 		background-color: var(--primary-clr);
 		color: #fff;
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
+
+		@supports (background-image: image-set(url("") 1x)) {
+			background-image:
+				linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)),
+				image-set(var(--hero-image) 1x, var(--hero-image-retina) 2x);
+		}
 	}
 
-	.hero__layout {
-		align-items: center;
+	@container (width > 480px) {
+		.hero {
+			--hero-image: var(--medium);
+			--hero-image-retina: var(--mediumRetina);
+		}
+	}
+
+	@container (width > 1024px) {
+		.hero {
+			--hero-image: var(--large);
+			--hero-image-retina: var(--largeRetina);
+		}
+	}
+
+	@container (width > 1440px) {
+		.hero {
+			--hero-image: var(--wide);
+			--hero-image-retina: var(--wideRetina);
+		}
 	}
 
 	.hero__content {
