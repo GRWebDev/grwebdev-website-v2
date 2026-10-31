@@ -7,6 +7,64 @@ import {
 
 test.use({ javaScriptEnabled: false });
 
+test("event logistics remain readable and accessible without flyer images", async ({
+	page,
+}) => {
+	await page.route(/\/_astro\/.*\.(webp|jpe?g)(\?.*)?$/, (route) =>
+		route.abort(),
+	);
+	await page.setViewportSize({ width: 320, height: 900 });
+	await page.goto("/events/");
+	const links = page.locator(".event-grid a");
+	const count = await links.count();
+	expect(count).toBeGreaterThan(0);
+	const first = page
+		.getByRole("link", { name: /Code \+ Commiserate.*Online event/ })
+		.first();
+	await expect(first).toHaveAccessibleName(
+		/Code \+ Commiserate.*8:00 AM Eastern Time.*Online event.*Event details on Meetup/,
+	);
+	await expect(first.locator("time").first()).toHaveAttribute(
+		"datetime",
+		/^\d{4}-\d{2}-\d{2}$/,
+	);
+	await expect(first.locator("time").last()).toHaveAttribute(
+		"datetime",
+		"08:00",
+	);
+	await expect(first.locator("img")).toHaveAttribute("alt", "");
+	await expect(page.locator(".event-details")).toHaveCount(count);
+	for (const details of await page.locator(".event-details").all()) {
+		await expect(details).not.toContainText("Start time on Meetup");
+		await expect(details).not.toContainText("Location on Meetup");
+	}
+	await first.focus();
+	await expect(first).toBeFocused();
+	await expect(first).toHaveCSS("outline-width", "2px");
+});
+
+test("event captions wrap long and multilingual text at enlarged sizes", async ({
+	page,
+}) => {
+	await page.goto("/events/");
+	const count = await page.locator(".event-grid a").count();
+	expect(count).toBeGreaterThan(0);
+	await page.evaluate(() => {
+		document.documentElement.style.fontSize = "200%";
+		const title = document.querySelector(".event-details h3");
+		if (title)
+			title.textContent =
+				"مرحبا 開発者 ".repeat(10) + "LongEventName".repeat(20);
+	});
+	for (const width of [320, 390, 768, 1440, 1920]) {
+		await page.setViewportSize({ width, height: 900 });
+		expect(
+			await page.evaluate(() => document.documentElement.scrollWidth),
+		).toBe(width);
+		await expect(page.locator(".event-grid a:visible")).toHaveCount(count);
+	}
+});
+
 test("homepage reveals the events page with all available flyers in each section", async ({
 	page,
 }) => {
@@ -67,10 +125,9 @@ test("homepage reveals the events page with all available flyers in each section
 			.getByRole("region", { name: section, exact: true })
 			.locator(".event-grid a");
 		for (const [index, file] of selected.entries()) {
-			await expect(links.nth(index)).toHaveAttribute(
-				"aria-label",
+			await expect(links.nth(index)).toHaveAccessibleName(
 				new RegExp(
-					`${formatEventDate({ date: new Date(file.slice(0, 10)) })} on Meetup$`,
+					`${formatEventDate({ date: new Date(file.slice(0, 10)) })}.*Event details on Meetup$`,
 				),
 			);
 		}
