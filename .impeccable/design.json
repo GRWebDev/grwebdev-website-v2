@@ -1,53 +1,73 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-20T00:00:00-04:00",
+  "generatedAt": "2026-11-01T02:20:49.924Z",
   "title": "Design System: GRWebDev",
   "extensions": {
     "colorMeta": {
       "stage-black": {
         "role": "primary",
         "displayName": "Stage Black",
-        "canonical": "var(--primary-clr), sourced from --gray-100",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(25% 0 0)",
-          "oklch(35% 0 0)",
-          "oklch(45% 0 0)",
-          "oklch(55% 0 0)",
-          "oklch(65% 0 0)",
-          "oklch(80% 0 0)",
-          "oklch(95% 0 0)"
+          "oklch(0.1034 0 0)",
+          "oklch(0.1867 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.3533 0 0)",
+          "oklch(0.4366 0 0)",
+          "oklch(0.5199 0 0)",
+          "oklch(0.6032 0 0)",
+          "oklch(0.6865 0 0)",
+          "oklch(0.7698 0 0)",
+          "oklch(0.8531 0 0)",
+          "oklch(0.9364 0 0)",
+          "oklch(1.0197 0 0)"
         ]
       },
       "signal-red": {
         "role": "secondary",
         "displayName": "Signal Red",
-        "canonical": "var(--secondary-clr), sourced from --red-500",
         "tonalRamp": [
-          "oklch(15% 0.1984 29.23)",
-          "oklch(25% 0.1984 29.23)",
-          "oklch(35% 0.1984 29.23)",
-          "oklch(45% 0.1984 29.23)",
-          "oklch(55% 0.1984 29.23)",
-          "oklch(65% 0.16 29.23)",
-          "oklch(80% 0.09 29.23)",
-          "oklch(95% 0.03 29.23)"
+          "oklch(0.067 0.1984 29.23)",
+          "oklch(0.1503 0.1984 29.23)",
+          "oklch(0.2336 0.1984 29.23)",
+          "oklch(0.3169 0.1984 29.23)",
+          "oklch(0.4002 0.1984 29.23)",
+          "oklch(0.4835 0.1984 29.23)",
+          "oklch(0.5668 0.1984 29.23)",
+          "oklch(0.6501 0.1984 29.23)",
+          "oklch(0.7334 0.1984 29.23)",
+          "oklch(0.8167 0.1984 29.23)",
+          "oklch(0.9 0.1984 29.23)"
         ]
       },
       "room-light": {
         "role": "neutral",
         "displayName": "Room Light",
-        "canonical": "var(--tertiary-clr), sourced from --gray-1000",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(25% 0 0)",
-          "oklch(35% 0 0)",
-          "oklch(45% 0 0)",
-          "oklch(55% 0 0)",
-          "oklch(65% 0 0)",
-          "oklch(80% 0 0)",
-          "oklch(95% 0 0)"
+          "oklch(0.1034 0 0)",
+          "oklch(0.1867 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.3533 0 0)",
+          "oklch(0.4366 0 0)",
+          "oklch(0.5199 0 0)",
+          "oklch(0.6032 0 0)",
+          "oklch(0.6865 0 0)",
+          "oklch(0.7698 0 0)",
+          "oklch(0.8531 0 0)",
+          "oklch(0.9364 0 0)",
+          "oklch(1.0197 0 0)"
         ]
+      },
+      "charcoal-shadow": {
+        "role": "neutral",
+        "displayName": "Charcoal Shadow"
+      },
+      "header-divider": {
+        "role": "neutral",
+        "displayName": "Header Divider"
+      },
+      "footer-red-wash": {
+        "role": "neutral",
+        "displayName": "Footer Red Wash"
       },
       "overlay-black": {
         "role": "neutral",
@@ -62,122 +82,220 @@
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Condensed Community Statement",
-        "purpose": "Poster-like statement text in black/red sections."
+        "displayName": "Condensed community statement",
+        "purpose": "Mission copy in the black/red band."
+      },
+      "hero": {
+        "displayName": "Homepage hero",
+        "purpose": "Homepage-only viewport-fluid headline."
+      },
+      "headline": {
+        "displayName": "Page heading",
+        "purpose": "Global h1; hero and profile overrides remain separate."
+      },
+      "title": {
+        "displayName": "Section heading",
+        "purpose": "Global h2; About addresses override leading and text-box."
+      },
+      "subheading": {
+        "displayName": "Subheading",
+        "purpose": "Global h3; event titles override the size to 1em."
       },
       "body": {
-        "displayName": "Open Body",
-        "purpose": "Readable community copy, logistics, and descriptions."
+        "displayName": "Body and logistics",
+        "purpose": "Descriptions, dates, times, locations, and biographies."
+      },
+      "small": {
+        "displayName": "Secondary text",
+        "purpose": "Secondary organization and legal copy."
       },
       "nav": {
-        "displayName": "Plain Navigation",
-        "purpose": "Sticky header links and simple site movement."
+        "displayName": "Disclosure navigation",
+        "purpose": "Links inside the native disclosure panel."
+      },
+      "nav-wide": {
+        "displayName": "Expanded navigation",
+        "purpose": "Links beside donation in the expanded header."
       }
     },
     "shadows": [
       {
         "name": "header-lift",
         "value": "0 -0.5em 0.5em 0.5em var(--gray-700)",
-        "purpose": "Separates the sticky header from scrolling content."
+        "purpose": "Structural separation below the sticky header."
+      },
+      {
+        "name": "disclosure-lift",
+        "value": "0 0.4rem 0.45rem oklch(from var(--gray-100) l c h / 0.2)",
+        "purpose": "Compact disclosure panel; removed when links join the wide header row."
       }
     ],
     "motion": [
       {
-        "name": "footer-reveal",
-        "value": "transition: all 300ms linear 100ms",
-        "purpose": "Reveals the fixed footer on large hover-capable screens."
+        "name": "menu-mark",
+        "value": "transform 160ms ease-out",
+        "purpose": "Rotates the menu mark; reduced-motion rules shorten transitions."
       },
       {
-        "name": "octocat-wave",
-        "value": "560ms ease-in-out",
-        "purpose": "Small GitHub corner animation."
+        "name": "route-slide-duration",
+        "value": "var(--route-slide-duration)",
+        "purpose": "Source token resolves to 380ms for named list/detail sliders."
       },
       {
-        "name": "slider-view-transition",
-        "value": "view-transition types: slider",
-        "purpose": "Preserves continuity from list pages to detail pages."
+        "name": "route-slide-easing",
+        "value": "var(--route-slide-easing)",
+        "purpose": "Source token resolves to cubic-bezier(0.16, 1, 0.3, 1)."
+      },
+      {
+        "name": "route-slide-distance",
+        "value": "var(--route-slide-distance)",
+        "purpose": "Source token resolves to 24% travel; slider animations are disabled for reduced motion."
       }
     ],
     "breakpoints": [
       {
-        "name": "main-480",
+        "name": "viewport-main-600-track",
         "value": "480px"
       },
       {
-        "name": "main-768",
+        "name": "viewport-main-1000-track",
         "value": "768px"
       },
       {
-        "name": "main-1152",
+        "name": "viewport-main-1500-track",
         "value": "1152px"
       },
       {
-        "name": "main-1600",
+        "name": "viewport-main-1800-track",
         "value": "1600px"
       },
       {
-        "name": "event-grid",
-        "value": "940px"
+        "name": "viewport-fluid-font-start",
+        "value": "320px"
       },
       {
-        "name": "desktop-event-switch",
-        "value": "1180px"
+        "name": "viewport-fluid-font-end",
+        "value": "1440px"
+      },
+      {
+        "name": "header-container-donation-inline-at-least",
+        "value": "25em"
+      },
+      {
+        "name": "header-container-expanded-at-least",
+        "value": "40em"
+      },
+      {
+        "name": "events-container-two-columns-above",
+        "value": "620px"
+      },
+      {
+        "name": "events-container-three-columns-above",
+        "value": "960px"
+      },
+      {
+        "name": "events-container-four-columns-above",
+        "value": "1280px"
+      },
+      {
+        "name": "hero-container-medium-above",
+        "value": "480px"
+      },
+      {
+        "name": "hero-container-large-above",
+        "value": "1024px"
+      },
+      {
+        "name": "hero-container-wide-above",
+        "value": "1440px"
+      },
+      {
+        "name": "image-text-container-title-inline-above",
+        "value": "16.6667em"
+      },
+      {
+        "name": "profile-container-role-spacing-above",
+        "value": "34.5em"
+      },
+      {
+        "name": "profile-container-two-columns-above",
+        "value": "40em"
+      },
+      {
+        "name": "sponsor-container-logo-rail-above",
+        "value": "620px"
+      },
+      {
+        "name": "about-container-two-columns-above",
+        "value": "960px"
+      },
+      {
+        "name": "about-container-location-leading-above",
+        "value": "400px"
+      },
+      {
+        "name": "footer-container-seal-inline-above",
+        "value": "520px"
+      },
+      {
+        "name": "statement-container-wide-trapezoid-above",
+        "value": "767px"
       }
     ]
   },
   "components": [
     {
-      "name": "Navigation Link",
+      "name": "Navigation link",
       "kind": "nav",
       "refersTo": "nav-link",
-      "description": "Plain inherited-color link with underline on hover.",
-      "html": "<a class=\"ds-nav-link\" href=\"#\">Board</a>",
-      "css": ".ds-nav-link { color: inherit; text-decoration: none; font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; } .ds-nav-link:hover { text-decoration: underline; } .ds-nav-link:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.25em; }"
+      "description": "Disclosure navigation link, with current-page and keyboard-focus states.",
+      "html": "<nav aria-label=\"Sample primary navigation\"><a class=\"ds-nav-link\" href=\"/about/\" aria-current=\"page\">About</a></nav>",
+      "css": ".ds-nav-link { font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; line-height: 1.5; align-items: center; display: inline-flex; color: var(--primary-clr, oklch(0.1867 0 0)); min-block-size: 2.75rem; padding-inline: 1rem; text-decoration: none; text-underline-offset: 0.28em; overflow-wrap: anywhere; } .ds-nav-link:hover, .ds-nav-link:focus-visible { text-decoration: underline; } .ds-nav-link[aria-current=\"page\"] { font-weight: 700; text-decoration: underline; text-decoration-color: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); } .ds-nav-link[aria-current=\"page\"]:hover { text-decoration-thickness: 0.12em; } .ds-nav-link:focus-visible { outline: 2px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); outline-offset: 0.2em; }"
     },
     {
-      "name": "Event Flyer Tile",
-      "kind": "card",
+      "name": "Donation campaign fallback",
+      "kind": "button",
+      "refersTo": "donate-link",
+      "description": "The actual campaign anchor used when Givebutter is unavailable, not a general-purpose native button.",
+      "html": "<a class=\"ds-donate\" href=\"https://givebutter.com/grwebdev-build-fund-23\" target=\"_blank\" rel=\"noopener noreferrer\">Donate to GRWebDev</a>",
+      "css": ".ds-donate { font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; line-height: 1.5; align-items: center; display: inline-flex; justify-content: center; min-block-size: 44px; max-inline-size: 100%; padding: 0.35em clamp(0.75rem, 3cqi, 1.15rem); background: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); color: var(--tertiary-clr, oklch(1 0 0)); font-weight: 700; border-radius: 0; text-align: center; overflow-wrap: anywhere; text-decoration: none; } .ds-donate:hover, .ds-donate:focus-visible { text-decoration: underline; text-decoration-thickness: 0.12em; text-underline-offset: 0.24em; } .ds-donate:focus-visible { outline: 2px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); outline-offset: 0.2em; }"
+    },
+    {
+      "name": "Native navigation disclosure",
+      "kind": "nav",
+      "refersTo": "navigation-disclosure",
+      "description": "Compact details/summary navigation with native open state. This sample shows the baseline, not wide-header placement.",
+      "html": "<nav class=\"ds-menu\" aria-label=\"Sample navigation\"><details><summary aria-label=\"Toggle navigation menu\"><span class=\"ds-menu-mark\" aria-hidden=\"true\"></span></summary><div class=\"ds-menu-content\"><a href=\"/board/\">Board</a><a href=\"/sponsors/\">Sponsors</a><a href=\"/about/\">About</a><a href=\"https://givebutter.com/grwebdev-build-fund-23\" target=\"_blank\" rel=\"noopener noreferrer\">Donate to GRWebDev</a></div></details></nav>",
+      "css": ".ds-menu { font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; line-height: 1.5; color: var(--primary-clr, oklch(0.1867 0 0)); background: var(--tertiary-clr, oklch(1 0 0)); position: relative; } .ds-menu summary { align-items: center; display: inline-flex; justify-content: center; inline-size: 2.75rem; block-size: 3.5rem; padding-inline: 0.75rem; list-style: none; cursor: pointer; } .ds-menu summary::-webkit-details-marker { display: none; } .ds-menu summary:focus-visible, .ds-menu a:focus-visible { outline: 2px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); outline-offset: 0.2em; } .ds-menu-mark, .ds-menu-mark::before, .ds-menu-mark::after { display: block; inline-size: 1.25rem; block-size: 2px; background: currentColor; position: relative; transition: transform 160ms ease-out; } .ds-menu-mark::before, .ds-menu-mark::after { content: \"\"; position: absolute; inset-inline-start: 0; } .ds-menu-mark::before { inset-block-start: -0.4rem; } .ds-menu-mark::after { inset-block-start: 0.4rem; } .ds-menu details[open] .ds-menu-mark { background: transparent; } .ds-menu details[open] .ds-menu-mark::before { inset-block-start: 0; transform: rotate(45deg); } .ds-menu details[open] .ds-menu-mark::after { inset-block-start: 0; transform: rotate(-45deg); } .ds-menu-content { background: var(--tertiary-clr, oklch(1 0 0)); padding: 0.5rem; max-block-size: 60svh; overflow-y: auto; box-shadow: 0 0.4rem 0.45rem oklch(from var(--primary-clr, oklch(0.1867 0 0)) l c h / 0.2); } .ds-menu a { align-items: center; display: flex; min-block-size: 2.75rem; padding-inline: 1rem; color: inherit; text-decoration: none; overflow-wrap: anywhere; } .ds-menu a:hover, .ds-menu a:focus-visible { text-decoration: underline; } @media (prefers-reduced-motion: reduce) { .ds-menu-mark, .ds-menu-mark::before, .ds-menu-mark::after { transition-duration: 0.01ms; } }"
+    },
+    {
+      "name": "Event link caption",
+      "kind": "custom",
       "refersTo": "event-flyer",
-      "description": "Full image event tile with no decorative frame. Flyers load lazily with asynchronous decoding and normal priority.",
-      "html": "<a class=\"ds-event-flyer\" href=\"#\"><img src=\"/event-flyers/2026-05-26-running-local-ai-agents-light.jpg\" alt=\"GRWebDev event flyer\"></a>",
-      "css": ".ds-event-flyer { display: block; color: inherit; text-decoration: none; } .ds-event-flyer img { display: block; width: 100%; height: auto; border-radius: 0; } .ds-event-flyer:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.35em; }"
+      "description": "Readable caption and link states beneath a flyer. The image is omitted from this standalone sample; EventGrid supplies responsive assets.",
+      "html": "<a class=\"ds-event\" href=\"https://www.meetup.com/grwebdev/events/316909823/\" target=\"_blank\" rel=\"noopener noreferrer\"><div class=\"ds-event-details\"><h3 dir=\"auto\">Code + Commiserate <svg aria-hidden=\"true\" focusable=\"false\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6\" /> <path d=\"m21 3-9 9\" /> <path d=\"M15 3h6v6\" /> </svg></h3><p><time datetime=\"2026-11-13\">November 13, 2026</time></p><p><time datetime=\"08:00\">8:00 AM Eastern Time</time></p><p dir=\"auto\">Online event</p><span class=\"ds-event-destination\">Event details on Meetup</span></div></a>",
+      "css": ".ds-event { font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; line-height: 1.5; display: block; min-inline-size: 0; color: var(--primary-clr, oklch(0.1867 0 0)); text-decoration: none; border-block-end: 4px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); } .ds-event:focus-visible { outline: 2px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); outline-offset: 0.2em; } .ds-event-details { margin-block-start: 0.75em; padding-block-end: 1em; overflow-wrap: anywhere; } .ds-event h3 { margin: 0; font-size: 1em; font-weight: 700; text-wrap: balance; } .ds-event h3 svg { display: inline-block; inline-size: 1em; block-size: 1em; margin-inline-start: 0.2em; vertical-align: -0.125em; } .ds-event p { margin: 0.25em 0 0; text-wrap: pretty; } .ds-event:hover h3, .ds-event:focus-visible h3 { text-decoration: underline; text-decoration-color: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); text-decoration-thickness: 0.12em; text-underline-offset: 0.2em; } .ds-event-destination { display: block; margin-block-start: 0.5em; text-decoration: underline; }"
     },
     {
-      "name": "Image Text Row",
+      "name": "Stacked board title",
       "kind": "custom",
       "refersTo": "person-list-item",
-      "description": "Compact board or sponsor row with a square image and text.",
-      "html": "<article class=\"ds-image-text\"><img src=\"/board-images/edward-grant.png\" alt=\"Board member\"><div><h2>President: Name</h2><p>Short community description.</p></div></article>",
-      "css": ".ds-image-text { display: grid; grid-template-columns: auto 1fr; column-gap: 2ch; align-items: start; font-family: \"Open Sans Variable\", sans-serif; color: var(--primary-clr); } .ds-image-text img { width: 100px; height: 100px; object-fit: cover; border-radius: 0; } .ds-image-text h2 { margin: 0; padding-block-start: 0.175em; line-height: 1cap; } .ds-image-text p { margin-block-start: 1em; text-wrap: balance; }"
+      "description": "Board role/name typography. Portrait and biography are outside this focused sample.",
+      "html": "<a class=\"ds-person\" href=\"/board/james-lund\"><h2><span class=\"ds-person-role\">President</span><span class=\"ds-person-name\">James Lund</span></h2></a>",
+      "css": ".ds-person { font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; line-height: 1.5; display: block; min-inline-size: 0; color: var(--primary-clr, oklch(0.1867 0 0)); text-decoration: none; } .ds-person h2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.15em; margin: 0; font-size: calc(2 / 3 * 1.5em + 1 / 3 * 1.5em * var(--fluid-font-progress, 1)); font-weight: 700; line-height: 1.125; } .ds-person-role, .ds-person-name { display: block; min-inline-size: 0; overflow-wrap: anywhere; } .ds-person-role { color: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); font-size: 0.75em; text-box: trim-start cap text; } .ds-person-name { text-box: cap alphabetic; } .ds-person:hover :where(.ds-person-role, .ds-person-name), .ds-person:focus-visible :where(.ds-person-role, .ds-person-name) { text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 0.1em; text-underline-offset: 0.1667em; } .ds-person:focus-visible { outline: 2px solid var(--secondary-clr, oklch(0.4835 0.1984 29.23)); outline-offset: 0.2em; }"
     },
     {
-      "name": "Black Red Community Section",
+      "name": "Black/red community band",
       "kind": "custom",
       "refersTo": "black-red-section",
-      "description": "Signature poster section using Stage Black, Signal Red, and Room Light.",
-      "html": "<section class=\"ds-black-red\"><div class=\"ds-signal-shape\"></div><p>At GRWebDev, everyone belongs.</p></section>",
-      "css": ".ds-black-red { position: relative; overflow: hidden; background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; font-variation-settings: \"wght\" 300, \"wdth\" 75; font-size: clamp(0.875em, 2.625cqi + 0.25em, 2.375em); line-height: 2cap; padding: 1cap; border-radius: 0; } .ds-black-red p { position: relative; z-index: 1; margin-block-start: 1cap; } .ds-signal-shape { position: absolute; inset-block-end: 0; inset-inline-end: 0; width: 42%; height: 65%; background: var(--secondary-clr); clip-path: polygon(22% 0%, 100% 0, 100% 100%, 48% 100%); }"
-    },
-    {
-      "name": "Plain Primary Button",
-      "kind": "button",
-      "refersTo": "button-primary",
-      "description": "A future-compatible button derived from the existing link and black/red vocabulary.",
-      "html": "<button class=\"ds-button-primary\">Attend an event</button>",
-      "css": ".ds-button-primary { appearance: none; border: 1px solid var(--primary-clr); border-radius: 0; background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; font-size: 1.125rem; padding: 0.75em 1em; cursor: pointer; } .ds-button-primary:hover { text-decoration: underline; } .ds-button-primary:focus-visible { outline: 2px solid var(--secondary-clr); outline-offset: 0.25em; } .ds-button-primary:disabled { opacity: 0.55; cursor: not-allowed; }"
-    },
-    {
-      "name": "Hero",
-      "kind": "custom",
-      "refersTo": "hero",
-      "description": "Hero.astro accepts an imported image, default-slot text, and an optional headingId. Its responsive AVIF image has a WebP fallback and loads eagerly at high priority. This preview shows the fallback surface.",
-      "html": "<section class=\"ds-hero\"><div><h1>For the community, by the community.</h1><p>Meetups for the Grand Rapids web community.</p></div></section>",
-      "css": ".ds-hero { background: var(--primary-clr); color: var(--tertiary-clr); font-family: \"Open Sans Variable\", sans-serif; padding: clamp(3rem, 8vw, 6rem) 2ch; } .ds-hero > div { max-inline-size: 52rem; } .ds-hero h1 { margin: 0; font-size: clamp(2.25rem, 4.5vw, 4rem); line-height: 1.15; text-wrap: balance; } .ds-hero p { max-inline-size: 55ch; font-size: clamp(1.125rem, 1.6vw, 1.5rem); }"
+      "description": "Mission band with the source grid and polygon, scoped to a local container so it renders independently of page styles.",
+      "html": "<div class=\"ds-band-container\"><section class=\"ds-band\"><div class=\"ds-band-trapezoid\" aria-hidden=\"true\"></div><div class=\"ds-band-square\" aria-hidden=\"true\"></div><p>At GRWebDev, we’re developing a different kind of tech community, where everyone belongs.</p></section></div>",
+      "css": ".ds-band-container { container: ds-band / inline-size; } .ds-band { display: grid; grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(10cqi, calc(var(--main-max-width, 400px) / 10)) [main-start] min(10cqi, calc(var(--main-max-width, 400px) / 10)) [indent-start] min(40cqi, var(--main-max-width, 400px)) [indent-end] min(10cqi, calc(var(--main-max-width, 400px) / 10)) [main-end] min(10cqi, calc(var(--main-max-width, 400px) / 10)) [outdent-end] minmax(0.5rem, auto) [full-end]; background: var(--primary-clr, oklch(0.1867 0 0)); color: var(--tertiary-clr, oklch(1 0 0)); font-family: \"Open Sans Variable\", sans-serif; font-size: clamp(0.875em, 2.625cqi + 0.25em, 2.375em); line-height: 2cap; margin-block-start: 1cap; padding-block-end: 1cap; border-radius: 0; } .ds-band-trapezoid { grid-column: indent-end / outdent-end; grid-row: 1; margin-inline-end: -1px; margin-block-end: -1cap; background: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); clip-path: polygon(2% 0%, 100% 0, 100% 100%, 28% 100%); } .ds-band-square { grid-column: outdent-end / full-end; grid-row: 1; margin-block-end: -1cap; background: var(--secondary-clr, oklch(0.4835 0.1984 29.23)); } .ds-band p { grid-column: outdent-start / outdent-end; grid-row: 1; z-index: 1; margin: 1cap 0 0; font-variation-settings: \"wght\" 300, \"wdth\" 75; text-wrap: pretty; } @container ds-band (width > 767px) { .ds-band-trapezoid { clip-path: polygon(22% 0%, 100% 0, 100% 100%, 48% 100%); } }"
     }
   ],
   "narrative": {
     "northStar": "Community Bulletin Board",
-    "overview": "The GRWebDev system should feel like a real local notice board outside a well-used event room: practical, public, friendly, and a little handmade. It is not a corporate conference brand. It should help newcomers understand what is happening, who is involved, and where they can show up without needing insider status.",
+    "overview": "The GRWebDev system should feel like a real local notice board outside a well-used event room: practical, public, friendly, and a little handmade. It is not a corporate conference brand. It should help newcomers understand what is happening, who is involved, and where they can show up without needing insider status.\n\nOpen Sans, Stage Black, Signal Red, and Room Light frame real community photographs, event flyers, board portraits, sponsor marks, and venue maps. Outdented grid tracks and the clipped black/red statement band provide the poster-like structure. Content lists stay flat; depth is reserved for the sticky header and its disclosure panel.\n\nThis guide records the current implementation, not a new visual direction. Token values come from `src/styles/`; component exceptions are documented below. Relative OKLCH values depend on the color variables in `src/styles/color.css`. The sidecar extends this guide with source-derived ramps, motion, breakpoints, and interactive component samples.",
     "keyCharacteristics": [
       "Public, local, and easy to scan.",
       "Poster-like blocks instead of decorative cards.",
@@ -207,25 +325,30 @@
         "section": "typography"
       },
       {
+        "name": "The Available Space Rule",
+        "body": "Keep component reflow tied to the container that owns the content. Do not shrink names or logistics to imitate a desktop layout at enlarged text sizes.",
+        "section": "layout"
+      },
+      {
         "name": "The Flat Bulletin Rule",
         "body": "Do not add card shadows to make lists feel designed. Use spacing, imagery, typography, and grid position first.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do use real community artifacts: event flyers, board photos, sponsor logos, venue maps, and organization details.",
-      "Do keep layouts public and scannable, especially for dates, names, locations, and next steps.",
-      "Do preserve the Stage Black, Signal Red, and Room Light relationship.",
-      "Do use the outdent grid to create a confident local-poster layout.",
-      "Do support WCAG 2.2 AA, reduced motion preferences, keyboard-friendly navigation, visible focus states, and contrast that does not rely on red and black alone."
+      "Use real community artifacts: event flyers, board photos, sponsor logos, venue maps, and organization details.",
+      "Keep dates, names, locations, and next steps readable independently of images or third-party scripts.",
+      "Preserve the Stage Black, Signal Red, and Room Light relationship.",
+      "Use the outdent grid and component-owned container queries for responsive composition.",
+      "Preserve keyboard focus, native disclosure behavior, reduced-motion handling, and no-script access. Target WCAG 2.2 AA without claiming that documentation alone verifies conformance."
     ],
     "donts": [
-      "Don't make the site feel corporate.",
-      "Don't use polished enterprise sameness, stock-photo professionalism, investor-deck language, generic SaaS sections, or sterile tech conference aesthetics.",
-      "Don't imply exclusivity, insider status, hustle culture, or a narrow definition of who counts as a developer.",
-      "Don't replace real community imagery with decorative abstract panels.",
-      "Don't add side-stripe card borders, gradient text, glassmorphism, identical icon-card grids, or hero-metric templates.",
-      "Don't use Signal Red as wallpaper. It should carry direction or emphasis."
+      "Make the site feel corporate, exclusive, or like a generic SaaS or conference template.",
+      "Replace real community imagery with decorative abstract panels.",
+      "Add side-stripe card borders, gradient text, glassmorphism, identical icon-card grids, or hero-metric templates.",
+      "Use Signal Red as wallpaper or color alone to communicate state.",
+      "Hide event logistics inside flyers, crop sponsor logos into squares, truncate names, or shrink text to force a layout.",
+      "Treat third-party widget styling or hypothetical future controls as an implemented native design system."
     ]
   }
 }
