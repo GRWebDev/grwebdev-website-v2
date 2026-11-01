@@ -13,11 +13,19 @@ interface Props {
 	old: number;
 	hideFlyers?: boolean;
 	heading?: string;
+	prioritizeFirstImage?: boolean;
 }
 
-const { gridSize, old, hideFlyers = false, heading = "Events" } = Astro.props;
+const {
+	gridSize,
+	old,
+	hideFlyers = false,
+	heading = "Events",
+	prioritizeFirstImage = false,
+} = Astro.props;
 const headingId = `${heading.toLowerCase()}-events-heading`;
 const baseUrl = import.meta.env.BASE_URL;
+const fallbackImageSizes = "min(80vw, 620px)";
 
 const events = await getCollection("events");
 const eventsToUse: typeof events = [];
@@ -183,20 +191,25 @@ while (
 				{eventsToUse.map((event, index) => {
 					const image =
 						index % 2 === 0 ? event.data.images.light : event.data.images.dark;
-					const isLikelyFirstVisible = index === (hideFlyers ? 2 : 0);
+					const isPriorityImage =
+						prioritizeFirstImage && index === (hideFlyers ? 2 : 0);
 
 					return (
 						<a href={event.data.url} target="_blank" rel="noopener noreferrer">
 							<Image
 								src={image.src}
 								alt=""
-								decoding={isLikelyFirstVisible ? "sync" : "async"}
-								fetchpriority={isLikelyFirstVisible ? "high" : "auto"}
+								decoding="async"
+								fetchpriority={isPriorityImage ? "high" : "auto"}
 								layout="full-width"
-								loading={isLikelyFirstVisible ? "eager" : "lazy"}
+								loading={isPriorityImage ? "eager" : "lazy"}
 								quality="low"
-								sizes="(min-width: 1281px) 25vw, (min-width: 961px) 33vw, (min-width: 621px) 50vw, 100vw"
-								widths={[360, 720]}
+								sizes={
+									isPriorityImage
+										? fallbackImageSizes
+										: `auto, ${fallbackImageSizes}`
+								}
+								widths={[320, 480, 640, 960, 1280]}
 							/>
 							<div class="event-details">
 								<h3 dir="auto">

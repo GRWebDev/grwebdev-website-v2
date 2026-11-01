@@ -48,6 +48,12 @@ p {
 
 main {
 	padding-block-end: 3em;
+	scroll-margin-block-start: 6rem;
+
+	&:focus-visible {
+		outline: 2px solid var(--secondary-clr);
+		outline-offset: -2px;
+	}
 }
 
 a {
