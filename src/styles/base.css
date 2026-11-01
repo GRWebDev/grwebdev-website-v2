@@ -114,3 +114,14 @@ p:has(small) {
 		font-size: inherit;
 	}
 }
+
+main p a {
+	text-decoration: underline;
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 0.16em;
+
+	&:hover,
+	&:focus-visible {
+		text-decoration-thickness: 0.12em;
+	}
+}
