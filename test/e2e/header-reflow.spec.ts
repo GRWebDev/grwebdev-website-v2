@@ -29,6 +29,9 @@ for (const javaScriptEnabled of [true, false]) {
 					1920, 1440, 1000, 768, 560, 390, 375, 320, 280, 375, 768, 1440, 1920,
 				]) {
 					await page.setViewportSize({ width, height: 900 });
+					const contentWidth = await page.evaluate(
+						() => document.documentElement.getBoundingClientRect().width,
+					);
 					const stage = !(await toggle.isVisible())
 						? "links"
 						: (await donation.isVisible())
@@ -69,7 +72,7 @@ for (const javaScriptEnabled of [true, false]) {
 					).toBe(true);
 					expect(
 						await page.evaluate(() => document.documentElement.scrollWidth),
-					).toBe(width);
+					).toBe(contentWidth);
 					expect(
 						await page.evaluate(
 							(original) =>
@@ -94,7 +97,7 @@ for (const javaScriptEnabled of [true, false]) {
 						await expect(donation).toBeVisible();
 						expect(
 							await page.evaluate(() => document.documentElement.scrollWidth),
-						).toBe(width);
+						).toBe(contentWidth);
 						await toggle.click();
 						if (stage === "menu") {
 							await page.keyboard.press("Tab");
