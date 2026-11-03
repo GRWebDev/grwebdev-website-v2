@@ -217,7 +217,7 @@ The skip link becomes visible on keyboard focus and targets `main` with `tabinde
 
 ### Homepage hero
 
-Use the real community photograph, centered and cover-sized beneath a 55% black overlay with white text. Generate WebP variants from the original image without introducing different crops. Container ranges select 768px sources through 480px, 1024px through 1024px, 1440px through 1440px, and 1920px beyond that; image-set supplies double-resolution variants where supported.
+Use the real community photograph, centered and cover-sized beneath a 55% black overlay with white text. Generate AVIF variants at quality 45 with WebP fallbacks from the original image without introducing different crops. Container ranges select 768px sources through 480px, 1024px through 1024px, 1440px through 1440px, and 1920px beyond that; image-set supplies double-resolution variants where supported. Typed image-set candidates prefer AVIF while downloading only the supported format at the matching density.
 
 Declare the URL variables once on the section. Assign every range inside a container query so initialization does not first download the wrong fallback image. Only browsers without container queries receive the smallest-range fallback outside those queries; browsers without image-set retain a single-resolution background. Do not add client-side image-selection code.
 
