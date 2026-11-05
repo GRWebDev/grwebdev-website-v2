@@ -8,7 +8,7 @@
 	justify-content: center;
 	min-block-size: 44px;
 	max-inline-size: 100%;
-	padding: 0.35em clamp(0.75rem, 3cqi, 1.15rem);
+	padding: 0.35em calc(0.667em + 0.333em * var(--fluid-font-progress));
 	overflow-wrap: anywhere;
 	text-align: center;
 
@@ -58,9 +58,9 @@
 	align-items: center;
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
-	gap: clamp(0.5rem, 2cqi, 1.5rem);
-	min-block-size: 4.25rem;
-	padding-block: 0.5rem;
+	gap: calc(0.667em + 0.667em * var(--fluid-font-progress));
+	min-block-size: 3.75em;
+	padding-block: 0.5em;
 	position: relative;
 }
 
@@ -72,7 +72,7 @@
 	min-inline-size: 0;
 
 	svg {
-		inline-size: clamp(4.7rem, 15cqi, 6.4rem);
+		inline-size: calc(4.25em + 1.5em * var(--fluid-font-progress));
 		max-inline-size: 100%;
 	}
 }
@@ -91,15 +91,18 @@
 	a {
 		align-items: center;
 		display: flex;
-		font-size: 1.125rem;
-		min-block-size: 2.75rem;
-		padding-inline: 1rem;
+		min-block-size: 2.5em;
+		padding-inline: 1em;
 		overflow-wrap: anywhere;
+
+		@container (width >= 40em) {
+			padding-inline: 0;
+		}
 	}
 }
 
 .site-header__donation {
-	padding: 0.5rem 1rem;
+	padding: 0.5em 1em;
 }
 
 .site-header__donation,
@@ -110,9 +113,9 @@ givebutter-widget {
 
 .site-header__menu-content {
 	background: var(--tertiary-clr);
-	box-shadow: 0 0.4rem 0.45rem oklch(from var(--gray-100) l c h / 0.2);
+	box-shadow: 0 0.4em 0.45em oklch(from var(--gray-100) l c h / 0.2);
 	inset-block-start: 100%;
-	inset-inline: -0.5rem;
+	inset-inline: -0.5em;
 	max-block-size: 60svh;
 	overflow-y: auto;
 	position: absolute;
@@ -123,14 +126,12 @@ givebutter-widget {
 
 	summary {
 		align-items: center;
-		block-size: 3.5rem;
 		box-sizing: border-box;
 		cursor: pointer;
 		display: inline-flex;
-		inline-size: 2.75rem;
+		font-size: 1.5em;
 		justify-content: center;
 		list-style: none;
-		padding-inline: 0.75rem;
 
 		&::-webkit-details-marker {
 			display: none;
@@ -143,43 +144,26 @@ givebutter-widget {
 	}
 
 	.site-header__menu-mark,
-	.site-header__menu-mark::before,
-	.site-header__menu-mark::after {
-		background: currentColor;
-		block-size: 2px;
+	.site-header__menu-close {
 		display: block;
-		inline-size: 1.25rem;
-		position: relative;
-		transition: transform 160ms ease-out;
-	}
-
-	.site-header__menu-mark::before,
-	.site-header__menu-mark::after {
-		content: "";
-		inset-inline-start: 0;
-		position: absolute;
-	}
-
-	.site-header__menu-mark::before {
-		inset-block-start: -0.4rem;
-	}
-
-	.site-header__menu-mark::after {
-		inset-block-start: 0.4rem;
+		flex-shrink: 0;
+		width: 1em;
+		height: 1em;
 	}
 
 	&[open] .site-header__menu-mark {
-		background: transparent;
+		display: none;
+		opacity: 0;
 	}
 
-	&[open] .site-header__menu-mark::before {
-		inset-block-start: 0;
-		transform: rotate(45deg);
+	.site-header__menu-close {
+		display: none;
+		opacity: 0;
 	}
 
-	&[open] .site-header__menu-mark::after {
-		inset-block-start: 0;
-		transform: rotate(-45deg);
+	&[open] .site-header__menu-close {
+		display: block;
+		opacity: 1;
 	}
 }
 
@@ -207,9 +191,9 @@ givebutter-widget {
 
 		.site-header__page-links {
 			background: var(--tertiary-clr);
-			box-shadow: 0 0.4rem 0.45rem oklch(from var(--gray-100) l c h / 0.2);
+			box-shadow: 0 0.4em 0.45em oklch(from var(--gray-100) l c h / 0.2);
 			inset-block-start: 100%;
-			inset-inline: -0.5rem;
+			inset-inline: -0.5em;
 			max-block-size: 60svh;
 			overflow-y: auto;
 			position: absolute;
@@ -235,7 +219,7 @@ givebutter-widget {
 	@container site-header (width >= 40em) {
 		.site-header__bar {
 			grid-template-columns: auto minmax(0, 1fr) auto;
-			min-block-size: 5rem;
+			min-block-size: 4.5em;
 		}
 
 		.site-header__mobile-menu summary {
@@ -247,20 +231,13 @@ givebutter-widget {
 			background: none;
 			box-shadow: none;
 			display: flex;
-			gap: clamp(1rem, 2.5cqi, 2rem);
+			gap: calc(0.85em + 1em * var(--fluid-font-progress));
 			grid-column: 2;
 			grid-row: 1;
 			justify-self: end;
 			max-block-size: none;
 			overflow: visible;
 			position: static;
-
-			a {
-				font-size: 1rem;
-				min-block-size: 44px;
-				padding-inline: 0;
-				white-space: nowrap;
-			}
 
 			li + li {
 				position: relative;
@@ -270,7 +247,10 @@ givebutter-widget {
 					block-size: 1em;
 					content: "";
 					inset-block: 0;
-					inset-inline-start: calc(clamp(1rem, 2.5cqi, 2rem) / -2);
+					inset-inline-start: calc(
+						(0.85em + 1em * var(--fluid-font-progress)) /
+						-2
+					);
 					margin-block: auto;
 					position: absolute;
 				}
