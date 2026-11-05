@@ -12,7 +12,7 @@ const [
 	largeRetina,
 	wideRetina,
 ] = await Promise.all(
-	[768, 1024, 1440, 1536, 1920, 2048, 2880, 3840].map(async (width) => {
+	[480, 1024, 1440, 960, 1920, 2048, 2880, 3840].map(async (width) => {
 		const [webp, avif] = await Promise.all([
 			getImage({ src: heroImage, width, format: "webp" }),
 			getImage({ src: heroImage, width, format: "avif", quality: 45 }),

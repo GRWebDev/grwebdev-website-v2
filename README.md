@@ -65,6 +65,10 @@ GIVEBUTTER_LIVE=1 npm run test:e2e -- test/e2e/donation-live.spec.ts
 
 The live tests click Donate, choose $25, and continue to the payment summary at desktop and phone widths. They attach screenshots of both steps and stop before entering payment details or submitting a donation.
 
+## Event freshness
+
+The GitHub Pages deployment workflow rebuilds the site daily at 12:17 a.m. in `America/Detroit`, as well as on pushes to `main` and manual runs. This moves past events out of Upcoming after their local calendar day ends, even when the content has not changed. GitHub may delay scheduled runs. The rebuild uses committed event content; importing new Meetup events still requires the updater below.
+
 ## Updating Events
 
 The site can update event entries from the GRWebDev Meetup iCal feed:
