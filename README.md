@@ -57,6 +57,10 @@ npx playwright install chromium --only-shell
 
 The browser tests start an isolated copy of the site and clean it up afterward. Fixture content uses entry IDs that differ from the generated route slugs, so the tests exercise the board and sponsor missing-entry guards. They verify HTTP 404, the original URL, no redirect, and the custom error page. GitHub Actions runs the full suite on all pull requests.
 
+## Event freshness
+
+The GitHub Pages deployment workflow rebuilds the site daily at 12:17 a.m. in `America/Detroit`, as well as on pushes to `main` and manual runs. This moves past events out of Upcoming after their local calendar day ends, even when the content has not changed. GitHub may delay scheduled runs. The rebuild uses committed event content; importing new Meetup events still requires the updater below.
+
 ## Updating Events
 
 The site can update event entries from the GRWebDev Meetup iCal feed:

@@ -140,7 +140,7 @@ The black/red identity combines dark text and statement bands with light page su
 
 ## Typography
 
-Open Sans Variable is the sole authored family, with sans-serif fallback. The self-hosted Latin font loads with `font-display: swap`, supports weights from 300 to 800, and supports widths from 75% to 100%. The condensed-light class gives mission copy its narrow poster voice; ordinary body and navigation text remain at the normal width.
+Open Sans is the chosen typeface for GRWebDev. The implementation uses the variable font under the CSS family name `"Open Sans Variable"`, with `sans-serif` as the fallback. The self-hosted Latin font loads with `font-display: swap`, supports weights from 300 to 800, and supports widths from 75% to 100%. The condensed-light class gives mission copy its narrow poster voice; ordinary body and navigation text remain at the normal width.
 
 ### Hierarchy
 
@@ -158,7 +158,7 @@ Open Sans Variable is the sole authored family, with sans-serif fallback. The se
 - Board and sponsor titles use bold stacked names with line-height 1.125. Board roles are smaller (`0.75em`) and red; names retain cap-to-alphabetic trimming. Do not apply their compact title treatment to general body copy.
 - Footer h2 headings use `0.925em`. Text-box trimming is a local alignment enhancement, not a replacement for readable line-height.
 
-**The One Family Rule.** Stay with Open Sans Variable unless there is a deliberate brand reason to add another family. The current system gets its range from weight, width, scale, and layout.
+**The One Family Rule.** Use Open Sans throughout unless there is a deliberate brand reason to add another family. The current system gets its range from weight, width, scale, and layout.
 
 **The Plain Invitation Rule.** Typography should sound and look like people inviting people. Avoid all-caps institutional labels and over-styled conference language.
 
@@ -205,7 +205,7 @@ The black/red section uses a clipped trapezoid plus an adjacent red block. Its p
 
 ### Navigation and donation
 
-Keep one logo, one link list, and one donation instance inside native details/summary markup. The logo width is fluid (`clamp(4.7rem, 15cqi, 6.4rem)`). The compact bar has a minimum height of 4.25rem; the wide bar uses 5rem. The summary is 2.75rem wide and 3.5rem tall; page links and the campaign fallback retain at least 44px target height.
+Keep one logo, one link list, and one donation instance inside native details/summary markup. The logo width is fluid (`clamp(4.7rem, 15cqi, 6.4rem)`). The compact bar has a minimum height of 4.25rem; the wide bar uses 5rem. The summary keeps its padded icon and has a minimum 44px by 44px hit area; page links and the campaign fallback retain at least 44px target height.
 
 Links underline on hover or visible keyboard focus. The current page also has bold text, a red underline, and `aria-current="page"`. Preserve native disclosure open state when resizing. The menu mark transitions with `transform 160ms ease-out`; reduced-motion rules shorten transitions.
 
@@ -217,7 +217,7 @@ The skip link becomes visible on keyboard focus and targets `main` with `tabinde
 
 ### Homepage hero
 
-Use the real community photograph, centered and cover-sized beneath a 55% black overlay with white text. Generate AVIF variants at quality 45 with WebP fallbacks from the original image without introducing different crops. Container ranges select 768px sources through 480px, 1024px through 1024px, 1440px through 1440px, and 1920px beyond that; image-set supplies double-resolution variants where supported. Typed image-set candidates prefer AVIF while downloading only the supported format at the matching density.
+Use the real community photograph, centered and cover-sized beneath a 55% black overlay with white text. Generate AVIF variants at quality 45 with WebP fallbacks from the original image without introducing different crops. Container ranges select 480px sources through 480px, 1024px through 1024px, 1440px through 1440px, and 1920px beyond that; image-set supplies double-resolution variants where supported. Typed image-set candidates prefer AVIF while downloading only the supported format at the matching density.
 
 Declare the URL variables once on the section. Assign every range inside a container query so initialization does not first download the wrong fallback image. Only browsers without container queries receive the smallest-range fallback outside those queries; browsers without image-set retain a single-resolution background. Do not add client-side image-selection code.
 

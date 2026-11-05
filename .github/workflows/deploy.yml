@@ -5,6 +5,10 @@ on:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
+  # Reclassify events after the local calendar day changes, even without a push.
+  schedule:
+    - cron: "17 0 * * *"
+      timezone: "America/Detroit"
 
 permissions:
   contents: read

@@ -91,6 +91,9 @@ for (const javaScriptEnabled of [true, false]) {
 						await expect(links).toBeVisible();
 						await expect(donation).toBeVisible();
 					} else {
+						const target = await toggle.boundingBox();
+						expect(target?.width).toBeGreaterThanOrEqual(44);
+						expect(target?.height).toBeGreaterThanOrEqual(44);
 						await expect(links).toBeHidden();
 						await toggle.click();
 						await expect(links).toBeVisible();

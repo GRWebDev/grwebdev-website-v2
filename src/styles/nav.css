@@ -132,6 +132,10 @@ givebutter-widget {
 		font-size: 1.5em;
 		justify-content: center;
 		list-style: none;
+		min-inline-size: 44px;
+		min-block-size: 44px;
+		margin-inline-start: -0.35em;
+		padding: 0.35em;
 
 		&::-webkit-details-marker {
 			display: none;

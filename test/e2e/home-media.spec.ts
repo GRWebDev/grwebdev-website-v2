@@ -1,9 +1,9 @@
 import { expect, type Page, test } from "playwright/test";
 
 const screenSizes = [
-	{ width: 320, imageWidth: 768 },
-	{ width: 375, imageWidth: 768 },
-	{ width: 480, imageWidth: 768 },
+	{ width: 320, imageWidth: 480 },
+	{ width: 375, imageWidth: 480 },
+	{ width: 480, imageWidth: 480 },
 	{ width: 481, imageWidth: 1024 },
 	{ width: 768, imageWidth: 1024 },
 	{ width: 1024, imageWidth: 1024 },
@@ -149,7 +149,7 @@ for (const deviceScaleFactor of [1, 2]) {
 			const source = new URL(heroRequests[0]);
 			expect(source.searchParams.get("f")).toBe("webp");
 			expect(source.searchParams.get("w")).toBe(
-				String(768 * deviceScaleFactor),
+				String(480 * deviceScaleFactor),
 			);
 		});
 	});
