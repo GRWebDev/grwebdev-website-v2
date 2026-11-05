@@ -48,7 +48,7 @@ p {
 
 main {
 	padding-block-end: 3em;
-	scroll-margin-block-start: 6rem;
+	scroll-margin-block-start: 5em;
 
 	&:focus-visible {
 		outline: 2px solid var(--secondary-clr);
@@ -76,12 +76,12 @@ a {
 	background: var(--primary-clr);
 	color: var(--tertiary-clr);
 	display: inline-flex;
-	inset-block-start: 0.5rem;
-	inset-inline-start: 0.5rem;
+	inset-block-start: 0.5em;
+	inset-inline-start: 0.5em;
 	min-block-size: 44px;
-	padding: 0.5rem 0.75rem;
+	padding: 0.5em 0.75em;
 	position: fixed;
-	transform: translateY(calc(-100% - 1rem));
+	transform: translateY(calc(-100% - 1em));
 	z-index: 10;
 
 	&:focus-visible {

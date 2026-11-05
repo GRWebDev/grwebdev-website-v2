@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import ExternalLink from "../assets/icons/square-arrow-out-up-right.svg";
+import { SquareArrowOutUpRight } from "@lucide/astro";
 import {
 	formatEventDate,
 	formatEventTime,
@@ -220,7 +220,7 @@ while (
 							<div class="event-details">
 								<h3 dir="auto">
 									{event.data.name}
-									<ExternalLink aria-hidden="true" focusable="false" />
+									<SquareArrowOutUpRight aria-hidden="true" focusable="false" />
 								</h3>
 								<p>
 									<time datetime={event.data.date.toISOString().slice(0, 10)}>

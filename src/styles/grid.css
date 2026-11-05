@@ -34,7 +34,7 @@ body {
 nav.grid,
 section.grid {
 	display: grid;
-	grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(
+	grid-template-columns: [full-start] minmax(0.5em, auto) [outdent-start] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
 		) [main-start] min(10cqi, calc(var(--main-max-width) / 10)) [indent-start] min(
@@ -43,7 +43,7 @@ section.grid {
 		) [indent-end] min(10cqi, calc(var(--main-max-width) / 10)) [main-end] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
-		) [outdent-end] minmax(0.5rem, auto) [full-end];
+		) [outdent-end] minmax(0.5em, auto) [full-end];
 
 	> * {
 		grid-area: outdent;
