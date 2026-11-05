@@ -1,9 +1,9 @@
 import { expect, type Page, test } from "playwright/test";
 
 const screenSizes = [
-	{ width: 320, imageWidth: 768 },
-	{ width: 375, imageWidth: 768 },
-	{ width: 480, imageWidth: 768 },
+	{ width: 320, imageWidth: 480 },
+	{ width: 375, imageWidth: 480 },
+	{ width: 480, imageWidth: 480 },
 	{ width: 481, imageWidth: 1024 },
 	{ width: 768, imageWidth: 1024 },
 	{ width: 1024, imageWidth: 1024 },
@@ -89,6 +89,7 @@ for (const deviceScaleFactor of [1, 2]) {
 				expect(new URL(heroRequests[0]).searchParams.get("w")).toBe(
 					String(imageWidth * deviceScaleFactor),
 				);
+				expect(new URL(heroRequests[0]).searchParams.get("f")).toBe("avif");
 				await expect(page.getByRole("heading", { level: 1 })).toHaveText(
 					"For the community, by the community.",
 				);
@@ -115,6 +116,42 @@ for (const deviceScaleFactor of [1, 2]) {
 				});
 			});
 		}
+	});
+}
+
+for (const deviceScaleFactor of [1, 2]) {
+	test.describe(`hero format fallback at ${deviceScaleFactor}x density`, () => {
+		test.use({ deviceScaleFactor, javaScriptEnabled: false });
+
+		test("loads only WebP when AVIF is unsupported", async ({ page }) => {
+			await setContentWidth(page, 375);
+			await page.route("http://127.0.0.1:4397/", async (route) => {
+				const response = await route.fetch();
+				await route.fulfill({
+					response,
+					body: (await response.text()).replaceAll(
+						"image/avif",
+						"image/unsupported",
+					),
+				});
+			});
+			const heroRequests: string[] = [];
+			page.on("request", (request) => {
+				if (
+					request.resourceType() === "image" &&
+					request.url().includes("hero")
+				) {
+					heroRequests.push(request.url());
+				}
+			});
+			await page.goto("/", { waitUntil: "networkidle" });
+			expect(heroRequests).toHaveLength(1);
+			const source = new URL(heroRequests[0]);
+			expect(source.searchParams.get("f")).toBe("webp");
+			expect(source.searchParams.get("w")).toBe(
+				String(480 * deviceScaleFactor),
+			);
+		});
 	});
 }
 

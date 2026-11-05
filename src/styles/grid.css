@@ -26,10 +26,15 @@ body {
 	container: container / inline-size;
 }
 
+.image-text > * {
+	min-inline-size: 0;
+	max-inline-size: 100%;
+}
+
 nav.grid,
 section.grid {
 	display: grid;
-	grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(
+	grid-template-columns: [full-start] minmax(0.5em, auto) [outdent-start] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
 		) [main-start] min(10cqi, calc(var(--main-max-width) / 10)) [indent-start] min(
@@ -38,7 +43,7 @@ section.grid {
 		) [indent-end] min(10cqi, calc(var(--main-max-width) / 10)) [main-end] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
-		) [outdent-end] minmax(0.5rem, auto) [full-end];
+		) [outdent-end] minmax(0.5em, auto) [full-end];
 
 	> * {
 		grid-area: outdent;
@@ -93,11 +98,6 @@ section.grid {
 	grid-template-areas: "image image" "title title" "body body";
 	column-gap: 2ch;
 
-	> * {
-		min-inline-size: 0;
-		max-inline-size: 100%;
-	}
-
 	.title,
 	.body {
 		overflow-wrap: anywhere;
@@ -146,6 +146,32 @@ section.grid {
 		text-decoration-color: currentColor;
 		text-decoration-thickness: 0.1em;
 		text-underline-offset: 0.1667em;
+	}
+
+	.board-title {
+		display: block;
+		min-inline-size: 0;
+		overflow-wrap: anywhere;
+		font-weight: 700;
+		line-height: 1.125;
+		text-decoration: none;
+
+		&.stacked {
+			margin-block-start: 0;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.15em;
+		}
+
+		&.role {
+			color: var(--secondary-clr);
+			font-size: 0.75em;
+			text-box: trim-start cap text;
+		}
+
+		&.name {
+			text-box: cap alphabetic;
+		}
 	}
 
 	&.large {
@@ -204,31 +230,5 @@ section.grid {
 	a:has(.board-title.stacked) {
 		text-decoration: none;
 		align-self: end;
-	}
-
-	.board-title {
-		display: block;
-		min-inline-size: 0;
-		overflow-wrap: anywhere;
-		font-weight: 700;
-		line-height: 1.125;
-		text-decoration: none;
-
-		&.stacked {
-			margin-block-start: 0;
-			display: grid;
-			grid-template-columns: minmax(0, 1fr);
-			gap: 0.15em;
-		}
-
-		&.role {
-			color: var(--secondary-clr);
-			font-size: 0.75em;
-			text-box: trim-start cap text;
-		}
-
-		&.name {
-			text-box: cap alphabetic;
-		}
 	}
 }

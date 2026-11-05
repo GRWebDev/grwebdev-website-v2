@@ -27,6 +27,14 @@
 		"enabled": true,
 		"rules": {
 			"preset": "recommended",
+			"correctness": {
+				"noUnknownFunction": {
+					"level": "error",
+					"options": {
+						"ignore": ["progress"]
+					}
+				}
+			},
 			"suspicious": {
 				"noExplicitAny": "error"
 			}
