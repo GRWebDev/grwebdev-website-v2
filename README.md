@@ -57,6 +57,14 @@ npx playwright install chromium --only-shell
 
 The browser tests start an isolated copy of the site and clean it up afterward. Fixture content uses entry IDs that differ from the generated route slugs, so the tests exercise the board and sponsor missing-entry guards. They verify HTTP 404, the original URL, no redirect, and the custom error page. GitHub Actions runs the full suite on all pull requests.
 
+Donation regression tests check the Givebutter widget ID and the fallback campaign link with the widget blocked and JavaScript disabled. The live checkout tests are opt-in because they depend on Givebutter and its payment providers:
+
+```sh
+GIVEBUTTER_LIVE=1 npm run test:e2e -- test/e2e/donation-live.spec.ts
+```
+
+The live tests click Donate, choose $25, and continue to the payment summary at desktop and phone widths. They attach screenshots of both steps and stop before entering payment details or submitting a donation.
+
 ## Updating Events
 
 The site can update event entries from the GRWebDev Meetup iCal feed:
