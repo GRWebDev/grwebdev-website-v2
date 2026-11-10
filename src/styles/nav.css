@@ -169,7 +169,38 @@
 	}
 }
 
-@media (width >= 43rem) {
+@container body (width <= 14rem) {
+	.site-header__bar {
+		display: grid;
+		grid-template-areas:
+			"brand menu"
+			"donation donation";
+		grid-template-columns: minmax(0, 1fr) auto;
+		padding-block: 0.5rem;
+	}
+
+	.site-header__brand {
+		grid-area: brand;
+		margin-inline-end: 0;
+		min-inline-size: 0;
+
+		svg {
+			inline-size: min(4.7rem, 100%);
+		}
+	}
+
+	.site-header__mobile-menu {
+		grid-area: menu;
+	}
+
+	.site-header__donation {
+		grid-area: donation;
+		justify-self: start;
+		max-inline-size: 100%;
+	}
+}
+
+@container body (width >= 43rem) {
 	.site-header__bar {
 		min-block-size: 5rem;
 	}
