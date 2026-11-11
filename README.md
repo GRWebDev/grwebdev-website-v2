@@ -65,6 +65,10 @@ GIVEBUTTER_LIVE=1 npm run test:e2e -- test/e2e/donation-live.spec.ts
 
 The live tests click Donate, choose $25, and continue to the payment summary at desktop and phone widths. They attach screenshots of both steps and stop before entering payment details or submitting a donation.
 
+## Event freshness
+
+The GitHub Pages deployment workflow rebuilds the site daily at 12:17 a.m. in `America/Detroit`, as well as on pushes to `main` and manual runs. This moves past events out of Upcoming after their local calendar day ends, even when the content has not changed. GitHub may delay scheduled runs. The rebuild uses committed event content; importing new Meetup events still requires the updater below.
+
 ## Updating Events
 
 The site can update event entries from the GRWebDev Meetup iCal feed:
@@ -74,6 +78,16 @@ npm run update:events
 ```
 
 The updater compares Meetup events against local files in `src/content/Events/` by event date and Meetup URL. It creates missing event markdown files, updates stale Meetup URLs when the match is unambiguous, exports light and dark flyer images into `src/assets/event-flyers/`, and removes events and matching flyers that are six months old or older.
+
+### Event details
+
+Event entries can include a quoted `startTime` in 24-hour `HH:mm` format and a quoted `location` containing the venue/address or verified online attendance information. Times are local to the required IANA `timeZone`. The grid renders these details as text below the flyer and points to Meetup when a detail is unavailable.
+
+The updater imports start times and structured iCal `LOCATION` values, including folded lines. It refreshes supplied details on existing entries and retains manually verified locations when the feed omits them. Verify locations against the specific event or its flyer; do not infer them from recurring event names. Flyer images supplement the text rather than supplying the only event logistics.
+
+Live updates also read each event page JSON-LD before changing files. The importer converts the published start instant into the local `startTime` and `timeZone` fields and combines the public venue name and address into `location`. Online listings use "Online event" because the structured data does not expose private meeting-room details.
+
+Use `--details-only` to refresh existing event logistics without changing URLs, flyers, or removing old events. `--feed-file` stays offline unless `--page-file` is also supplied. `--page-file` requires `--event` to prevent applying one fixture to multiple events. Dry runs never fetch pages or write files.
 
 Start with a dry run when checking what will change:
 
@@ -87,6 +101,8 @@ npm run update:events -- --dry-run
 |:----------------|:---------------------------------------------------------------------|
 | `--dry-run`     | Print planned changes without writing files                          |
 | `--skip-flyers` | Create or update markdown without exporting flyer images             |
+| `--details-only` | Refresh page details for existing local events only                |
+| `--page-file` | Read event HTML from a local file, requires `--event`                  |
 | `--no-cleanup`  | Do not remove events older than six months                           |
 | `--event <url>` | Process one Meetup event URL from the iCal feed                      |
 | `--feed-file`   | Read iCal text from a local file instead of Meetup                   |

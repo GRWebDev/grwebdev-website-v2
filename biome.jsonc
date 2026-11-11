@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
@@ -27,6 +27,14 @@
 		"enabled": true,
 		"rules": {
 			"preset": "recommended",
+			"correctness": {
+				"noUnknownFunction": {
+					"level": "error",
+					"options": {
+						"ignore": ["progress"]
+					}
+				}
+			},
 			"suspicious": {
 				"noExplicitAny": "error"
 			}
@@ -38,6 +46,15 @@
 			"indentScriptAndStyle": true
 		},
 		"experimentalFullSupportEnabled": true
+	},
+	"markdown": {
+		"parser": {
+			"frontmatter": true
+		},
+		"formatter": {
+			"proseWrap": "preserve",
+			"formatEmbeds": false
+		}
 	},
 	"javascript": {
 		"formatter": {

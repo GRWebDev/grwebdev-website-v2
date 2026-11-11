@@ -1,0 +1,132 @@
+---
+import { getImage } from "astro:assets";
+import heroImage from "../assets/hero/hero.jpg";
+
+const [
+	small,
+	medium,
+	large,
+	smallRetina,
+	wide,
+	mediumRetina,
+	largeRetina,
+	wideRetina,
+] = await Promise.all(
+	[480, 1024, 1440, 960, 1920, 2048, 2880, 3840].map(async (width) => {
+		const [webp, avif] = await Promise.all([
+			getImage({ src: heroImage, width, format: "webp" }),
+			getImage({ src: heroImage, width, format: "avif", quality: 45 }),
+		]);
+		return { webp: `url("${webp.src}")`, avif: `url("${avif.src}")` };
+	}),
+);
+
+const imageSet = (standard: typeof small, retina: typeof small) =>
+	`image-set(${standard.avif} type("image/avif") 1x, ${retina.avif} type("image/avif") 2x, ${standard.webp} type("image/webp") 1x, ${retina.webp} type("image/webp") 2x)`;
+---
+
+<section
+	class="grid hero"
+	aria-labelledby="hero-heading"
+	style={{
+		"--small": small.webp,
+		"--medium": medium.webp,
+		"--large": large.webp,
+		"--wide": wide.webp,
+		"--smallRetina": smallRetina.webp,
+		"--mediumRetina": mediumRetina.webp,
+		"--largeRetina": largeRetina.webp,
+		"--wideRetina": wideRetina.webp,
+		"--smallSources": imageSet(small, smallRetina),
+		"--mediumSources": imageSet(medium, mediumRetina),
+		"--largeSources": imageSet(large, largeRetina),
+		"--wideSources": imageSet(wide, wideRetina),
+	}}
+>
+	<div class="hero__content">
+		<h1 id="hero-heading">For the community, by the community.</h1>
+		<p>
+			Grand Rapids Web Development Group is a group of tech enthusiasts in the
+			Grand Rapids, MI area, offering meetups and more.
+		</p>
+	</div>
+</section>
+
+<style>
+	.hero {
+		background-image:
+			linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), var(--hero-image);
+		background-color: var(--primary-clr);
+		color: #fff;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		@supports (background-image: image-set(url("") 1x)) {
+			background-image:
+				linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)),
+				image-set(var(--hero-image) 1x, var(--hero-image-retina) 2x);
+		}
+
+		@supports (background-image: image-set(url("") type("image/avif") 1x)) {
+			background-image:
+				linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)), var(--hero-sources);
+		}
+	}
+
+	@supports not (container-type: inline-size) {
+		.hero {
+			--hero-image: var(--small);
+			--hero-image-retina: var(--smallRetina);
+			--hero-sources: var(--smallSources);
+		}
+	}
+
+	@container (width <= 480px) {
+		.hero {
+			--hero-image: var(--small);
+			--hero-image-retina: var(--smallRetina);
+			--hero-sources: var(--smallSources);
+		}
+	}
+
+	@container (width > 480px) {
+		.hero {
+			--hero-image: var(--medium);
+			--hero-image-retina: var(--mediumRetina);
+			--hero-sources: var(--mediumSources);
+		}
+	}
+
+	@container (width > 1024px) {
+		.hero {
+			--hero-image: var(--large);
+			--hero-image-retina: var(--largeRetina);
+			--hero-sources: var(--largeSources);
+		}
+	}
+
+	@container (width > 1440px) {
+		.hero {
+			--hero-image: var(--wide);
+			--hero-image-retina: var(--wideRetina);
+			--hero-sources: var(--wideSources);
+		}
+	}
+
+	.hero__content {
+		max-inline-size: 80ch;
+		padding-block: calc(2.5em + 2.5em * var(--fluid-font-progress));
+	}
+
+	h1 {
+		margin-block-start: 0;
+		font-size: calc(2em + 1.5em * var(--fluid-font-progress));
+		line-height: 1.15;
+	}
+
+	p {
+		max-inline-size: 55ch;
+		font-size: calc(1em + 0.35em * var(--fluid-font-progress));
+	}
+</style>

@@ -13,6 +13,32 @@ export function formatEventDate({ date }: { date: Date }): string {
 	return eventDateFormatter.format(date);
 }
 
+export function formatEventTime({
+	date,
+	startTime,
+	timeZone,
+}: {
+	date: Date;
+	startTime: string;
+	timeZone: string;
+}): string {
+	const wallTime = new Date(
+		`${date.toISOString().slice(0, 10)}T${startTime}:00Z`,
+	);
+	const time = new Intl.DateTimeFormat("en-US", {
+		hour: "numeric",
+		minute: "2-digit",
+		timeZone: "UTC",
+	}).format(wallTime);
+	const zone = new Intl.DateTimeFormat("en-US", {
+		timeZone,
+		timeZoneName: "longGeneric",
+	})
+		.formatToParts(date)
+		.find((part) => part.type === "timeZoneName")?.value;
+	return `${time} ${zone ?? timeZone}`;
+}
+
 /**
  * Compare date-only event content against the current calendar date where the
  * event takes place. Events remain upcoming for their whole local day.

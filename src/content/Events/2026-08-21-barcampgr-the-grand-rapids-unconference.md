@@ -7,4 +7,6 @@ images: {
 url: "https://www.meetup.com/grwebdev/events/315632888/"
 date: 2026-08-21
 timeZone: "America/New_York"
+startTime: "18:30"
+location: "Covenant Fine Arts Center, 1795 Knollcrest Circle SE, Grand Rapids, MI"
 ---

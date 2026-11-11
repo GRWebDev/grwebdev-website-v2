@@ -26,10 +26,15 @@ body {
 	container: container / inline-size;
 }
 
+.image-text > * {
+	min-inline-size: 0;
+	max-inline-size: 100%;
+}
+
 nav.grid,
 section.grid {
 	display: grid;
-	grid-template-columns: [full-start] minmax(0.5rem, auto) [outdent-start] min(
+	grid-template-columns: [full-start] minmax(0.5em, auto) [outdent-start] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
 		) [main-start] min(10cqi, calc(var(--main-max-width) / 10)) [indent-start] min(
@@ -38,7 +43,7 @@ section.grid {
 		) [indent-end] min(10cqi, calc(var(--main-max-width) / 10)) [main-end] min(
 			10cqi,
 			calc(var(--main-max-width) / 10)
-		) [outdent-end] minmax(0.5rem, auto) [full-end];
+		) [outdent-end] minmax(0.5em, auto) [full-end];
 
 	> * {
 		grid-area: outdent;
@@ -88,18 +93,32 @@ section.grid {
 .image-text {
 	margin-block-start: 1em;
 	display: grid;
-	grid-template-columns: auto 1fr;
-	grid-template-areas: "image title" "body body";
+	grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+	min-inline-size: 0;
+	grid-template-areas: "image image" "title title" "body body";
 	column-gap: 2ch;
+
+	.title,
+	.body {
+		overflow-wrap: anywhere;
+	}
 
 	.image {
 		grid-area: image;
 	}
 
 	.title {
+		margin-block-start: 1em;
 		grid-area: title;
 		display: flow-root;
 		place-content: end;
+	}
+
+	@container (width > 16.6667em) {
+		grid-template-areas: "image title" "body body";
+		.title {
+			margin-block-start: 0;
+		}
 	}
 
 	.body {
@@ -129,18 +148,45 @@ section.grid {
 		text-underline-offset: 0.1667em;
 	}
 
+	.board-title {
+		display: block;
+		min-inline-size: 0;
+		overflow-wrap: anywhere;
+		font-weight: 700;
+		line-height: 1.125;
+		text-decoration: none;
+
+		&.stacked {
+			margin-block-start: 0;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.15em;
+		}
+
+		&.role {
+			color: var(--secondary-clr);
+			font-size: 0.75em;
+			text-box: trim-start cap text;
+		}
+
+		&.name {
+			text-box: cap alphabetic;
+		}
+	}
+
 	&.large {
-		grid-template-areas: "image" "title" "body";
 		grid-template-columns: minmax(0, 1fr);
+		grid-template-areas: "image" "title" "body";
+		grid-template-rows: auto;
 
 		.title {
 			place-content: center;
 		}
 
-		@container (width > 620px) {
-			grid-template-columns: auto minmax(0, 1fr);
-			grid-template-rows: auto auto 1fr;
-			grid-template-areas: "image title" "image body" "image body";
+		@container (width > 40em) {
+			grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+			grid-template-rows: auto 1fr;
+			grid-template-areas: "image title" "image body";
 			place-items: revert;
 
 			.title {
@@ -149,6 +195,8 @@ section.grid {
 		}
 
 		.image {
+			block-size: auto;
+			max-inline-size: 100%;
 			place-self: center;
 		}
 
@@ -156,7 +204,7 @@ section.grid {
 			margin-block-start: 1ex;
 			text-box: trim-start cap text;
 
-			@container (width > 620px) {
+			@container (width > 34.5em) {
 				margin-block-start: 0;
 			}
 		}
@@ -166,7 +214,7 @@ section.grid {
 				margin-block-start: 0.75ex;
 				text-box: cap alphabetic;
 
-				@container (width > 620px) {
+				@container (width > 34.5em) {
 					margin-block-start: 0;
 				}
 			}
@@ -182,29 +230,5 @@ section.grid {
 	a:has(.board-title.stacked) {
 		text-decoration: none;
 		align-self: end;
-	}
-
-	.board-title {
-		display: block;
-		font-weight: 700;
-		line-height: 1.125;
-		text-decoration: none;
-
-		&.stacked {
-			display: grid;
-			gap: 0.15em;
-			grid-template-columns: minmax(0, 1fr);
-		}
-
-		&.role {
-			color: var(--secondary-clr);
-			font-size: 0.75em;
-			text-box: trim-start cap text;
-		}
-
-		&.name {
-			overflow-wrap: anywhere;
-			text-box: cap alphabetic;
-		}
 	}
 }

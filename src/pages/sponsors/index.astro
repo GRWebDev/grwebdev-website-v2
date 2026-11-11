@@ -53,9 +53,9 @@ const sponsorsToUse = Object.values(
 	}
 
 	.logo-row .image {
-		block-size: 5.5rem;
+		block-size: 5em;
 		display: grid;
-		inline-size: min(100%, 17rem);
+		inline-size: min(100%, 16em);
 		place-items: center start;
 	}
 
@@ -71,14 +71,14 @@ const sponsorsToUse = Object.values(
 			grid-template-areas:
 				"image title"
 				"image body";
-			grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+			grid-template-columns: minmax(10em, 16em) minmax(0, 1fr);
 			row-gap: 0;
 		}
 	}
 
 	.logo-row .image img {
 		height: auto;
-		max-block-size: 4rem;
+		max-block-size: 3.5em;
 		max-inline-size: 100%;
 		object-fit: contain;
 		width: auto;
@@ -103,7 +103,7 @@ const sponsorsToUse = Object.values(
 							src={sponsor.data.image.src}
 							alt=""
 							widths={[100, 200]}
-							sizes="(min-width: 621px) 18rem, 100vw"
+							sizes="(min-width: 621px) 16em, 100vw"
 							style={{ viewTransitionName: `${sponsor.data.slug}-image` }}
 						/>
 					</div>
