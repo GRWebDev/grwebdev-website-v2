@@ -101,17 +101,22 @@ for (const deviceScaleFactor of [1, 2]) {
 				expect(
 					await page.locator(".hero").evaluate((hero) => {
 						const styles = getComputedStyle(hero);
+						// A single CSS value repeats across layers; browsers may expand it.
+						const uniqueValues = (value: string) =>
+							[...new Set(value.split(",").map((item) => item.trim()))].join(
+								", ",
+							);
 						return {
 							width: hero.getBoundingClientRect().width,
-							size: styles.backgroundSize,
-							position: styles.backgroundPosition,
+							size: uniqueValues(styles.backgroundSize),
+							position: uniqueValues(styles.backgroundPosition),
 							overlay: styles.backgroundImage.includes("0.55"),
 						};
 					}),
 				).toEqual({
 					width,
-					size: "cover, cover",
-					position: "50% 50%, 50% 50%",
+					size: "cover",
+					position: "50% 50%",
 					overlay: true,
 				});
 			});
